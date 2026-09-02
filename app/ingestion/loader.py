@@ -36,7 +36,7 @@ def load_pdf(path: str | Path) -> RawDocument:
 
         pages = []
         with pdfplumber.open(path) as pdf:
-            for i, page in enumerate(pdf.pages):
+            for _i, page in enumerate(pdf.pages):
                 text = page.extract_text()
                 if text:
                     pages.append(text)

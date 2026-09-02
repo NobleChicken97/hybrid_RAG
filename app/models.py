@@ -5,8 +5,8 @@ These define the contract for all FastAPI endpoints.
 """
 
 from datetime import datetime
-from pydantic import BaseModel, Field
 
+from pydantic import BaseModel, Field
 
 # ─── Ingest ──────────────────────────────────────────────────────────────────
 

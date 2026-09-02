@@ -117,7 +117,7 @@ def compress_context(
         # Keep sentences above threshold
         kept_sentences = [
             sent
-            for sent, score in zip(sentences, scores)
+            for sent, score in zip(sentences, scores, strict=True)
             if score >= threshold
         ]
 

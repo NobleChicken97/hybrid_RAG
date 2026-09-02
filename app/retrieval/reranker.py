@@ -70,7 +70,7 @@ def rerank(
             text=text,
             original_sources=sources,
         )
-        for (chunk_id, text, sources), score in zip(candidates, scores)
+        for (chunk_id, text, sources), score in zip(candidates, scores, strict=True)
     ]
 
     # Sort by cross-encoder score (highest = most relevant)

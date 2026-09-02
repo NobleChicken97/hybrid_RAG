@@ -3,12 +3,11 @@ LLM client supporting multi-backend architectures as per instructions.md.
 Supports: ollama_qwen3, ollama_phi4mini, cerebras, groq, gemini, claude.
 """
 
-import time
 from functools import lru_cache
 
-from openai import OpenAI
 import anthropic
-from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception, retry_if_exception_type
+from openai import OpenAI
+from tenacity import retry, retry_if_exception, stop_after_attempt, wait_exponential
 
 from app.config import get_settings
 
@@ -111,24 +110,20 @@ def _generate_ollama(prompt: str, model: str, system_prompt: str = "", max_token
 
 def _is_retryable_cloud_error(e: Exception) -> bool:
     """Retry transient cloud failures; fail fast on 4xx (except 429)."""
-    if not isinstance(e, CloudAPIError):
-        return False
-    if isinstance(e, NonRetryableCloudAPIError):
-        return False
-    return True
+    return isinstance(e, CloudAPIError) and not isinstance(e, NonRetryableCloudAPIError)
 
 
 # Long eval runs (1h+) hit transient free-tier connection drops, so retries
 # use more attempts and a longer backoff ceiling than a single request needs.
-_RETRY_KWARGS = dict(
-    stop=stop_after_attempt(5),
-    wait=wait_exponential(multiplier=2, min=2, max=30),
-    retry=retry_if_exception(_is_retryable_cloud_error),
-)
+_RETRY_KWARGS = {
+    "stop": stop_after_attempt(5),
+    "wait": wait_exponential(multiplier=2, min=2, max=30),
+    "retry": retry_if_exception(_is_retryable_cloud_error),
+}
 
 
 @retry(**_RETRY_KWARGS)
-def _generate_openai_compatible(client: OpenAI, model: str, prompt: str, system_prompt: str = "", max_tokens: int = 1024, temperature: float = 0.1) -> str:
+def _generate_openai_compatible(client: OpenAI, model: str, prompt: str, system_prompt: str = "", max_tokens: int = 1024, temperature: float = 0.1, extra_body: dict | None = None) -> str:
     messages = []
     if system_prompt:
         messages.append({"role": "system", "content": system_prompt})
@@ -140,6 +135,7 @@ def _generate_openai_compatible(client: OpenAI, model: str, prompt: str, system_
             messages=messages,
             max_tokens=max_tokens,
             temperature=temperature,
+            **({"extra_body": extra_body} if extra_body else {}),
         )
         usage = response.usage
         if usage:
@@ -180,7 +176,7 @@ def _generate_anthropic(prompt: str, system_prompt: str = "", max_tokens: int = 
         raise CloudAPIError(f"Failed to generate from Anthropic API: {e}") from e
 
 
-def generate(prompt: str, system_prompt: str = "", backend: str = None, max_tokens: int = 1024, temperature: float = 0.1) -> str:
+def generate(prompt: str, system_prompt: str = "", backend: str | None = None, max_tokens: int = 1024, temperature: float = 0.1) -> str:
     """
     Generate a response using the configured LLM provider.
     """
@@ -196,7 +192,11 @@ def generate(prompt: str, system_prompt: str = "", backend: str = None, max_toke
         return _generate_openai_compatible(client, model=settings.cerebras_model, prompt=prompt, system_prompt=system_prompt, max_tokens=max_tokens, temperature=temperature)
     elif backend == "groq":
         client = _get_groq_client()
-        return _generate_openai_compatible(client, model=settings.groq_model, prompt=prompt, system_prompt=system_prompt, max_tokens=max_tokens, temperature=temperature)
+        # gpt-oss models burn tokens on hidden reasoning by default; low
+        # effort measured 12x faster with identical grounded answers
+        # (7.6s -> 0.6s, 2026-09-02). Other Groq models don't accept the param.
+        extra_body = {"reasoning_effort": "low"} if settings.groq_model.startswith("openai/gpt-oss") else None
+        return _generate_openai_compatible(client, model=settings.groq_model, prompt=prompt, system_prompt=system_prompt, max_tokens=max_tokens, temperature=temperature, extra_body=extra_body)
     elif backend == "gemini":
         client = _get_gemini_client()
         return _generate_openai_compatible(client, model=settings.gemini_model, prompt=prompt, system_prompt=system_prompt, max_tokens=max_tokens, temperature=temperature)

@@ -16,10 +16,10 @@ sys.stdout.reconfigure(encoding="utf-8")
 from app.config import get_settings
 from app.evaluation.qa_loader import load_qa_set
 from app.ingestion.embedder import embed_query
-from app.retrieval import vector_store, bm25_index
+from app.retrieval import bm25_index, vector_store
+from app.retrieval.compressor import compress_context
 from app.retrieval.fusion import fuse
 from app.retrieval.reranker import rerank
-from app.retrieval.compressor import compress_context
 
 STOPWORDS = {
     "the", "a", "an", "is", "are", "was", "were", "be", "been", "being",

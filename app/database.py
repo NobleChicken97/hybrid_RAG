@@ -9,10 +9,10 @@ Tables:
 """
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
-from sqlalchemy import Column, Integer, String, Text, Float, DateTime, ForeignKey, create_engine
-from sqlalchemy.orm import DeclarativeBase, relationship, Session, sessionmaker
+from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String, Text, create_engine
+from sqlalchemy.orm import DeclarativeBase, Session, relationship, sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from app.config import get_settings
@@ -34,7 +34,7 @@ class Document(Base):
     # SHA-256 of the document text; used to reject duplicate ingestion
     # (a PDF uploaded twice used to be indexed twice, wasting retrieval slots).
     content_hash = Column(String(64), nullable=True, index=True)
-    ingested_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    ingested_at = Column(DateTime, default=lambda: datetime.now(UTC))
 
     # Relationship to chunks
     chunks = relationship("Chunk", back_populates="document", cascade="all, delete-orphan")
@@ -88,7 +88,7 @@ class EvalRun(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     run_id = Column(String(64), unique=True, nullable=False, index=True)
-    timestamp = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    timestamp = Column(DateTime, default=lambda: datetime.now(UTC))
     retrieval_mode = Column(String(32), nullable=False, default="hybrid")  # 'vector_only' | 'hybrid'
     config_snapshot = Column(Text, nullable=True)  # JSON of pipeline config at time of run
 

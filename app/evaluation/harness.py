@@ -10,18 +10,17 @@ with numbers, not vibes.
 
 import json
 import uuid
-from datetime import datetime, timezone
 
 from app.config import get_settings
-from app.models import QAItem, EvalScores, QuestionScore
-from app.database import get_engine, get_session_factory, EvalRun
+from app.database import EvalRun, get_session_factory
+from app.generation.llm import generate
+from app.generation.prompt import SYSTEM_PROMPT, build_prompt
 from app.ingestion.embedder import embed_query
-from app.retrieval import vector_store, bm25_index
+from app.models import EvalScores, QAItem, QuestionScore
+from app.retrieval import bm25_index, vector_store
+from app.retrieval.compressor import compress_context
 from app.retrieval.fusion import fuse
 from app.retrieval.reranker import rerank
-from app.retrieval.compressor import compress_context
-from app.generation.llm import generate
-from app.generation.prompt import build_prompt, SYSTEM_PROMPT
 
 
 def _run_pipeline(question: str, mode: str = "hybrid", top_k: int | None = None) -> tuple[str, list[str]]:
@@ -151,14 +150,14 @@ def run_evaluation(
         })
 
         try:
+            import pandas as pd
             from ragas import evaluate
             from ragas.metrics import (
-                faithfulness,
                 answer_relevancy,
                 context_precision,
                 context_recall,
+                faithfulness,
             )
-            import pandas as pd
 
             # Configure RAGAS judge backend.
             # NOTE: ragas >= 0.4 no longer honours the legacy OPENAI_* env vars,
@@ -176,10 +175,10 @@ def run_evaluation(
                     "groq": settings.groq_api_key,
                     "gemini": settings.gemini_api_key,
                 }
-                from langchain_openai import ChatOpenAI
-                from ragas.llms import LangchainLLMWrapper
-                from ragas.embeddings import LangchainEmbeddingsWrapper
                 from langchain_community.embeddings import HuggingFaceEmbeddings
+                from langchain_openai import ChatOpenAI
+                from ragas.embeddings import LangchainEmbeddingsWrapper
+                from ragas.llms import LangchainLLMWrapper
 
                 judge_llm = LangchainLLMWrapper(
                     ChatOpenAI(
@@ -236,8 +235,8 @@ def run_evaluation(
 
                 # Per-question scores from the RAGAS result dataframe
                 for idx, row in result_df.iterrows():
-                    def _val(col):
-                        v = row.get(col) if col in result_df.columns else None
+                    def _val(col, _row=row):
+                        v = _row.get(col) if col in result_df.columns else None
                         if v is None or (isinstance(v, float) and pd.isna(v)):
                             return None
                         return round(float(v), 4)
@@ -333,7 +332,7 @@ def run_evaluation(
     except Exception as e:
         print(f"[Eval] Failed to save run: {e}")
 
-    print(f"\n[Eval] === Evaluation Complete ===")
+    print("\n[Eval] === Evaluation Complete ===")
     print(f"[Eval] Run ID: {run_id}")
     print(f"[Eval] Faithfulness:      {aggregate_scores.faithfulness}")
     print(f"[Eval] Answer Relevancy:  {aggregate_scores.answer_relevancy}")

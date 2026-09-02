@@ -4,21 +4,20 @@ POST /ingest — Document ingestion endpoint.
 Pipeline: upload/raw_text → load → chunk → embed → store (ChromaDB + BM25 + SQLite)
 """
 
-import uuid
 import hashlib
-import shutil
+import uuid
 from pathlib import Path
 
-from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 
 from app.config import get_settings
-from app.database import get_db, Document, Chunk
-from app.models import IngestResponse, ChunkPreview
-from app.ingestion.loader import load_document, load_from_raw_text
+from app.database import Chunk, Document, get_db
 from app.ingestion.chunker import chunk_document
 from app.ingestion.embedder import embed_chunks
-from app.retrieval import vector_store, bm25_index
+from app.ingestion.loader import load_document, load_from_raw_text
+from app.models import ChunkPreview, IngestResponse
+from app.retrieval import bm25_index, vector_store
 
 router = APIRouter(tags=["Ingestion"])
 
@@ -73,7 +72,7 @@ async def ingest_document(
         except ValueError as e:
             # Clean up the uploaded file
             file_path.unlink(missing_ok=True)
-            raise HTTPException(status_code=400, detail=str(e))
+            raise HTTPException(status_code=400, detail=str(e)) from e
     else:
         raw_doc = load_from_raw_text(raw_text, title)
 

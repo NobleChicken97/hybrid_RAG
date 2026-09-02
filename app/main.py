@@ -9,13 +9,12 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
 
-from app.config import get_settings
-from app.database import init_db, get_db, get_session_factory, Document, Chunk, EvalRun
+from app.api.eval import router as eval_router
 from app.api.ingest import router as ingest_router
 from app.api.query import router as query_router
-from app.api.eval import router as eval_router
+from app.config import get_settings
+from app.database import Chunk, Document, EvalRun, get_session_factory, init_db
 from app.models import HealthResponse
 
 

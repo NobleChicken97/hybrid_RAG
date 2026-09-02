@@ -11,9 +11,9 @@ This is NOT fixed-size sliding window chunking. Structure-first, size-last.
 """
 
 import re
-import uuid
+from dataclasses import dataclass
+
 import tiktoken
-from dataclasses import dataclass, field
 
 from app.ingestion.loader import RawDocument
 

@@ -9,10 +9,10 @@ POST /eval/compare — Compare two runs side-by-side
 
 from fastapi import APIRouter, HTTPException
 
-from app.models import EvalRunRequest, EvalRunResponse, EvalRunSummary, EvalScores
-from app.evaluation.qa_loader import load_qa_set, list_qa_sets
 from app.evaluation.harness import run_evaluation
-from app.evaluation.scorecard import get_scorecard, compare_runs, list_runs
+from app.evaluation.qa_loader import list_qa_sets, load_qa_set
+from app.evaluation.scorecard import compare_runs, get_scorecard, list_runs
+from app.models import EvalRunRequest, EvalRunResponse, EvalRunSummary, EvalScores
 
 router = APIRouter(prefix="/eval", tags=["Evaluation"])
 
@@ -32,7 +32,7 @@ async def trigger_eval_run(request: EvalRunRequest):
         try:
             qa_items = load_qa_set(request.qa_set_name)
         except FileNotFoundError as e:
-            raise HTTPException(status_code=404, detail=str(e))
+            raise HTTPException(status_code=404, detail=str(e)) from e
 
     if not qa_items:
         raise HTTPException(status_code=400, detail="QA set is empty.")

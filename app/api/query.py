@@ -11,18 +11,21 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.config import get_settings
-from app.database import get_db, Chunk
-from app.models import (
-    QueryRequest, QueryResponse, Citation, RetrievalDebug, RetrievalHit,
-)
+from app.database import get_db
+from app.generation.citations import build_citation_map, get_citations_for_answer
+from app.generation.llm import generate
+from app.generation.prompt import SYSTEM_PROMPT, build_prompt
 from app.ingestion.embedder import embed_query
-from app.retrieval import vector_store, bm25_index
+from app.models import (
+    QueryRequest,
+    QueryResponse,
+    RetrievalDebug,
+    RetrievalHit,
+)
+from app.retrieval import bm25_index, vector_store
+from app.retrieval.compressor import compress_context
 from app.retrieval.fusion import fuse
 from app.retrieval.reranker import rerank
-from app.retrieval.compressor import compress_context
-from app.generation.llm import generate
-from app.generation.prompt import build_prompt, SYSTEM_PROMPT
-from app.generation.citations import build_citation_map, get_citations_for_answer
 
 router = APIRouter(tags=["Query"])
 

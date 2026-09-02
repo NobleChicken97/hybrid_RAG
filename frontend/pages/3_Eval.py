@@ -8,10 +8,11 @@ Features:
   - Side-by-side comparison: vector-only vs hybrid+rerank
 """
 
-import streamlit as st
-import requests
-import pandas as pd
 import os
+
+import pandas as pd
+import requests
+import streamlit as st
 
 st.set_page_config(page_title="Eval | Hybrid RAG", page_icon="📊", layout="wide")
 

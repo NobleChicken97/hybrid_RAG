@@ -7,12 +7,13 @@ Features:
   - Document library view
 """
 
-import streamlit as st
 import requests
+import streamlit as st
 
 st.set_page_config(page_title="Ingest | Hybrid RAG", page_icon="📄", layout="wide")
 
 import os
+
 
 def load_css():
     css_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "style.css")
@@ -45,9 +46,8 @@ with tab1:
         key="file_title",
     )
 
-    if st.button("🚀 Ingest Document", key="ingest_file", disabled=uploaded_file is None):
-        if uploaded_file is not None:
-            title = title_file if title_file else uploaded_file.name
+    if st.button("🚀 Ingest Document", key="ingest_file", disabled=uploaded_file is None) and uploaded_file is not None:
+        title = title_file if title_file else uploaded_file.name
             with st.spinner("Processing document..."):
                 try:
                     files = {"file": (uploaded_file.name, uploaded_file.getvalue())}

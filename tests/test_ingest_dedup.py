@@ -7,9 +7,7 @@ citations. These tests cover the fingerprint and the duplicate-lookup query
 used by POST /ingest.
 """
 
-import sqlite3
 
-from fastapi import HTTPException
 from sqlalchemy.orm import sessionmaker
 
 from app.api.ingest import compute_content_hash
@@ -70,7 +68,6 @@ class TestDuplicateLookup:
         db.add(Document(doc_id="doc_legacy", title="Legacy", content_hash=None))
         db.commit()
 
-        import sqlalchemy
 
         result = (
             db.query(Document).filter(Document.content_hash == compute_content_hash("x")).first()

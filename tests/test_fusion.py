@@ -9,8 +9,7 @@ Verifies that:
   - Edge cases (empty lists, single list) are handled
 """
 
-import pytest
-from app.retrieval.fusion import fuse, FusedResult
+from app.retrieval.fusion import fuse
 
 
 class TestRRFBasics:

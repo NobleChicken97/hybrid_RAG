@@ -6,6 +6,7 @@ actual source chunks, producing structured Citation objects.
 """
 
 import re
+
 from app.models import Citation
 
 

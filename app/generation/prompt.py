@@ -35,7 +35,7 @@ def build_prompt(
     """
     # Build numbered context block
     context_lines = []
-    for i, (chunk_id, text, doc_title) in enumerate(context_chunks, 1):
+    for i, (_chunk_id, text, doc_title) in enumerate(context_chunks, 1):
         context_lines.append(f"[{i}] (Source: {doc_title})\n{text}")
 
     context_block = "\n\n".join(context_lines)

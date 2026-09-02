@@ -7,10 +7,9 @@ Usage:
     python run.py frontend # Only frontend
 """
 
-import sys
 import subprocess
+import sys
 import time
-import signal
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent

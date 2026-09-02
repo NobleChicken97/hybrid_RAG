@@ -8,11 +8,10 @@ Verifies that:
   - Token budget is respected
 """
 
-import pytest
 from unittest.mock import patch
 
 from app.retrieval import compressor
-from app.retrieval.compressor import _split_sentences, CompressedChunk
+from app.retrieval.compressor import _split_sentences
 
 
 class TestSentenceSplitting:

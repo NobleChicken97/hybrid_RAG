@@ -5,8 +5,8 @@ eval_dc701f3b is already complete and clean; re-running it would waste quota.
 
 Probes the API first: if the quota is still exhausted, exits without running.
 """
-import sys
 import json
+import sys
 import time
 
 sys.stdout.reconfigure(encoding="utf-8")
@@ -32,8 +32,8 @@ def main() -> None:
         print("[VecEval] API quota still exhausted — aborting without wasting calls.")
         sys.exit(2)
 
-    from app.evaluation.qa_loader import load_qa_set
     from app.evaluation.harness import run_evaluation
+    from app.evaluation.qa_loader import load_qa_set
 
     qa_items = load_qa_set("default")
     print(f"[VecEval] Loaded {len(qa_items)} QA items")

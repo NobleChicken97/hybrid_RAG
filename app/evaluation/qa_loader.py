@@ -6,7 +6,6 @@ Format: [{ "question": "...", "ground_truth_answer": "...", "ground_truth_chunk_
 """
 
 import json
-from pathlib import Path
 
 from app.config import get_settings
 from app.models import QAItem
@@ -31,7 +30,7 @@ def load_qa_set(name: str = "default") -> list[QAItem]:
             f"Create a JSON file at data/qa_sets/{name}_qa_set.json"
         )
 
-    with open(qa_path, "r", encoding="utf-8") as f:
+    with open(qa_path, encoding="utf-8") as f:
         data = json.load(f)
 
     items = []

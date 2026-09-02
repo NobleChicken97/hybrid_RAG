@@ -140,12 +140,12 @@ def remove_document(doc_id: str) -> None:
     # Filter out chunks belonging to this document
     filtered = [
         (cid, text)
-        for cid, text in zip(_chunk_ids, _chunk_texts)
+        for cid, text in zip(_chunk_ids, _chunk_texts, strict=True)
         if not cid.startswith(doc_id + "__")
     ]
 
     if filtered:
-        new_ids, new_texts = zip(*filtered)
+        new_ids, new_texts = zip(*filtered, strict=True)
         build_index(list(new_ids), list(new_texts))
     else:
         _chunk_ids = []

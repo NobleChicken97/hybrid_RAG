@@ -5,13 +5,11 @@ Loads settings from environment variables / .env file.
 All paths are relative to the project root and resolved at startup.
 """
 
-import os
-from pathlib import Path
 from functools import lru_cache
+from pathlib import Path
 
-from pydantic_settings import BaseSettings
 from pydantic import Field
-
+from pydantic_settings import BaseSettings
 
 # Project root = parent of the 'app/' directory
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -125,7 +123,7 @@ class Settings(BaseSettings):
         return f"sqlite+aiosqlite:///{self.sqlite_db_abs_path}"
 
 
-@lru_cache()
+@lru_cache
 def get_settings() -> Settings:
     """Get cached application settings (singleton)."""
     return Settings()

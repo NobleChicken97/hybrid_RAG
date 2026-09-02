@@ -7,10 +7,10 @@ Features:
   - Expandable "Why this answer?" debug panel showing full retrieval pipeline
 """
 
-import streamlit as st
-import requests
-import json
 import os
+
+import requests
+import streamlit as st
 
 st.set_page_config(page_title="Ask | Hybrid RAG", page_icon="💬", layout="wide")
 

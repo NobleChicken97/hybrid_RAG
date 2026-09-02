@@ -16,10 +16,9 @@ sys.stdout.reconfigure(encoding="utf-8")
 
 from sqlalchemy import text as sql_text  # noqa: F401  (kept for potential raw queries)
 
-from app.config import get_settings
-from app.database import get_engine, get_session_factory, Document, Chunk
+from app.database import Chunk, Document, get_session_factory
 from app.ingestion.loader import load_document
-from app.retrieval import vector_store, bm25_index
+from app.retrieval import bm25_index, vector_store
 
 # doc_c74bd5716030 kept (first gatsby ingest), doc_6974ad192700 removed.
 DUPLICATE_DOC_ID = "doc_6974ad192700"

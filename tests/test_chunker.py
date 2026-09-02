@@ -9,10 +9,8 @@ Verifies that:
   - Chunk metadata (offsets, token counts, section headers) is correct
 """
 
-import pytest
-from app.ingestion.loader import RawDocument
 from app.ingestion.chunker import chunk_document, count_tokens
-
+from app.ingestion.loader import RawDocument
 
 # ─── Fixtures ─────────────────────────────────────────────────────────────────
 

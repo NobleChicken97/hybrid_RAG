@@ -5,8 +5,7 @@ Produces structured scorecards and side-by-side comparison tables
 for vector-only vs hybrid+rerank runs.
 """
 
-import json
-from app.database import get_session_factory, EvalRun
+from app.database import EvalRun, get_session_factory
 
 
 def get_scorecard(run_id: str) -> dict:
