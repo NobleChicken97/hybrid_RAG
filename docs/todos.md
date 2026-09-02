@@ -31,6 +31,7 @@
 - [x] Corpus dedupe executed (2026-09-02): duplicate gatsby copy removed (195 chunks), content hashes backfilled, stores verified clean, diagnostic re-run (16/20 full evidence)
 - [x] Generator model decision: `gemini-3.5-flash` = 503 high-demand on free tier (even with a fresh key) → **flash-lite is permanent**; `.env` documents this
 - [x] Final verification: 43/43 tests, backend `/health` OK (3 docs / 237 chunks), `/eval/runs` serves both clean scorecard arms, **live `/query` verified end-to-end** (answer + citations + retrieval debug on the deduped corpus, 2026-09-02)
+- [x] Git initialized on `main` with initial commit `875bbbe` (89 files); `.gitignore` extended (logs, `data/uploads/`, `.pytest_cache/`, local installer); README gained a repo-tooling-scripts section (2026-09-02)
 
 ## Retrieval / quality (new open items from the 2026-09-01 diagnosis)
 
