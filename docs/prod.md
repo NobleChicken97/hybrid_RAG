@@ -93,6 +93,17 @@ The MVP includes:
 - eval harness with measurement
 - working local UI
 
+## Deployment decision (2026-09-02): AWS, not Vercel
+
+The system's storage is **local-persistent by design** (ChromaDB directory, BM25 pickle, SQLite file) and it loads ~200 MB of local models (BGE embeddings, ms-marco cross-encoder) into process memory.
+
+- **Vercel is a poor fit**: serverless functions have no persistent disk (all three stores break), can't hold loaded models between invocations, and Streamlit is a long-lived websocket process Vercel doesn't host. Choosing Vercel would mean rearchitecting to managed vector DBs + API embeddings — which would erase the project's "runs on CPU, zero-infra" design point.
+- **AWS (recommended)**: a single small instance preserves the architecture as-is. Options in order of simplicity:
+  1. **Lightsail** (4 GB RAM plan, ~$24/mo, flat rate) — simplest; Docker or systemd.
+  2. **EC2 t3.medium** (4 GB RAM, spot-able) — uses credits, full control; run both services via `docker compose` or the existing `run.py` behind Caddy/nginx with HTTPS.
+  3. **ECS/Fargate** — only if container orchestration is the learning goal; overkill for a two-process demo.
+- Minimum spec: 4 GB RAM (models + ChromaDB in memory), 20 GB disk (models + corpus), ports 8000/8501 behind a reverse proxy.
+
 ## Stretch items
 
 - semantic caching

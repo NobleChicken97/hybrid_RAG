@@ -48,6 +48,9 @@
 - [x] Create `sample_docs/` referenced by the README; add ingestion duplicate guard + tests (43 passing) (2026-09-02)
 - [x] Run `dedupe_corpus.py` after the vector-only eval — done 2026-09-02 (195 duplicate chunks removed; 3 docs / 237 chunks; hashes backfilled; stores verified)
 - [x] Generator decision final: flash returns 503 high-demand even on a fresh key → flash-lite stays permanent (see docs/progress.md)
+- [x] Groq fallback backend live (2026-09-02): key valid, model `openai/gpt-oss-120b` (old `llama-3.3-70b-versatile` decommissioned on Groq), `reasoning_effort=low` added (measured 7.6s → 0.6s per generation) — single-provider fragility resolved
+- [x] GitHub Actions CI added (2026-09-02, `.github/workflows/ci.yml`): ruff (config in pyproject.toml), gitleaks secret scan, pytest incl. 5 new end-to-end API smoke tests (hermetic TestClient, real embeddings into isolated stores, duplicate guard, mocked-generation query pipeline) — keyless, 48/48 passing; repo lint-clean
+- [x] Deployment decision recorded in docs/prod.md: AWS (Lightsail/EC2 t3.medium, 4 GB RAM) — Vercel rejected (no persistent disk for ChromaDB/BM25/SQLite, can't host Streamlit)
 
 ## Optional / stretch
 
