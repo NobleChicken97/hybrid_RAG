@@ -1,0 +1,17 @@
+# Build context = repo root; keep it small and secret-free.
+# NOTE: .env is NEVER copied into the image — compose injects it via env_file.
+.venv
+venv
+.env
+data
+.git
+.github
+__pycache__
+*.pyc
+*.log
+ui/node_modules
+.pytest_cache
+vs_BuildTools.exe
+deploy
+docs
+sample_docs

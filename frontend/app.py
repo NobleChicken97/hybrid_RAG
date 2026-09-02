@@ -36,7 +36,7 @@ with st.sidebar:
     # Backend URL configuration
     backend_url = st.text_input(
         "Backend URL",
-        value="http://localhost:8000",
+        value=os.environ.get("BACKEND_URL", "http://localhost:8000"),
         help="The URL of the FastAPI backend",
     )
     st.session_state["backend_url"] = backend_url

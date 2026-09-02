@@ -1,0 +1,6 @@
+# No DOMAIN set: plain HTTP on whatever IP/hostname reaches the server.
+# With a domain: `DOMAIN=rag.example.com docker compose ...` (or put it in
+# deploy/.env) and Caddy obtains/renews Let's Encrypt TLS automatically.
+{$DOMAIN} {
+	reverse_proxy streamlit:8501
+}

@@ -24,7 +24,7 @@ def load_css():
 # ─── Custom CSS ──────────────────────────────────────────────────────────────
 load_css()
 
-BACKEND_URL = st.session_state.get("backend_url", "http://localhost:8000")
+BACKEND_URL = st.session_state.get("backend_url") or os.environ.get("BACKEND_URL", "http://localhost:8000")
 
 st.markdown("# 📊 Evaluation Dashboard")
 st.markdown("Run RAGAS evaluations and compare retrieval modes.")
