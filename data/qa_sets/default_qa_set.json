@@ -1,0 +1,102 @@
+[
+  {
+    "question": "What is FastAPI built on top of?",
+    "ground_truth_answer": "FastAPI is built on top of Starlette for the web parts and Pydantic for the data parts.",
+    "ground_truth_chunk_ids": []
+  },
+  {
+    "question": "What are the automatic documentation endpoints provided by FastAPI?",
+    "ground_truth_answer": "FastAPI automatically generates Swagger UI at /docs and ReDoc at /redoc.",
+    "ground_truth_chunk_ids": []
+  },
+  {
+    "question": "What ASGI server is recommended for FastAPI?",
+    "ground_truth_answer": "Uvicorn is the recommended ASGI server for FastAPI applications.",
+    "ground_truth_chunk_ids": []
+  },
+  {
+    "question": "How should Python imports be organized?",
+    "ground_truth_answer": "Imports should be organized in three groups separated by blank lines: standard library imports, third-party library imports, and local application imports.",
+    "ground_truth_chunk_ids": []
+  },
+  {
+    "question": "Why should you use virtual environments in Python?",
+    "ground_truth_answer": "Virtual environments isolate project dependencies, preventing conflicts between different projects, and make it easy to reproduce the exact same environment on different machines.",
+    "ground_truth_chunk_ids": []
+  },
+  {
+    "question": "What is the purpose of Pydantic in FastAPI?",
+    "ground_truth_answer": "Pydantic models define the shape of data. FastAPI validates incoming requests against Pydantic models automatically, and uses them for serialization and documentation.",
+    "ground_truth_chunk_ids": []
+  },
+  {
+    "question": "What testing framework is recommended for Python?",
+    "ground_truth_answer": "Pytest is the most popular Python testing framework, providing simple test discovery, powerful assertion introspection, fixtures, and parametrized tests.",
+    "ground_truth_chunk_ids": []
+  },
+  {
+    "question": "How should secrets and API keys be handled in Python projects?",
+    "ground_truth_answer": "Never hardcode secrets, API keys, or passwords in source code. Use environment variables and .env files that are excluded from version control.",
+    "ground_truth_chunk_ids": []
+  },
+  {
+    "question": "What is the purpose of FastAPI's dependency injection system?",
+    "ground_truth_answer": "FastAPI's dependency injection system allows you to define reusable dependencies for database sessions, authentication, configuration, and more.",
+    "ground_truth_chunk_ids": []
+  },
+  {
+    "question": "What connection pooling strategy is appropriate for SQLite?",
+    "ground_truth_answer": "SQLAlchemy's StaticPool is appropriate for SQLite's single-threaded nature.",
+    "ground_truth_chunk_ids": []
+  },
+  {
+    "question": "What is middleware in FastAPI used for?",
+    "ground_truth_answer": "Middleware runs before and after each request. Common uses include CORS handling, logging, authentication, and request/response modification.",
+    "ground_truth_chunk_ids": []
+  },
+  {
+    "question": "What is the recommended batch size for embedding text chunks?",
+    "ground_truth_answer": "When processing multiple items like embedding multiple text chunks, use batch sizes of 32-64 for optimal throughput.",
+    "ground_truth_chunk_ids": []
+  },
+  {
+    "question": "What should a Python README file contain?",
+    "ground_truth_answer": "Every project README should explain what the project does, how to install and run it, how to contribute, and license information.",
+    "ground_truth_chunk_ids": []
+  },
+  {
+    "question": "How do you profile Python code for performance?",
+    "ground_truth_answer": "Use cProfile or py-spy to identify performance bottlenecks. Optimize the hot paths identified by profiling rather than guessing.",
+    "ground_truth_chunk_ids": []
+  },
+  {
+    "question": "What is the purpose of context managers in Python?",
+    "ground_truth_answer": "Context managers ensure resources like file handles, database connections, and network sockets are properly cleaned up, even when exceptions occur.",
+    "ground_truth_chunk_ids": []
+  },
+  {
+    "question": "What cloud platforms can FastAPI be deployed to?",
+    "ground_truth_answer": "FastAPI applications can be deployed to any cloud platform that supports Python applications, including Render, Railway, AWS, GCP, and Azure.",
+    "ground_truth_chunk_ids": []
+  },
+  {
+    "question": "How do you prevent SQL injection in Python?",
+    "ground_truth_answer": "Use parameterized queries for database operations to prevent SQL injection, and use Pydantic models for API input validation.",
+    "ground_truth_chunk_ids": []
+  },
+  {
+    "question": "What caching approach is recommended for Python functions?",
+    "ground_truth_answer": "Use functools.lru_cache for memoizing expensive pure functions. For more complex caching needs, consider Redis or Memcached.",
+    "ground_truth_chunk_ids": []
+  },
+  {
+    "question": "What are path operations in FastAPI?",
+    "ground_truth_answer": "Path operations are the fundamental building blocks of a FastAPI application. Each path operation is a Python function decorated with an HTTP method decorator.",
+    "ground_truth_chunk_ids": []
+  },
+  {
+    "question": "How should you audit Python dependencies for security?",
+    "ground_truth_answer": "Regularly audit dependencies for known vulnerabilities using tools like pip-audit or safety. Keep dependencies updated but test thoroughly after updates.",
+    "ground_truth_chunk_ids": []
+  }
+]

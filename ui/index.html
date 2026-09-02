@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home - Precision Architectural RAG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div style="font-size: var(--text-body); font-weight: 600;">Clinical-RAG</div>
+          <div class="caption" style="color: var(--color-charcoal); margin-top: var(--spacing-4);">V 2.0.4 - <span style="color: var(--color-forest-ink);">ACTIVE</span></div>
+        </div>
+        <nav class="sidebar-menu reveal-left">
+          <a href="/" class="sidebar-item active">
+            <span style="font-size: 18px;">🏠</span> Overview
+          </a>
+          <a href="/ingest.html" class="sidebar-item">
+            <span style="font-size: 18px;">🗄️</span> Retrieval
+          </a>
+          <a href="/ask.html" class="sidebar-item">
+            <span style="font-size: 18px;">⚡</span> Generation
+          </a>
+          <a href="/eval.html" class="sidebar-item">
+            <span style="font-size: 18px;">📈</span> Analytics
+          </a>
+          <a href="/docs.html" class="sidebar-item glitch-hover">
+            <span style="font-size: 18px;">📘</span> Documentation
+          </a>
+          <a href="/topology.html" class="sidebar-item glitch-hover">
+            <span style="font-size: 18px;">🕸️</span> Topology
+          </a>
+          <a href="/system.html" class="sidebar-item">
+            <span style="font-size: 18px;">⚙️</span> System
+          </a>
+        </nav>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content scanline" style="position: relative; overflow-x: hidden; overflow-y: auto; display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center;">
+        
+        <!-- Animated Geometric Backdrop (FIXED SCROLL BUG) -->
+        <div class="bg-pan" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-image: linear-gradient(var(--color-hairline-gray) 1px, transparent 1px), linear-gradient(90deg, var(--color-hairline-gray) 1px, transparent 1px); background-size: 40px 40px; z-index: 0; opacity: 0.6; pointer-events: none;"></div>
+        
+        <!-- Large SVG Shapes for Backdrop (FIXED SCROLL BUG) -->
+        <svg style="position: fixed; top: 10%; right: -10%; width: 500px; height: 500px; opacity: 0.05; z-index: 0; pointer-events: none;" viewBox="0 0 100 100" class="pulse-border">
+          <rect x="10" y="10" width="80" height="80" fill="none" stroke="black" stroke-width="2"/>
+          <line x1="10" y1="10" x2="90" y2="90" stroke="black" stroke-width="1"/>
+          <line x1="90" y1="10" x2="10" y2="90" stroke="black" stroke-width="1"/>
+        </svg>
+
+        <!-- Precision Crosshairs -->
+        <div class="crosshair crosshair-tl"></div>
+        <div class="crosshair crosshair-tr"></div>
+        
+        <!-- Ticker Tape -->
+        <div class="ticker-wrap reveal-up" style="position: relative; z-index: 1; margin-bottom: var(--spacing-42); width: calc(100% + var(--spacing-84)); margin-left: calc(var(--spacing-42) * -1);">
+          <div class="ticker">
+            <span class="ticker-item">SYS_STATUS: NOMINAL</span>
+            <span class="ticker-item">EMBEDDING_LATENCY: 12ms</span>
+            <span class="ticker-item">CLUSTER_DENSITY: 94.2%</span>
+            <span class="ticker-item">VECTOR_COUNT: 1,402,991</span>
+            <span class="ticker-item">SYNTHESIS_QPS: 42</span>
+            <span class="ticker-item">GPU_MEM_UTIL: 78%</span>
+            <span class="ticker-item">INDEX_SHARDS: 4/4 SYNCED</span>
+          </div>
+        </div>
+
+        <!-- TOP: Neural Architecture Graphic (Placeholder) -->
+        <div class="reveal-up" style="text-align: center; margin: 0 auto; width: 100%; max-width: 800px; position: relative; z-index: 1;">
+          <!-- Using CSS grid patterns and SVGs to fake the neural graphic -->
+          
+          <h1 class="heading" style="font-size: var(--text-display); font-weight: 600; text-transform: uppercase; line-height: 1.1; margin-bottom: var(--spacing-14); position: relative; z-index: 1;">Precision<br>Retrieval Engine.</h1>
+          <p class="body-sm" style="color: var(--color-charcoal); max-width: 500px; margin: 0 auto var(--spacing-21) auto; position: relative; z-index: 1;">A clinical-grade architecture for semantic search and generative synthesis, engineered for high-stakes data environments requiring absolute veracity.</p>
+          
+          <div style="position: relative; z-index: 1; display: flex; gap: var(--spacing-14); justify-content: center;">
+            <a href="/ingest.html" class="btn-primary pulse-border">DEPLOY INSTANCE</a>
+            <a href="/docs.html" class="btn-secondary">VIEW DOCUMENTATION</a>
+          </div>
+        </div>
+
+        <!-- BOTTOM: System Status Gauges -->
+        <div class="reveal-up" style="width: 100%; max-width: 900px; margin: var(--spacing-99) auto 0 auto; position: relative; z-index: 1;">
+          <h2 class="subheading glitch-hover" style="text-align: center; margin-bottom: var(--spacing-42);">SYSTEM STATUS</h2>
+          <div class="grid-3" style="gap: var(--spacing-42);">
+            
+            <div class="gauge-card">
+              <div class="caption" style="margin-bottom: var(--spacing-14);">Ingestion Pipeline</div>
+              <div class="radial-gauge" id="home-gauge-1">100%</div>
+              <div class="heading-sm" id="home-docs-count" style="color: var(--color-true-black);">0</div>
+              <div class="caption" style="color: var(--color-charcoal);">Ingested Documents</div>
+            </div>
+
+            <div class="gauge-card">
+              <div class="caption" style="margin-bottom: var(--spacing-14);">Generation Nodes</div>
+              <!-- Faking a different percentage with border trick -->
+              <div class="radial-gauge" style="border-right-color: transparent;" id="home-gauge-2">85%</div>
+              <div class="heading-sm" id="home-chunks-count" style="color: var(--color-true-black);">0</div>
+              <div class="caption" style="color: var(--color-charcoal);">Chunks Processed</div>
+            </div>
+
+            <div class="gauge-card">
+              <div class="caption" style="margin-bottom: var(--spacing-14);">Evaluation Matrix</div>
+              <div class="radial-gauge" style="border-color: var(--color-hairline-gray);" id="home-gauge-3">IDLE</div>
+              <div class="heading-sm" id="home-evals-count" style="color: var(--color-true-black);">0</div>
+              <div class="caption" style="color: var(--color-charcoal);">Final Reports</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="reveal-up" style="width: 100%; margin-top: var(--spacing-70); padding-top: var(--spacing-21); border-top: 1px solid var(--color-hairline-gray); display: flex; justify-content: space-between; font-size: 10px; color: var(--color-charcoal); text-transform: uppercase; position: relative; z-index: 1;">
+          <div>© 2024 CLINICAL-RAG INFRASTRUCTURE. PRECISION RETRIEVAL ENGINE.</div>
+          <div style="display: flex; gap: var(--spacing-21);">
+            <a href="/docs.html" style="color: inherit; text-decoration: none;" class="glitch-hover">DOCUMENTATION</a>
+            <span class="glitch-hover">API STATUS</span>
+            <span class="glitch-hover">SUPPORT</span>
+          </div>
+        </footer>
+
+      </main>
+    </div>
+    <script type="module" src="./main.js"></script>
+    <script src="./animations.js"></script>
+    <script src="./animations.js"></script>
+  </body>
+</html>

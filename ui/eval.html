@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Evaluate - Performance Matrix</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div style="font-size: var(--text-body); font-weight: 600;">Clinical-RAG</div>
+          <div class="caption" style="color: var(--color-charcoal); margin-top: var(--spacing-4);">V 2.0.4 - <span style="color: var(--color-forest-ink);">ACTIVE</span></div>
+        </div>
+        <nav class="sidebar-menu">
+          <a href="/" class="sidebar-item">
+            <span style="font-size: 18px;">🏠</span> Overview
+          </a>
+          <a href="/ingest.html" class="sidebar-item">
+            <span style="font-size: 18px;">🗄️</span> Retrieval
+          </a>
+          <a href="/ask.html" class="sidebar-item">
+            <span style="font-size: 18px;">⚡</span> Generation
+          </a>
+          <a href="/eval.html" class="sidebar-item active" style="background-color: var(--color-linen); color: var(--color-forest-ink);">
+            <span style="font-size: 18px;">📈</span> Analytics
+          </a>
+          <a href="/docs.html" class="sidebar-item glitch-hover">
+            <span style="font-size: 18px;">📘</span> Documentation
+          </a>
+          <a href="/topology.html" class="sidebar-item glitch-hover">
+            <span style="font-size: 18px;">🕸️</span> Topology
+          </a>
+          <a href="/system.html" class="sidebar-item">
+            <span style="font-size: 18px;">⚙️</span> System
+          </a>
+        </nav>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content" style="background-image: linear-gradient(var(--color-hairline-gray) 1px, transparent 1px), linear-gradient(90deg, var(--color-hairline-gray) 1px, transparent 1px); background-size: 20px 20px;">
+        
+        <div style="margin-bottom: var(--spacing-42);">
+          <h1 class="heading" style="font-size: var(--text-heading); color: var(--color-true-black);">Performance Matrix Dashboard</h1>
+          <p class="body-sm" style="color: var(--color-charcoal);">Professional, architectural Hybrid RAG platform for high-end clinical data teams.</p>
+        </div>
+
+        <!-- TOP METRICS -->
+        <div class="grid-3" style="gap: 0; margin-bottom: var(--spacing-42);">
+          
+          <div class="metric-dash-card" style="border-right: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="caption" style="text-transform: uppercase; color: var(--color-charcoal); letter-spacing: 1px;">RETRIEVAL ACCURACY</span>
+              <span class="caption" style="color: var(--color-forest-ink);">↑ 2.4%</span>
+            </div>
+            <div class="value" id="val-accuracy">--%</div>
+            <!-- Sparkline SVG placeholder -->
+            <svg viewBox="0 0 100 20" style="width: 100%; height: 30px; margin-top: 10px;">
+              <path d="M0,15 Q15,5 30,10 T60,15 T100,5" fill="none" stroke="var(--color-forest-ink)" stroke-width="1.5"/>
+            </svg>
+          </div>
+
+          <div class="metric-dash-card" style="border-right: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="caption" style="text-transform: uppercase; color: var(--color-charcoal); letter-spacing: 1px;">GENERATION HALLUCINATION</span>
+              <span class="caption" style="color: #ef4444;">↓ 0.8%</span>
+            </div>
+            <div class="value" id="val-hallucination" style="color: #ef4444;">--%</div>
+            <!-- Sparkline SVG placeholder -->
+            <svg viewBox="0 0 100 20" style="width: 100%; height: 30px; margin-top: 10px;">
+              <path d="M0,5 Q15,15 30,10 T60,5 T100,15" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+            </svg>
+          </div>
+
+          <div class="metric-dash-card" style="background-color: var(--color-linen);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span class="caption" style="text-transform: uppercase; color: var(--color-forest-ink); letter-spacing: 1px;">CONTEXT RELEVANCE</span>
+              <span class="caption" style="color: var(--color-forest-ink);">↑ 1.1%</span>
+            </div>
+            <div class="value" id="val-relevance" style="color: var(--color-forest-ink);">--%</div>
+            <!-- Sparkline SVG placeholder -->
+            <svg viewBox="0 0 100 20" style="width: 100%; height: 30px; margin-top: 10px;">
+              <path d="M0,15 Q15,5 30,10 T60,15 T100,5" fill="none" stroke="var(--color-forest-ink)" stroke-width="1.5"/>
+            </svg>
+          </div>
+
+        </div>
+
+        <!-- BOTTOM TABLES & GAUGE -->
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--spacing-42);">
+          
+          <div class="flex-col gap-42">
+            <!-- Table 1 -->
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-14);">
+                <h3 class="subheading">Model Performance Matrix</h3>
+                <button class="btn-secondary" style="padding: 4px 12px; font-size: 11px; text-transform: uppercase;">↓ EXPORT CSV</button>
+              </div>
+              <div style="background-color: var(--color-linen-white); border: 1px solid var(--color-hairline-gray);">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>MODEL VARIANT</th>
+                      <th style="text-align: right;">PRECISION</th>
+                      <th style="text-align: right;">F1 SCORE</th>
+                    </tr>
+                  </thead>
+                  <tbody id="eval-table-1">
+                    <tr>
+                      <td style="font-family: 'JetBrains Mono', monospace;">v2.0.4-Clinical-Core</td>
+                      <td style="text-align: right;">0.982</td>
+                      <td style="text-align: right;">0.961 ↑</td>
+                    </tr>
+                    <tr>
+                      <td style="font-family: 'JetBrains Mono', monospace;">v2.0.3-Legacy-Base</td>
+                      <td style="text-align: right;">0.965</td>
+                      <td style="text-align: right;">0.920 ↓</td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr style="background-color: rgba(182, 206, 213, 0.2);">
+                      <td style="font-weight: 600;">Target Threshold</td>
+                      <td style="text-align: right; font-weight: 600;">> 0.980</td>
+                      <td style="text-align: right; font-weight: 600;">> 0.965</td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+
+            <!-- Table 2 -->
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-14);">
+                <h3 class="subheading">Model Performance Matrix</h3>
+                <button class="btn-secondary" style="padding: 4px 12px; font-size: 11px; text-transform: uppercase;">↓ EXPORT CSV</button>
+              </div>
+              <div style="background-color: var(--color-linen-white); border: 1px solid var(--color-hairline-gray);">
+                <table class="data-table">
+                  <thead>
+                    <tr>
+                      <th>MODEL VARIANT</th>
+                      <th style="text-align: right;">PRECISION</th>
+                      <th style="text-align: right;">RECALL</th>
+                      <th style="text-align: right;">LATENCY (MS)</th>
+                      <th style="text-align: right;">F1 SCORE</th>
+                    </tr>
+                  </thead>
+                  <tbody id="eval-table-2">
+                    <tr>
+                      <td style="font-family: 'JetBrains Mono', monospace;">v2.0.4-Clinical-Core</td>
+                      <td style="text-align: right;">0.982</td>
+                      <td style="text-align: right;">0.941</td>
+                      <td style="text-align: right;">124</td>
+                      <td style="text-align: right;">0.961 ↑</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <button class="btn-primary" id="btn-run-eval" style="align-self: flex-start; margin-top: var(--spacing-14);">RUN NEW EVALUATION</button>
+            <div id="eval-loading" style="display:none; align-items:center; gap:8px;">
+              <div class="spinner"></div><span class="body-sm">Running full pipeline evaluation...</span>
+            </div>
+            <div id="eval-error" class="toast toast-error" style="display: none;"></div>
+
+          </div>
+
+          <!-- RIGHT GAUGE -->
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: var(--spacing-42);">
+            <div class="caption" style="text-transform: uppercase; color: var(--color-charcoal); letter-spacing: 1px; margin-bottom: var(--spacing-21);">SYSTEM HEALTH</div>
+            
+            <!-- Complex Analog Dial Placeholder -->
+            <div style="width: 200px; height: 200px; border-radius: 50%; border: 2px solid var(--color-sage-wash); background: repeating-conic-gradient(var(--color-linen) 0% 2%, var(--color-linen-white) 2% 4%); display: flex; align-items: center; justify-content: center; position: relative; box-shadow: inset 0 0 20px rgba(0,0,0,0.05);">
+              <div style="width: 140px; height: 140px; border-radius: 50%; background-color: var(--color-linen-white); border: 1px solid var(--color-hairline-gray); display: flex; align-items: center; justify-content: center; flex-direction: column; z-index: 2;">
+                <div style="font-size: var(--text-heading-sm); font-family: var(--font-faire-octave);">96/100</div>
+              </div>
+              <!-- Dial Hands -->
+              <div style="position: absolute; top: 50%; left: 50%; width: 2px; height: 80px; background-color: var(--color-forest-ink); transform-origin: top center; transform: rotate(220deg); z-index: 3;"></div>
+              <div style="position: absolute; top: 50%; left: 50%; width: 4px; height: 60px; background-color: var(--color-true-black); transform-origin: top center; transform: rotate(140deg); z-index: 3;"></div>
+              <!-- Center Dot -->
+              <div style="position: absolute; width: 12px; height: 12px; background-color: var(--color-forest-ink); border-radius: 50%; z-index: 4;"></div>
+            </div>
+            
+          </div>
+
+        </div>
+
+      </main>
+    </div>
+    <script type="module" src="./eval.js"></script>
+  </body>
+</html>

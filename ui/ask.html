@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ask - Precision Retrieval Debug</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div style="font-size: var(--text-body); font-weight: 600;">Clinical-RAG</div>
+          <div class="caption" style="color: var(--color-charcoal); margin-top: var(--spacing-4);">V 2.0.4 - <span style="color: var(--color-forest-ink);">ACTIVE</span></div>
+        </div>
+        <nav class="sidebar-menu">
+          <a href="/" class="sidebar-item">
+            <span style="font-size: 18px;">🏠</span> Overview
+          </a>
+          <a href="/ingest.html" class="sidebar-item">
+            <span style="font-size: 18px;">🗄️</span> Retrieval
+          </a>
+          <a href="/ask.html" class="sidebar-item active">
+            <span style="font-size: 18px;">⚡</span> Generation
+          </a>
+          <a href="/eval.html" class="sidebar-item">
+            <span style="font-size: 18px;">📈</span> Analytics
+          </a>
+          <a href="/docs.html" class="sidebar-item glitch-hover">
+            <span style="font-size: 18px;">📘</span> Documentation
+          </a>
+          <a href="/topology.html" class="sidebar-item glitch-hover">
+            <span style="font-size: 18px;">🕸️</span> Topology
+          </a>
+          <a href="/system.html" class="sidebar-item">
+            <span style="font-size: 18px;">⚙️</span> System
+          </a>
+        </nav>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content" style="background-image: radial-gradient(var(--color-sage-wash) 1px, transparent 1px); background-size: 20px 20px;">
+        
+        <div style="margin-bottom: var(--spacing-42);">
+          <h1 class="heading" style="font-size: var(--text-heading); color: var(--color-true-black);">Academic Precision Search</h1>
+          <p class="body-sm" style="color: var(--color-charcoal);">Professional, architectural Hybrid RAG platform for high-end clinical data teams.</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--spacing-42);">
+          
+          <!-- LEFT COLUMN -->
+          <div class="flex-col">
+            <!-- Search Bar -->
+            <div style="position: relative; margin-bottom: var(--spacing-14);">
+              <input type="text" id="question-input" placeholder="Enter clinical inquiry..." style="width: 100%; font-size: var(--text-subheading); padding: var(--spacing-21) var(--spacing-28); border-radius: 999px; border: 1px solid var(--color-forest-ink); box-shadow: 0 10px 40px rgba(15, 62, 23, 0.1); background-color: var(--color-linen-white); color: var(--color-true-black); outline: none; font-family: var(--font-suisse-intl);">
+            </div>
+            
+            <div style="display: flex; gap: var(--spacing-11); margin-bottom: var(--spacing-42);">
+              <button class="chip">✧ Oncology Protocols</button>
+              <button class="chip">✧ Drug Interactions</button>
+              <button class="chip">✧ Recent Guidelines</button>
+              
+              <div style="margin-left: auto; display: flex; gap: var(--spacing-7);">
+                <select id="mode-select" class="input-field" style="width: auto; height: 32px; padding: 0 8px;">
+                  <option value="hybrid">Hybrid + Rerank</option>
+                  <option value="vector_only">Vector Only</option>
+                </select>
+                <button class="btn-primary" id="btn-ask" style="padding: 4px 16px; border-radius: 999px;">Search</button>
+              </div>
+            </div>
+
+            <!-- Synthesis Box -->
+            <div class="synthesis-box" style="min-height: 300px; display: flex; flex-direction: column;">
+              <h3 class="subheading" style="margin-bottom: var(--spacing-14);">Generated Synthesis</h3>
+              
+              <div id="ask-loading" style="display:none; align-items:center; gap:8px; margin: auto;">
+                <div class="spinner"></div><span class="body-sm">Synthesizing corpus...</span>
+              </div>
+              <div id="ask-error" class="toast toast-error" style="display: none;"></div>
+              
+              <div id="answer-box" style="flex-grow: 1;">
+                <span style="color: var(--color-charcoal); opacity: 0.5;">Enter an inquiry to generate clinical synthesis...</span>
+              </div>
+              
+              <div style="display: flex; gap: var(--spacing-14); margin-top: var(--spacing-28);">
+                <button class="btn-secondary">Copy</button>
+                <button class="btn-secondary">Save to Logs</button>
+              </div>
+            </div>
+            
+            <!-- Citations (hidden by default until result) -->
+            <div id="citations-container" style="display: none; margin-top: var(--spacing-21);">
+              <h4 class="caption" style="text-transform: uppercase; color: var(--color-charcoal); margin-bottom: var(--spacing-7);">References</h4>
+              <div id="citations-list" class="flex-col gap-14"></div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT COLUMN -->
+          <div class="flex-col gap-21">
+            
+            <!-- Retrieval Debug Graph -->
+            <div class="card" style="min-height: 400px; display: flex; flex-direction: column;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-14);">
+                <h3 class="subheading">Retrieval Debug</h3>
+                <span style="cursor: pointer; font-size: 18px;">↗</span>
+              </div>
+              <div class="caption" style="text-transform: uppercase; color: var(--color-charcoal); margin-bottom: var(--spacing-14);">KNOWLEDGE GRAPH</div>
+              
+              <div style="flex-grow: 1; background-color: #f7f9f8; border: 1px solid var(--color-hairline-gray); border-radius: var(--radius-nav); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                <!-- Placeholder for actual Graph logic -->
+                <div style="position: absolute; inset: 0; display: flex; flex-wrap: wrap; gap: 10px; padding: 20px; opacity: 0.8;" id="debug-graph-container">
+                  <span class="caption" style="color: var(--color-charcoal);">[ Semantic Graph Rendering Pending ]</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- System Metrics -->
+            <div class="card" style="background-color: var(--color-linen-white);">
+              <h3 class="subheading" style="margin-bottom: var(--spacing-14);">System Metrics</h3>
+              <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--color-hairline-gray); padding-bottom: var(--spacing-7); margin-bottom: var(--spacing-14);">
+                <span class="body-sm" style="color: var(--color-charcoal);">Retrieval Latency</span>
+                <span class="body-sm" style="font-family: 'JetBrains Mono', monospace;" id="metric-latency">- ms</span>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span class="body-sm" style="color: var(--color-charcoal);">Tokens Generated</span>
+                <span class="body-sm" style="font-family: 'JetBrains Mono', monospace;" id="metric-tokens">-</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </main>
+    </div>
+    <script type="module" src="./ask.js"></script>
+    <script>
+      // Small UI tweaks
+      const chips = document.querySelectorAll('.chip');
+      const input = document.getElementById('question-input');
+      chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+          input.value = chip.textContent.replace('✧ ', '');
+          document.getElementById('btn-ask').disabled = false;
+        });
+      });
+    </script>
+  </body>
+</html>

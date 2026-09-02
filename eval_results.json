@@ -1,0 +1,346 @@
+{
+  "hybrid": {
+    "run_id": "eval_dc701f3b",
+    "elapsed_s": 1796.6,
+    "scores": {
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.9502,
+      "context_precision": 0.8571,
+      "context_recall": 1.0
+    },
+    "per_question": [
+      {
+        "question": "What is FastAPI built on top of?",
+        "answer": "FastAPI is built on top of Starlette for the web parts and Pydantic for the data parts [1]. Additionally, it is built on ASGI (Asynchronous Server Gateway Interface) [2].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8666,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      {
+        "question": "What are the automatic documentation endpoints provided by FastAPI?",
+        "answer": "FastAPI provides Swagger UI at `/docs` and ReDoc at `/redoc` as automatic documentation endpoints [2].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9664,
+        "context_precision": 0.5,
+        "context_recall": 1.0
+      },
+      {
+        "question": "What ASGI server is recommended for FastAPI?",
+        "answer": "Uvicorn is the recommended ASGI server for FastAPI applications [1].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9917,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      {
+        "question": "How should Python imports be organized?",
+        "answer": "Python imports should be organized into three groups, separated by blank lines [2]:\n1. Standard library imports [2]\n2. Third-party library imports [2]\n3. Local application imports [2]",
+        "faithfulness": 1.0,
+        "answer_relevancy": 1.0,
+        "context_precision": 0.5,
+        "context_recall": 1.0
+      },
+      {
+        "question": "Why should you use virtual environments in Python?",
+        "answer": "You should use virtual environments in Python because they isolate project dependencies, which prevents conflicts between different projects [1]. Additionally, they make it easy to reproduce the exact same environment across different machines [1].",
+        "faithfulness": 1.0,
+        "answer_relevancy": null,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      {
+        "question": "What is the purpose of Pydantic in FastAPI?",
+        "answer": "In FastAPI, Pydantic is used for the data parts of the framework [4]. Specifically, its purposes include:\n\n* Defining the shape of data and request bodies [1, 2].\n* Automatically validating incoming requests and JSON data against these models, as well as returning clear error messages for invalid data [1, 2].\n* Handling data serialization [1].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.996,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      {
+        "question": "What testing framework is recommended for Python?",
+        "answer": "Pytest is the most popular Python testing framework [1].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9427,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      {
+        "question": "How should secrets and API keys be handled in Python projects?",
+        "answer": "Secrets, API keys, and passwords should never be hardcoded in source code [1]. Instead, you should use environment variables and `.env` files that are excluded from version control for sensitive configuration [1].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8379,
+        "context_precision": null,
+        "context_recall": 1.0
+      },
+      {
+        "question": "What is the purpose of FastAPI's dependency injection system?",
+        "answer": "The purpose of FastAPI's dependency injection system is to allow you to define reusable dependencies for various components such as database sessions, authentication, and configuration [1]. It is also used in combination with SQLAlchemy to provide database sessions to route handlers [2].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 1.0,
+        "context_precision": null,
+        "context_recall": 1.0
+      },
+      {
+        "question": "What connection pooling strategy is appropriate for SQLite?",
+        "answer": "SQLAlchemy's `StaticPool` is appropriate for SQLite's single-threaded nature [1].",
+        "faithfulness": null,
+        "answer_relevancy": null,
+        "context_precision": null,
+        "context_recall": null
+      },
+      {
+        "question": "What is middleware in FastAPI used for?",
+        "answer": "Middleware in FastAPI runs before and after each request, and its common uses include CORS handling, logging, authentication, and request/response modification [1].",
+        "faithfulness": null,
+        "answer_relevancy": null,
+        "context_precision": null,
+        "context_recall": null
+      },
+      {
+        "question": "What is the recommended batch size for embedding text chunks?",
+        "answer": "The recommended batch size for processing multiple items like embedding text chunks is 32-64 for optimal throughput [1].",
+        "faithfulness": null,
+        "answer_relevancy": null,
+        "context_precision": null,
+        "context_recall": null
+      },
+      {
+        "question": "What should a Python README file contain?",
+        "answer": "A Python README file should explain:\n- What the project does [2]\n- How to install and run it [2]\n- How to contribute [2]\n- License information [2]",
+        "faithfulness": null,
+        "answer_relevancy": null,
+        "context_precision": null,
+        "context_recall": null
+      },
+      {
+        "question": "How do you profile Python code for performance?",
+        "answer": "I don't have enough information in the provided documents to answer this question.",
+        "faithfulness": null,
+        "answer_relevancy": null,
+        "context_precision": null,
+        "context_recall": null
+      },
+      {
+        "question": "What is the purpose of context managers in Python?",
+        "answer": "The purpose of context managers (used with `with` statements) in Python is resource management [1]. They ensure that resources such as file handles, database connections, and network sockets are properly cleaned up, even if exceptions occur [1].",
+        "faithfulness": null,
+        "answer_relevancy": null,
+        "context_precision": null,
+        "context_recall": null
+      },
+      {
+        "question": "What cloud platforms can FastAPI be deployed to?",
+        "answer": "FastAPI can be deployed to any cloud platform that supports Python applications, including Render, Railway, AWS, GCP, and Azure [1].",
+        "faithfulness": null,
+        "answer_relevancy": null,
+        "context_precision": null,
+        "context_recall": null
+      },
+      {
+        "question": "How do you prevent SQL injection in Python?",
+        "answer": "To prevent SQL injection in Python, you should use parameterized queries for database operations [1].",
+        "faithfulness": null,
+        "answer_relevancy": null,
+        "context_precision": null,
+        "context_recall": null
+      },
+      {
+        "question": "What caching approach is recommended for Python functions?",
+        "answer": "For expensive pure functions, `functools.lru_cache` is recommended for memoization [1]. For more complex caching needs, Redis or Memcached should be considered [1].",
+        "faithfulness": null,
+        "answer_relevancy": null,
+        "context_precision": null,
+        "context_recall": null
+      },
+      {
+        "question": "What are path operations in FastAPI?",
+        "answer": "Path operations are the fundamental building blocks of a FastAPI application, and each one is a Python function decorated with an HTTP method decorator [1].",
+        "faithfulness": null,
+        "answer_relevancy": null,
+        "context_precision": null,
+        "context_recall": null
+      },
+      {
+        "question": "How should you audit Python dependencies for security?",
+        "answer": "You should regularly audit dependencies for known vulnerabilities using tools like `pip-audit` or `safety` [1].",
+        "faithfulness": null,
+        "answer_relevancy": null,
+        "context_precision": null,
+        "context_recall": null
+      }
+    ]
+  },
+  "vector_only": {
+    "run_id": "eval_7c8461c4",
+    "elapsed_s": 895.1,
+    "scores": {
+      "faithfulness": 1.0,
+      "answer_relevancy": 0.8974,
+      "context_precision": 0.8684,
+      "context_recall": 0.9474
+    },
+    "per_question": [
+      {
+        "question": "What is FastAPI built on top of?",
+        "answer": "FastAPI is built on top of Starlette for the web parts and Pydantic for the data parts [1]. It is also built on ASGI (Asynchronous Server Gateway Interface) [2].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8667,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      {
+        "question": "What are the automatic documentation endpoints provided by FastAPI?",
+        "answer": "FastAPI provides Swagger UI at `/docs` and ReDoc at `/redoc` as automatic interactive API documentation endpoints [2].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9537,
+        "context_precision": 0.5,
+        "context_recall": 1.0
+      },
+      {
+        "question": "What ASGI server is recommended for FastAPI?",
+        "answer": "Uvicorn is the recommended ASGI server for FastAPI applications [1].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9917,
+        "context_precision": null,
+        "context_recall": 1.0
+      },
+      {
+        "question": "How should Python imports be organized?",
+        "answer": "Python imports should be organized into three distinct groups, with each group separated by a blank line [2]:\n1. Standard library imports [2]\n2. Third-party library imports [2]\n3. Local application imports [2]",
+        "faithfulness": 1.0,
+        "answer_relevancy": 1.0,
+        "context_precision": 0.5,
+        "context_recall": 1.0
+      },
+      {
+        "question": "Why should you use virtual environments in Python?",
+        "answer": "Virtual environments in Python should be used because they isolate project dependencies, which prevents conflicts between different projects [1]. Additionally, they make it easy to reproduce the exact same environment across different machines [1].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9917,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      {
+        "question": "What is the purpose of Pydantic in FastAPI?",
+        "answer": "In FastAPI, Pydantic is used for the data parts of the framework [4]. Specifically, Pydantic models are used to define request bodies and the shape of data [1, 2]. FastAPI leverages Pydantic along with Python type hints to automatically validate incoming requests and JSON data against these models, return clear error messages for invalid data, and handle automatic request validation, serialization, and documentation [1, 2, 4].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.977,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      {
+        "question": "What testing framework is recommended for Python?",
+        "answer": "Pytest is the most popular Python testing framework [1].",
+        "faithfulness": null,
+        "answer_relevancy": 0.9427,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      {
+        "question": "How should secrets and API keys be handled in Python projects?",
+        "answer": "Secrets, API keys, and passwords should never be hardcoded in source code [1]. Instead, you should use environment variables and `.env` files (which are excluded from version control) for sensitive configuration [1].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8846,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      {
+        "question": "What is the purpose of FastAPI's dependency injection system?",
+        "answer": "FastAPI's dependency injection system allows you to define reusable dependencies for database sessions, authentication, configuration, and more [1]. It is also used to provide database sessions to route handlers [2].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 1.0,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      {
+        "question": "What connection pooling strategy is appropriate for SQLite?",
+        "answer": "SQLAlchemy's `StaticPool` is appropriate for SQLite's single-threaded nature [1].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8922,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      {
+        "question": "What is middleware in FastAPI used for?",
+        "answer": "Middleware in FastAPI runs before and after each request, with common uses including CORS handling, logging, authentication, and request/response modification [1].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9742,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      {
+        "question": "What is the recommended batch size for embedding text chunks?",
+        "answer": "The recommended batch size for processing multiple items like embedding text chunks is 32-64 for optimal throughput [1].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.952,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      {
+        "question": "What should a Python README file contain?",
+        "answer": "A Python README file should explain:\n- What the project does [2]\n- How to install and run it [2]\n- How to contribute [2]\n- License information [2]",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9373,
+        "context_precision": 0.5,
+        "context_recall": null
+      },
+      {
+        "question": "How do you profile Python code for performance?",
+        "answer": "I don't have enough information in the provided documents to answer this question.",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0,
+        "context_precision": 0.0,
+        "context_recall": 0.0
+      },
+      {
+        "question": "What is the purpose of context managers in Python?",
+        "answer": "The purpose of context managers (used with `with` statements) in Python is to handle resource management by ensuring that resources such as file handles, database connections, and network sockets are properly cleaned up, even if exceptions occur [1].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 1.0,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      {
+        "question": "What cloud platforms can FastAPI be deployed to?",
+        "answer": "FastAPI applications can be deployed to any cloud platform that supports Python applications, including Render, Railway, AWS, GCP, and Azure [1].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8895,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      {
+        "question": "How do you prevent SQL injection in Python?",
+        "answer": "To prevent SQL injection in Python, you should use parameterized queries for database operations [1].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9988,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      {
+        "question": "What caching approach is recommended for Python functions?",
+        "answer": "For memoizing expensive pure functions, `functools.lru_cache` is recommended, while Redis or Memcached can be considered for more complex caching needs [1].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8457,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      {
+        "question": "What are path operations in FastAPI?",
+        "answer": "Path operations are the fundamental building blocks of a FastAPI application, and each one is a Python function decorated with an HTTP method decorator [1].",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.9925,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      },
+      {
+        "question": "How should you audit Python dependencies for security?",
+        "answer": "You should regularly audit dependencies for known vulnerabilities using tools like `pip-audit` or `safety`.",
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8572,
+        "context_precision": 1.0,
+        "context_recall": 1.0
+      }
+    ]
+  }
+}

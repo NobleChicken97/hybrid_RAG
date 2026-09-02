@@ -1,0 +1,190 @@
+/* Ease Health Clinical Theme for Streamlit */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Inter:wght@300;400;600&display=swap');
+
+:root {
+  /* Colors */
+  --color-forest-ink: #0f3e17;
+  --color-sage-wash: #b1dbb8;
+  --color-mist-blue: #b6ced5;
+  --color-mint-veil: #cfe7d3;
+  --color-linen: #e1f4df;
+  --color-linen-white: #fffefc;
+  --color-hairline-gray: #e5e7eb;
+  --color-charcoal: #222222;
+  --color-graphite: #333333;
+  --color-true-black: #000000;
+  
+  /* Radii */
+  --radius-cards: 14px;
+  --radius-buttons: 14px;
+  --radius-nav: 7px;
+  --radius-badges: 999px;
+}
+
+/* Global styling */
+.stApp {
+    background-color: var(--color-linen-white);
+    color: var(--color-true-black);
+    font-family: 'Inter', sans-serif;
+}
+
+/* Sidebar styling */
+[data-testid="stSidebar"] {
+    background-color: var(--color-linen-white);
+    border-right: 1px solid var(--color-hairline-gray);
+}
+
+[data-testid="stSidebar"] .css-17lntkn {
+    color: var(--color-forest-ink);
+}
+
+/* Typography Overrides */
+h1, h2, h3 {
+    font-family: 'Cormorant Garamond', serif !important;
+    color: var(--color-forest-ink) !important;
+    font-weight: 300 !important;
+}
+
+p, span, div, label {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Buttons */
+.stButton > button {
+    background-color: var(--color-forest-ink) !important;
+    color: var(--color-linen-white) !important;
+    border: none !important;
+    border-radius: var(--radius-buttons) !important;
+    padding: 8px 24px !important;
+    font-weight: 400 !important;
+    transition: filter 0.2s ease !important;
+    box-shadow: none !important;
+}
+
+.stButton > button:hover {
+    filter: brightness(1.2);
+    border: none !important;
+    color: var(--color-linen-white) !important;
+}
+
+/* Custom Cards / Metrics */
+.stMetric, .css-1wivap2, [data-testid="metric-container"] {
+    background-color: var(--color-mint-veil) !important;
+    border: 1px solid var(--color-hairline-gray) !important;
+    border-radius: var(--radius-cards) !important;
+    padding: 16px !important;
+    box-shadow: none !important;
+}
+
+[data-testid="stMetricValue"] {
+    color: var(--color-forest-ink) !important;
+}
+
+/* Expander */
+.streamlit-expanderHeader {
+    background-color: var(--color-linen) !important;
+    border-radius: var(--radius-cards) !important;
+    border: 1px solid var(--color-hairline-gray) !important;
+    color: var(--color-true-black) !important;
+}
+
+.streamlit-expanderContent {
+    border-left: 1px solid var(--color-hairline-gray);
+    border-right: 1px solid var(--color-hairline-gray);
+    border-bottom: 1px solid var(--color-hairline-gray);
+    border-radius: 0 0 var(--radius-cards) var(--radius-cards);
+}
+
+/* Alerts / Info boxes */
+.stAlert, [data-testid="stAlert"] {
+    background-color: var(--color-linen) !important;
+    color: var(--color-true-black) !important;
+    border-radius: var(--radius-cards) !important;
+    border: 1px solid var(--color-hairline-gray) !important;
+}
+
+.stAlert [data-testid="markdown-container"] {
+    color: var(--color-true-black) !important;
+}
+
+/* File uploader */
+[data-testid="stFileUploader"] {
+    border: 2px dashed var(--color-hairline-gray) !important;
+    border-radius: var(--radius-cards) !important;
+    padding: 16px !important;
+    background-color: transparent !important;
+}
+
+[data-testid="stFileUploader"]:hover {
+    border-color: var(--color-forest-ink) !important;
+    background-color: var(--color-linen) !important;
+}
+
+/* Custom Chunk Cards used in Markdown */
+.chunk-card {
+    background-color: var(--color-linen-white);
+    border: 1px solid var(--color-hairline-gray);
+    border-radius: var(--radius-cards);
+    padding: 16px;
+    margin-bottom: 12px;
+}
+.chunk-header {
+    color: var(--color-forest-ink);
+    font-size: 0.85em;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+/* Tabs */
+.stTabs [data-baseweb="tab-list"] {
+    border-bottom: 1px solid var(--color-hairline-gray);
+}
+
+.stTabs [data-baseweb="tab"] {
+    border-radius: var(--radius-nav) var(--radius-nav) 0 0 !important;
+}
+
+.stTabs [aria-selected="true"] {
+    color: var(--color-forest-ink) !important;
+    border-bottom-color: var(--color-forest-ink) !important;
+}
+
+/* Inputs */
+.stTextInput > div > div > input, .stTextArea > div > div > textarea, .stSelectbox > div > div > div {
+    border: 1px solid var(--color-hairline-gray) !important;
+    border-radius: var(--radius-nav) !important;
+    background-color: var(--color-linen-white) !important;
+    color: var(--color-true-black) !important;
+}
+
+.stTextInput > div > div > input:focus, .stTextArea > div > div > textarea:focus {
+    border-color: var(--color-forest-ink) !important;
+    box-shadow: none !important;
+}
+
+/* Eval Page Specifics */
+.score-card {
+    background-color: var(--color-mint-veil);
+    border: 1px solid var(--color-hairline-gray);
+    border-radius: var(--radius-cards);
+    padding: 20px;
+    text-align: center;
+}
+.score-value {
+    font-size: 2.2em;
+    font-weight: 700;
+    color: var(--color-forest-ink);
+}
+.score-label {
+    font-size: 0.85em;
+    color: var(--color-charcoal);
+    margin-top: 4px;
+}
+.comparison-better {
+    color: var(--color-forest-ink);
+    font-weight: 600;
+}
+.comparison-worse {
+    color: #ef4444; /* Keep red for worse */
+    font-weight: 600;
+}

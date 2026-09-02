@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ingest - Technical Processor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- SIDEBAR -->
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div style="font-size: var(--text-body); font-weight: 600;">Clinical-RAG</div>
+          <div class="caption" style="color: var(--color-charcoal); margin-top: var(--spacing-4);">V 2.0.4 - <span style="color: var(--color-forest-ink);">ACTIVE</span></div>
+        </div>
+        <nav class="sidebar-menu">
+          <a href="/" class="sidebar-item">
+            <span style="font-size: 18px;">🏠</span> Overview
+          </a>
+          <a href="/ingest.html" class="sidebar-item active">
+            <span style="font-size: 18px;">🗄️</span> Retrieval
+          </a>
+          <a href="/ask.html" class="sidebar-item">
+            <span style="font-size: 18px;">⚡</span> Generation
+          </a>
+          <a href="/eval.html" class="sidebar-item">
+            <span style="font-size: 18px;">📈</span> Analytics
+          </a>
+          <a href="/docs.html" class="sidebar-item glitch-hover">
+            <span style="font-size: 18px;">📘</span> Documentation
+          </a>
+          <a href="/topology.html" class="sidebar-item glitch-hover">
+            <span style="font-size: 18px;">🕸️</span> Topology
+          </a>
+          <a href="/system.html" class="sidebar-item">
+            <span style="font-size: 18px;">⚙️</span> System
+          </a>
+        </nav>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content" style="background-image: linear-gradient(var(--color-hairline-gray) 1px, transparent 1px), linear-gradient(90deg, var(--color-hairline-gray) 1px, transparent 1px); background-size: 40px 40px; padding: var(--spacing-42);">
+        
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: var(--spacing-42); border-bottom: 2px solid var(--color-true-black); padding-bottom: var(--spacing-14);">
+          <div>
+            <div class="caption" style="text-transform: uppercase; color: var(--color-charcoal); letter-spacing: 1px;">PIPELINE // STAGE 01</div>
+            <h1 class="heading" style="font-size: var(--text-heading-lg); color: var(--color-true-black);">Ingest Payload</h1>
+          </div>
+          <div style="display: flex; gap: var(--spacing-21); text-align: right;">
+            <div>
+              <div class="caption" style="text-transform: uppercase; color: var(--color-charcoal);">SYSTEM LOAD</div>
+              <div class="subheading">12%</div>
+            </div>
+            <div>
+              <div class="caption" style="text-transform: uppercase; color: var(--color-charcoal);">QUEUE STATUS</div>
+              <div class="subheading" style="color: var(--color-forest-ink);">IDLE</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--spacing-42);">
+          
+          <!-- LEFT COLUMN -->
+          <div class="flex-col gap-21">
+            <!-- Dropzone -->
+            <div class="file-uploader" id="drop-area" style="background-color: var(--color-linen-white); height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              <div style="font-size: 24px; margin-bottom: var(--spacing-14);">→</div>
+              <h2 class="subheading" style="font-family: var(--font-faire-octave); font-size: var(--text-heading-sm);">Initialize Transfer</h2>
+              <div class="caption" style="text-transform: uppercase; margin-top: var(--spacing-14); letter-spacing: 1px;">SUPPORTED FORMATS: .PDF, .MD, .TXT</div>
+              <div class="caption" style="text-transform: uppercase; letter-spacing: 1px;">MAX PAYLOAD: 500MB</div>
+              <input type="file" id="fileElem" style="display:none" accept=".pdf,.txt,.md" />
+              <div id="file-name" style="margin-top: var(--spacing-14); font-weight: 600; color: var(--color-forest-ink);"></div>
+            </div>
+
+            <!-- Configuration -->
+            <div class="card" style="margin-top: var(--spacing-14);">
+              <h3 class="subheading" style="margin-bottom: var(--spacing-21);">Parser Configuration</h3>
+              <div class="grid-3" style="margin-bottom: var(--spacing-21);">
+                <div class="flex-col">
+                  <label class="caption" style="text-transform: uppercase; margin-bottom: var(--spacing-7);">CHUNKING STRATEGY</label>
+                  <select class="input-field">
+                    <option>Recursive Character Text Splitter</option>
+                  </select>
+                </div>
+                <div class="flex-col">
+                  <label class="caption" style="text-transform: uppercase; margin-bottom: var(--spacing-7);">OVERLAP SIZE (TOKENS)</label>
+                  <input type="text" class="input-field" value="256">
+                </div>
+              </div>
+              <div class="flex-col" style="margin-bottom: var(--spacing-21);">
+                <label class="caption" style="text-transform: uppercase; margin-bottom: var(--spacing-7);">EMBEDDING MODEL</label>
+                <select class="input-field">
+                  <option>clinical-bge-small-v1.5</option>
+                </select>
+              </div>
+              <div style="text-align: right;">
+                <button class="btn-primary" id="btn-ingest" style="background-color: var(--color-true-black);">EXECUTE INGEST</button>
+              </div>
+              
+              <div id="ingest-loading" style="display:none; align-items:center; gap:8px; margin-top:14px; justify-content: flex-end;">
+                <div class="spinner"></div><span class="body-sm">Processing...</span>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT COLUMN -->
+          <div class="flex-col gap-21">
+            
+            <!-- Graphic Placeholder (Tree) -->
+            <div class="card" style="height: 200px; display: flex; align-items: center; justify-content: center; background-color: var(--color-hairline-gray);">
+              <span class="caption" style="color: var(--color-charcoal);">[ File Hierarchy Graphic ]</span>
+            </div>
+
+            <!-- Parameter Dock -->
+            <div class="parameter-dock">
+              <h3 class="subheading" style="margin-bottom: var(--spacing-21);">Parameter Dock</h3>
+              <div class="flex-col gap-14" style="margin-bottom: var(--spacing-21);">
+                <div class="flex-col">
+                  <label class="caption" style="text-transform: uppercase; margin-bottom: var(--spacing-7);">DOCUMENT TITLE</label>
+                  <input type="text" id="title-input" class="input-field" placeholder="Auto-generated if blank">
+                </div>
+              </div>
+              <div id="ingest-result" style="margin-top: var(--spacing-21);"></div>
+            </div>
+
+            <!-- Terminal log style text -->
+            <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--color-charcoal); line-height: 1.5; padding: var(--spacing-14);">
+              ...unrecognized encoding pattern at line 42, continuing...<br>
+              TOKENS: 12 &nbsp;&nbsp; VECTOR: PENDING<br><br>
+              <div style="display:flex; justify-content: space-between; align-items: center; margin-top: 8px;">
+                <span>PKT_ID: X7F90</span>
+                <span class="badge-mist" style="background-color: var(--color-sage-wash);">VALIDATED</span>
+              </div>
+              <br>Clearance recommended following successful completion...<br>
+              TOKENS: 501 &nbsp;&nbsp; VECTOR: GENERATED
+            </div>
+
+          </div>
+        </div>
+
+      </main>
+    </div>
+    <script type="module" src="./ingest.js"></script>
+    <script>
+      // Hook up UI specific to this new layout
+      const dropArea = document.getElementById('drop-area');
+      const fileElem = document.getElementById('fileElem');
+      const fileName = document.getElementById('file-name');
+
+      dropArea.addEventListener('click', () => fileElem.click());
+      
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false)
+      });
+      function preventDefaults (e) {
+        e.preventDefault()
+        e.stopPropagation()
+      }
+      
+      dropArea.addEventListener('dragover', () => dropArea.classList.add('dragover'));
+      dropArea.addEventListener('dragleave', () => dropArea.classList.remove('dragover'));
+      dropArea.addEventListener('drop', (e) => {
+        dropArea.classList.remove('dragover');
+        let dt = e.dataTransfer;
+        let files = dt.files;
+        if(files.length) {
+          fileElem.files = files;
+          fileName.textContent = files[0].name;
+        }
+      });
+      fileElem.addEventListener('change', () => {
+        if(fileElem.files.length) fileName.textContent = fileElem.files[0].name;
+      });
+    </script>
+  </body>
+</html>

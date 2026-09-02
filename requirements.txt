@@ -1,0 +1,55 @@
+# === Core Backend ===
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
+python-dotenv>=1.0.0
+python-multipart>=0.0.9
+
+# === Database ===
+sqlalchemy>=2.0.0
+aiosqlite>=0.20.0
+
+# === Embeddings & Reranking ===
+sentence-transformers>=3.0.0
+torch>=2.0.0
+
+# === Vector Store ===
+chromadb>=0.5.0
+
+# === Keyword Search ===
+rank-bm25>=0.2.2
+
+# === Document Loading ===
+pypdf>=4.0.0
+pdfplumber>=0.11.0
+
+# === LLM ===
+anthropic>=0.34.0
+openai>=1.0.0
+tenacity>=8.0.0
+
+# === Evaluation ===
+ragas>=0.4.0
+datasets>=2.0.0
+pandas>=2.0.0
+
+# === RAGAS judge integration (langchain 0.3.x pinned - see docs/progress.md:
+# ragas 0.4.x is incompatible with langchain-community 0.4.x) ===
+langchain==0.3.30
+langchain-core==0.3.86
+langchain-community==0.3.31
+langchain-openai==0.3.35
+
+# === Frontend ===
+streamlit>=1.38.0
+requests>=2.31.0
+
+# === Schemas ===
+pydantic>=2.0.0
+pydantic-settings>=2.0.0
+
+# === Tokenization ===
+tiktoken>=0.7.0
+
+# === Testing ===
+pytest>=8.0.0
+pytest-asyncio>=0.23.0

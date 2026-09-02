@@ -1,0 +1,41 @@
+# === Data stores (persist locally, don't commit) ===
+data/chroma_db/
+data/bm25_index/
+data/hybrid_rag.db
+data/uploads/
+
+# === Environment ===
+.env
+
+# === Python ===
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.eggs/
+.pytest_cache/
+
+# === Logs (run evidence lives in eval_results.json + docs/progress.md) ===
+*.log
+
+# === Local one-offs ===
+vs_BuildTools.exe
+
+# === IDE ===
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === Model cache (sentence-transformers downloads) ===
+# These are large and auto-downloaded on first run
+# Uncomment if you want to exclude them from version control:
+# .cache/

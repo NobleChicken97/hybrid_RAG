@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation - Technical References</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+  </head>
+  <body>
+    <div class="app-layout">
+      <!-- SIDEBAR -->
+      <aside class="sidebar reveal-left">
+        <div class="sidebar-header">
+          <div style="font-size: var(--text-body); font-weight: 600;">Clinical-RAG</div>
+          <div class="caption" style="color: var(--color-charcoal); margin-top: var(--spacing-4);">V 2.0.4 - <span style="color: var(--color-forest-ink);">ACTIVE</span></div>
+        </div>
+        <nav class="sidebar-menu">
+          <a href="/" class="sidebar-item">
+            <span style="font-size: 18px;">🏠</span> Overview
+          </a>
+          <a href="/ingest.html" class="sidebar-item">
+            <span style="font-size: 18px;">🗄️</span> Retrieval
+          </a>
+          <a href="/ask.html" class="sidebar-item">
+            <span style="font-size: 18px;">⚡</span> Generation
+          </a>
+          <a href="/eval.html" class="sidebar-item">
+            <span style="font-size: 18px;">📈</span> Analytics
+          </a>
+          <a href="/topology.html" class="sidebar-item glitch-hover">
+            <span style="font-size: 18px;">🕸️</span> Topology
+          </a>
+          <a href="/system.html" class="sidebar-item">
+            <span style="font-size: 18px;">⚙️</span> System
+          </a>
+          <a href="/docs.html" class="sidebar-item active">
+            <span style="font-size: 18px;">📘</span> Documentation
+          </a>
+        </nav>
+      </aside>
+
+      <!-- MAIN CONTENT -->
+      <main class="main-content bg-pan" style="background-image: linear-gradient(var(--color-hairline-gray) 1px, transparent 1px), linear-gradient(90deg, var(--color-hairline-gray) 1px, transparent 1px); background-size: 40px 40px; padding: var(--spacing-42);">
+        
+        <div class="reveal-up" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: var(--spacing-42); border-bottom: 2px solid var(--color-true-black); padding-bottom: var(--spacing-14);">
+          <div>
+            <div class="caption" style="text-transform: uppercase; color: var(--color-charcoal); letter-spacing: 1px;">DEVELOPER RESOURCES</div>
+            <h1 class="heading glitch-hover" style="font-size: var(--text-heading-lg); color: var(--color-true-black);">API Documentation</h1>
+          </div>
+          <div style="display: flex; gap: var(--spacing-21); text-align: right;">
+            <div>
+              <div class="caption" style="text-transform: uppercase; color: var(--color-charcoal);">LATEST BUILD</div>
+              <div class="subheading" style="color: var(--color-forest-ink);">v2.0.4</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--spacing-42);">
+          
+          <!-- LEFT COLUMN: Docs Content -->
+          <div class="flex-col gap-21">
+            
+            <div class="card reveal-up" style="animation-delay: 0.1s;">
+              <h2 class="subheading" style="margin-bottom: var(--spacing-14);">Authentication</h2>
+              <p class="body-sm" style="color: var(--color-charcoal); margin-bottom: var(--spacing-14);">
+                All requests to the Clinical-RAG API must be authenticated via a Bearer token. Include the token in the Authorization header.
+              </p>
+              <div style="background-color: var(--color-true-black); color: var(--color-linen-white); font-family: 'JetBrains Mono', monospace; font-size: var(--text-caption); padding: var(--spacing-14); border: 1px solid var(--color-true-black); border-radius: 0px; margin-bottom: var(--spacing-14);">
+                Authorization: Bearer &lt;YOUR_API_KEY&gt;
+              </div>
+            </div>
+
+            <div class="card reveal-up" style="animation-delay: 0.2s;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-14);">
+                <h2 class="subheading">POST /v1/ingest</h2>
+                <span class="badge-mist" style="border-radius: 0; border: 1px solid var(--color-true-black);">ENDPOINT</span>
+              </div>
+              <p class="body-sm" style="color: var(--color-charcoal); margin-bottom: var(--spacing-14);">
+                Ingests a new clinical document into the vector space. The payload must not exceed 500MB.
+              </p>
+              <h4 class="caption" style="text-transform: uppercase; margin-bottom: var(--spacing-7);">Parameters</h4>
+              <table class="data-table" style="margin-bottom: var(--spacing-14);">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="font-family: 'JetBrains Mono', monospace;">file</td>
+                    <td>Binary</td>
+                    <td>The .pdf, .txt, or .md file to ingest.</td>
+                  </tr>
+                  <tr>
+                    <td style="font-family: 'JetBrains Mono', monospace;">chunk_size</td>
+                    <td>Integer</td>
+                    <td>The token overlap size. Default is 256.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="card reveal-up" style="animation-delay: 0.3s;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-14);">
+                <h2 class="subheading">POST /v1/ask</h2>
+                <span class="badge-mist" style="border-radius: 0; border: 1px solid var(--color-true-black);">ENDPOINT</span>
+              </div>
+              <p class="body-sm" style="color: var(--color-charcoal); margin-bottom: var(--spacing-14);">
+                Submits a clinical inquiry and returns the generated synthesis along with the retrieved citation contexts.
+              </p>
+              <div style="background-color: var(--color-true-black); color: var(--color-linen-white); font-family: 'JetBrains Mono', monospace; font-size: var(--text-caption); padding: var(--spacing-14); border: 1px solid var(--color-true-black); border-radius: 0px;">
+<pre style="margin:0;"><code>curl -X POST "https://api.clinical-rag.local/v1/ask" \
+     -H "Authorization: Bearer TOKEN" \
+     -H "Content-Type: application/json" \
+     -d '{"query": "Recent guidelines for Pathway X", "mode": "hybrid"}'</code></pre>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT COLUMN: Table of Contents -->
+          <div class="flex-col gap-21 reveal-up" style="animation-delay: 0.4s;">
+            <div class="parameter-dock">
+              <h3 class="subheading" style="margin-bottom: var(--spacing-21);">Contents</h3>
+              <ul style="list-style-type: none; font-size: var(--text-body-sm); display: flex; flex-direction: column; gap: var(--spacing-11);">
+                <li><a href="#" style="color: var(--color-charcoal); text-decoration: none;" class="glitch-hover">Authentication</a></li>
+                <li><a href="#" style="color: var(--color-forest-ink); text-decoration: none; font-weight: 600;">Endpoints</a>
+                  <ul style="list-style-type: none; margin-left: var(--spacing-14); margin-top: var(--spacing-7); display: flex; flex-direction: column; gap: var(--spacing-7);">
+                    <li><a href="#" style="color: var(--color-charcoal); text-decoration: none;" class="glitch-hover">/v1/ingest</a></li>
+                    <li><a href="#" style="color: var(--color-charcoal); text-decoration: none;" class="glitch-hover">/v1/ask</a></li>
+                    <li><a href="#" style="color: var(--color-charcoal); text-decoration: none;" class="glitch-hover">/v1/evaluate</a></li>
+                  </ul>
+                </li>
+                <li><a href="#" style="color: var(--color-charcoal); text-decoration: none;" class="glitch-hover">Error Codes</a></li>
+                <li><a href="#" style="color: var(--color-charcoal); text-decoration: none;" class="glitch-hover">Rate Limits</a></li>
+              </ul>
+            </div>
+            
+            <button class="btn-primary" style="width: 100%;">DOWNLOAD OPENAPI SPEC</button>
+          </div>
+        </div>
+
+      </main>
+    </div>
+    <script src="./animations.js"></script>
+  </body>
+</html>
