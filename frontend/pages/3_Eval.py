@@ -82,7 +82,7 @@ if run_eval:
                     ("Context Recall", scores.get("context_recall")),
                 ]
 
-                for col, (label, value) in zip(score_cols, metrics):
+                for col, (label, value) in zip(score_cols, metrics, strict=True):
                     with col:
                         display = f"{value:.4f}" if value is not None else "N/A"
                         st.metric(label, display)

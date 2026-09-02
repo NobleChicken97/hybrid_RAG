@@ -48,47 +48,47 @@ with tab1:
 
     if st.button("🚀 Ingest Document", key="ingest_file", disabled=uploaded_file is None) and uploaded_file is not None:
         title = title_file if title_file else uploaded_file.name
-            with st.spinner("Processing document..."):
-                try:
-                    files = {"file": (uploaded_file.name, uploaded_file.getvalue())}
-                    data = {"title": title}
-                    response = requests.post(
-                        f"{BACKEND_URL}/ingest",
-                        files=files,
-                        data=data,
-                        timeout=120,
+        with st.spinner("Processing document..."):
+            try:
+                files = {"file": (uploaded_file.name, uploaded_file.getvalue())}
+                data = {"title": title}
+                response = requests.post(
+                    f"{BACKEND_URL}/ingest",
+                    files=files,
+                    data=data,
+                    timeout=120,
+                )
+
+                if response.status_code == 200:
+                    result = response.json()
+                    st.success(
+                        f"✅ Document ingested! "
+                        f"**{result['chunk_count']}** chunks created."
                     )
 
-                    if response.status_code == 200:
-                        result = response.json()
-                        st.success(
-                            f"✅ Document ingested! "
-                            f"**{result['chunk_count']}** chunks created."
+                    # Show chunk previews
+                    st.markdown("### Chunk Previews")
+                    for chunk in result.get("sample_chunks", []):
+                        st.markdown(
+                            f"""<div class="chunk-card">
+                            <div class="chunk-header">
+                                📦 {chunk['chunk_id']} | {chunk['token_count']} tokens
+                                {(' | 📑 ' + chunk['section_header']) if chunk.get('section_header') else ''}
+                            </div>
+                            <div>{chunk['text_preview']}</div>
+                            </div>""",
+                            unsafe_allow_html=True,
                         )
-
-                        # Show chunk previews
-                        st.markdown("### Chunk Previews")
-                        for chunk in result.get("sample_chunks", []):
-                            st.markdown(
-                                f"""<div class="chunk-card">
-                                <div class="chunk-header">
-                                    📦 {chunk['chunk_id']} | {chunk['token_count']} tokens
-                                    {(' | 📑 ' + chunk['section_header']) if chunk.get('section_header') else ''}
-                                </div>
-                                <div>{chunk['text_preview']}</div>
-                                </div>""",
-                                unsafe_allow_html=True,
-                            )
-                    else:
-                        st.error(f"Error: {response.json().get('detail', response.text)}")
-                except requests.ConnectionError:
-                    st.error(
-                        "❌ Cannot connect to backend. "
-                        "Make sure the FastAPI server is running on "
-                        f"{BACKEND_URL}"
-                    )
-                except Exception as e:
-                    st.error(f"Error: {e}")
+                else:
+                    st.error(f"Error: {response.json().get('detail', response.text)}")
+            except requests.ConnectionError:
+                st.error(
+                    "❌ Cannot connect to backend. "
+                    "Make sure the FastAPI server is running on "
+                    f"{BACKEND_URL}"
+                )
+            except Exception as e:
+                st.error(f"Error: {e}")
 
 with tab2:
     st.markdown("### Paste Raw Text")

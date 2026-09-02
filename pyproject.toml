@@ -32,6 +32,9 @@ ignore = [
 "eval_vector_only.py" = ["E402"]
 "diagnose_retrieval.py" = ["E402"]
 "dedupe_corpus.py" = ["E402"]
+# Test isolation: env vars must be set before any app import by design
+"tests/conftest.py" = ["E402"]
+"tests/test_api_smoke.py" = ["E402"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

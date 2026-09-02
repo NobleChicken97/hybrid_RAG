@@ -186,7 +186,7 @@ if ask_button and question:
 if st.session_state.get("query_history"):
     st.markdown("---")
     st.markdown("### 📜 Recent Queries")
-    for i, entry in enumerate(reversed(st.session_state["query_history"][-5:])):
+    for _i, entry in enumerate(reversed(st.session_state["query_history"][-5:])):
         with st.expander(f"Q: {entry['question'][:80]}... ({entry['mode']})"):
             st.write(entry["answer"])
             st.caption(f"Mode: {entry['mode']} | Citations: {entry['citations']}")
