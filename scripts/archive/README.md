@@ -2,7 +2,9 @@
 
 These completed their purpose during the 2026-09-01/02 validation and are
 kept for provenance only. Run from the repo root if ever needed again
-(e.g. `python scripts/archive/diagnose_retrieval.py`).
+with the repo on the import path (they were written when they lived at the
+root, so bare `python scripts/archive/...` fails with `ModuleNotFoundError`):
+`$env:PYTHONPATH = (Get-Location).Path; python scripts/archive/diagnose_retrieval.py`.
 
 | Script | Purpose | Status |
 |---|---|---|
