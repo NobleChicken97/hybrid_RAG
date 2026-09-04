@@ -21,7 +21,7 @@
 - Domain / A record → static IP: `rag.noblechicken.me` → `65.2.210.233` (Namecheap A record, TTL Automatic; verified via nslookup 2026-09-05)
 - TLS: Caddy automatic Let's Encrypt once the domain resolves to the box
 - LLM keys on the box: `GEMINI_API_KEY` + `GROQ_API_KEY` (matches config defaults: gemini flash-lite primary, groq fallback)
-- Status: provisioning — instance creation in progress, DNS + firewall pending
+- Status: LIVE 2026-09-05 — build green (backend + web Healthy, Caddy TLS issued for rag.noblechicken.me); prod ingest verified (`Sample FastAPI Guide`, 20 chunks); live prod query verified (correct answer + 2 citations + retrieval debug, gemini backend). Remaining: prod eval re-run, restart persistence check, README live-URL update. Known issue: web UI renders on all 6 routes but styling/palette/typography judged poor — redesign queued as follow-up.
 
 SSH from the dev machine (PowerShell):
 
