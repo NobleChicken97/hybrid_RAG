@@ -1,4 +1,36 @@
-# AWS Deployment — exact steps (~$13–15/month)
+# AWS Deployment
+
+## LIVE DEPLOYMENT RECORD (Lightsail — in progress since 2026-09-05)
+
+> Read this first. The EC2 `t4g.small` runbook below is SUPERSEDED — the
+> deployment decision changed to Lightsail (see `docs/prod.md`). The box-level
+> steps (Docker, clone, compose) are provider-agnostic and still valid; the
+> "Launch the instance" step is not — use the record below instead.
+
+- Provider / service: AWS Lightsail
+- Instance name: `hybrid-rag-prod`
+- Blueprint: Ubuntu 24.04 LTS (OS Only — no app blueprint)
+- Plan type: general_purpose, 4 GB RAM / 2 vCPU tier
+- Network: dual-stack (public IPv4 + IPv6)
+- Automatic snapshots: ON (daily — cheapest DR for local ChromaDB/SQLite state)
+- SSH key pair (Lightsail account): `trakplus-lightsail`
+- Local copy of the private key: `C:\Users\arpan.ARPAN\.ssh\trakplus-lightsail.pem`
+- SSH user: `ubuntu`
+- Static IP: (fill in once attached)
+- Domain / A record → static IP: (fill in once set)
+- TLS: Caddy automatic Let's Encrypt once the domain resolves to the box
+- LLM keys on the box: `GEMINI_API_KEY` + `GROQ_API_KEY` (matches config defaults: gemini flash-lite primary, groq fallback)
+- Status: provisioning — instance creation in progress, DNS + firewall pending
+
+SSH from the dev machine (PowerShell):
+
+```powershell
+ssh -i C:\Users\arpan.ARPAN\.ssh\trakplus-lightsail.pem ubuntu@<STATIC_IP>
+```
+
+---
+
+## Original EC2 runbook (superseded — kept for reference)
 
 Target: **EC2 `t4g.small`** (2 vCPU ARM Graviton, 2 GB RAM, us-east-1 pricing)
 — compute ≈ **$12.27/mo** + 20 GB gp3 disk ≈ **$1.60/mo** = **~$13.90/mo**, inside the $10–15 budget.
