@@ -11,23 +11,26 @@ function Hits({
   hits: { chunk_id: string; score: number; text_preview: string }[];
 }) {
   return (
-    <details className="rounded-lg border border-zinc-200 bg-white">
-      <summary className="cursor-pointer px-4 py-2 text-sm font-medium">
-        {title} ({hits.length})
+    <details className="rounded-lg border border-line bg-raised">
+      <summary className="cursor-pointer px-4 py-2 text-sm font-semibold text-ink">
+        {title}{" "}
+        <span className="font-mono text-xs font-medium text-gold">
+          ({hits.length})
+        </span>
       </summary>
-      <div className="flex flex-col gap-2 border-t border-zinc-100 p-3">
+      <div className="flex flex-col gap-2 border-t border-line-soft p-3">
         {hits.length === 0 && (
-          <p className="text-sm text-zinc-500">No hits.</p>
+          <p className="text-sm text-mist">No hits.</p>
         )}
         {hits.slice(0, 10).map((h) => (
           <div
             key={h.chunk_id}
-            className="rounded border-l-2 border-zinc-300 bg-zinc-50 px-3 py-2 text-sm"
+            className="rounded border-l-2 border-signal/60 bg-abyss px-3 py-2 text-sm"
           >
-            <div className="font-mono text-xs text-zinc-500">
+            <div className="font-mono text-xs text-dim">
               {h.chunk_id} · {h.score.toFixed(4)}
             </div>
-            <div className="mt-1 text-zinc-700">{h.text_preview}…</div>
+            <div className="mt-1 leading-5 text-mist">{h.text_preview}…</div>
           </div>
         ))}
       </div>
@@ -58,25 +61,30 @@ export default function AskPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-2xl font-semibold tracking-tight">
-        💬 Ask a question
-      </h1>
+      <div>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-signal">
+          Query
+        </p>
+        <h1 className="mt-1 font-display text-3xl font-semibold tracking-tight text-ink">
+          Ask a question
+        </h1>
+      </div>
 
-      <div className="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-4">
+      <div className="flex flex-col gap-3 rounded-xl border border-line bg-raised p-4">
         <input
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && question && !loading && ask()}
           placeholder="What would you like to know?"
-          className="rounded-lg border border-zinc-300 px-3 py-2 text-sm outline-none focus:border-zinc-500"
+          className="rounded-lg border border-line bg-abyss px-3 py-2 text-sm text-ink outline-none placeholder:text-dim focus:border-signal"
         />
-        <div className="flex items-center gap-4 text-sm">
+        <div className="flex flex-wrap items-center gap-4 text-sm text-mist">
           <label className="flex items-center gap-2">
             Mode
             <select
               value={mode}
               onChange={(e) => setMode(e.target.value)}
-              className="rounded border border-zinc-300 px-2 py-1"
+              className="rounded-md border border-line bg-abyss px-2 py-1 text-ink outline-none focus:border-signal"
             >
               <option value="hybrid">hybrid</option>
               <option value="vector_only">vector_only</option>
@@ -90,56 +98,63 @@ export default function AskPage() {
               max={20}
               value={topK}
               onChange={(e) => setTopK(Number(e.target.value))}
-              className="w-16 rounded border border-zinc-300 px-2 py-1"
+              className="w-16 rounded-md border border-line bg-abyss px-2 py-1 text-ink outline-none focus:border-signal"
             />
           </label>
           <button
             onClick={ask}
             disabled={!question || loading}
-            className="rounded-lg bg-zinc-900 px-4 py-1.5 text-sm font-medium text-white disabled:opacity-40"
+            className="rounded-lg bg-signal px-4 py-1.5 text-sm font-semibold text-signal-ink transition hover:brightness-110 disabled:opacity-40"
           >
-            {loading ? "Searching…" : "🔍 Ask"}
+            {loading ? "Searching…" : "Ask"}
           </button>
         </div>
       </div>
 
       {error && (
-        <p className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+        <p className="rounded-lg border border-bad/50 bg-bad/10 p-3 text-sm text-ink">
           {error}
         </p>
       )}
 
       {result && (
         <>
-          <section className="rounded-xl border border-zinc-200 bg-white p-4">
-            <h2 className="font-medium">📝 Answer</h2>
-            <p className="mt-2 whitespace-pre-wrap text-sm leading-6">
+          <section className="rounded-xl border border-signal/40 bg-raised p-5">
+            <h2 className="text-[11px] font-semibold uppercase tracking-[0.18em] text-signal">
+              Answer
+            </h2>
+            <p className="mt-2 whitespace-pre-wrap text-[15px] leading-7 text-ink">
               {result.answer}
             </p>
           </section>
 
           <section className="flex flex-col gap-2">
-            <h2 className="font-medium">
-              📌 Citations ({result.citations.length})
+            <h2 className="font-display text-lg font-semibold text-ink">
+              Citations{" "}
+              <span className="font-mono text-sm font-medium text-gold">
+                ({result.citations.length})
+              </span>
             </h2>
             {result.citations.map((c, i) => (
               <div
                 key={c.chunk_id}
-                className="rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm"
+                className="rounded-lg border border-line bg-raised px-4 py-3 text-sm"
               >
-                <div className="font-medium">
+                <div className="font-semibold text-ink">
                   [{i + 1}] {c.doc_title}
                 </div>
-                <div className="font-mono text-xs text-zinc-500">
+                <div className="mt-0.5 font-mono text-xs text-dim">
                   {c.chunk_id}
                 </div>
-                <div className="mt-1 text-zinc-600">“{c.snippet}”</div>
+                <div className="mt-1 leading-5 text-mist">“{c.snippet}”</div>
               </div>
             ))}
           </section>
 
           <section className="flex flex-col gap-2">
-            <h2 className="font-medium">🔧 Retrieval debug</h2>
+            <h2 className="font-display text-lg font-semibold text-ink">
+              Retrieval debug
+            </h2>
             <Hits title="BM25 hits" hits={result.retrieval_debug.bm25_hits} />
             <Hits
               title="Vector hits"

@@ -7,17 +7,20 @@ import { api, type Health } from "@/lib/api";
 const CARDS = [
   {
     href: "/ingest",
-    title: "📄 Ingest",
+    eyebrow: "Step 01 — Load",
+    title: "Ingest",
     body: "Upload PDF/Markdown/text. Context-aware chunking preserves document structure.",
   },
   {
     href: "/ask",
-    title: "💬 Ask",
+    eyebrow: "Step 02 — Query",
+    title: "Ask",
     body: "Cited answers with the full retrieval debug: BM25, vector, fusion, rerank.",
   },
   {
     href: "/eval",
-    title: "📊 Evaluate",
+    eyebrow: "Step 03 — Prove",
+    title: "Evaluate",
     body: "RAGAS scorecards and vector-only vs hybrid+rerank comparisons.",
   },
 ];
@@ -36,10 +39,13 @@ export default function Home() {
   return (
     <div className="flex flex-col gap-8">
       <div>
-        <h1 className="text-3xl font-semibold tracking-tight">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-signal">
+          Overview
+        </p>
+        <h1 className="mt-1 font-display text-4xl font-semibold tracking-tight text-ink">
           Hybrid RAG System
         </h1>
-        <p className="mt-2 max-w-2xl text-zinc-600">
+        <p className="mt-3 max-w-2xl leading-6 text-mist">
           A production-grade retrieval-augmented generation pipeline with
           hybrid retrieval, cross-encoder reranking, context compression, and
           RAGAS evaluation.
@@ -54,25 +60,28 @@ export default function Home() {
         ].map(([label, value]) => (
           <div
             key={label as string}
-            className="rounded-xl border border-zinc-200 bg-white p-4"
+            className="rounded-xl border border-line bg-raised p-5"
           >
-            <div className="text-xs uppercase tracking-wide text-zinc-500">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-dim">
               {label}
             </div>
-            <div className="mt-1 text-2xl font-semibold">
+            <div className="mt-1 font-display text-4xl font-semibold text-gold">
               {value ?? (error ? "—" : "…")}
             </div>
           </div>
         ))}
       </div>
       {error && (
-        <p className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+        <p className="rounded-lg border border-bad/50 bg-bad/10 p-3 text-sm text-ink">
           Cannot reach backend: {error}. Start it with{" "}
-          <code className="font-mono">uvicorn app.main:app --port 8000</code>.
+          <code className="font-mono text-mist">
+            uvicorn app.main:app --port 8000
+          </code>
+          .
         </p>
       )}
       {health && (
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-mist">
           Environment <code className="font-mono">{health.environment}</code> ·{" "}
           LLM backend <code className="font-mono">{health.llm_backend}</code>
         </p>
@@ -83,18 +92,29 @@ export default function Home() {
           <Link
             key={card.href}
             href={card.href}
-            className="rounded-xl border border-zinc-200 bg-white p-5 hover:border-zinc-400"
+            className="group rounded-xl border border-line bg-raised p-5 transition-colors hover:border-signal/60"
           >
-            <div className="font-medium">{card.title}</div>
-            <p className="mt-1 text-sm text-zinc-600">{card.body}</p>
-            <div className="mt-3 text-sm font-medium text-zinc-900">
-              Open →
+            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-signal">
+              {card.eyebrow}
+            </div>
+            <div className="mt-1 font-display text-xl font-semibold text-ink">
+              {card.title}
+            </div>
+            <p className="mt-1 text-sm leading-5 text-mist">{card.body}</p>
+            <div className="mt-3 text-sm font-semibold text-signal">
+              Open{" "}
+              <span
+                aria-hidden="true"
+                className="inline-block transition-transform group-hover:translate-x-1"
+              >
+                →
+              </span>
             </div>
           </Link>
         ))}
       </div>
 
-      <pre className="overflow-x-auto rounded-xl bg-zinc-950 p-4 text-xs leading-5 text-zinc-100">
+      <pre className="overflow-x-auto rounded-xl border border-line-soft bg-panel p-4 font-mono text-xs leading-5 text-mist">
         {`Documents → Loader (PDF/MD/TXT) → Chunker → BGE Embeddings
 → ChromaDB (vector) + BM25 Index (keyword)
 

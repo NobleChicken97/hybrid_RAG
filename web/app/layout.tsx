@@ -1,6 +1,25 @@
 import type { Metadata } from "next";
+import { JetBrains_Mono, Jost, Mulish } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
+
+const display = Jost({
+  subsets: ["latin"],
+  variable: "--font-jost",
+  weight: ["500", "600", "700"],
+});
+
+const body = Mulish({
+  subsets: ["latin"],
+  variable: "--font-mulish",
+  weight: ["400", "500", "600", "700"],
+});
+
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+  weight: ["400", "500", "600"],
+});
 
 export const metadata: Metadata = {
   title: "Hybrid RAG System",
@@ -24,34 +43,50 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-zinc-50 font-sans text-zinc-900 antialiased">
-        <header className="border-b border-zinc-200 bg-white">
+      <body
+        className={`${display.variable} ${body.variable} ${mono.variable} min-h-screen bg-abyss font-sans text-ink antialiased`}
+      >
+        <header className="border-b border-line bg-panel">
           <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-            <Link href="/" className="text-lg font-semibold tracking-tight">
-              🔍 Hybrid RAG
+            <Link href="/" className="flex items-baseline gap-2">
+              <span className="font-display text-lg font-semibold tracking-tight text-ink">
+                Hybrid&nbsp;RAG
+              </span>
+              <span className="hidden text-[11px] font-medium uppercase tracking-[0.18em] text-dim sm:inline">
+                Retrieval Lab
+              </span>
             </Link>
             <nav className="flex gap-1 text-sm">
               {NAV.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="rounded px-3 py-1.5 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-950"
+                  className="rounded-md px-3 py-1.5 font-medium text-mist transition-colors hover:bg-hover hover:text-ink"
                 >
                   {item.label}
                 </Link>
               ))}
             </nav>
           </div>
+          <div className="h-px bg-gradient-to-r from-transparent via-signal/60 to-transparent" />
         </header>
         <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-8">
           {children}
         </main>
-        <footer className="border-t border-zinc-200 bg-white">
-          <div className="mx-auto max-w-5xl px-4 py-3 text-xs text-zinc-500">
-            BM25 + Vector → RRF → Reranker → Compression → LLM · Backend:{" "}
-            <code className="font-mono">
-              {process.env.NEXT_PUBLIC_BACKEND_URL || "/api (same origin)"}
-            </code>
+        <footer className="border-t border-line-soft bg-panel">
+          <div className="mx-auto flex max-w-5xl flex-wrap items-center gap-x-3 gap-y-1 px-4 py-3 text-xs text-dim">
+            <span className="font-mono tracking-wide">
+              BM25 + Vector → RRF → Reranker → Compression → LLM
+            </span>
+            <span aria-hidden="true" className="text-line">
+              |
+            </span>
+            <span>
+              Backend:{" "}
+              <code className="font-mono text-mist">
+                {process.env.NEXT_PUBLIC_BACKEND_URL || "/api (same origin)"}
+              </code>
+            </span>
           </div>
         </footer>
       </body>

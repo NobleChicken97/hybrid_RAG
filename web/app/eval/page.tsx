@@ -10,11 +10,11 @@ import {
 
 function ScoreRow({ label, value }: { label: string; value: number | null }) {
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white p-3">
-      <div className="text-xs uppercase tracking-wide text-zinc-500">
+    <div className="rounded-lg border border-line bg-raised p-4">
+      <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-dim">
         {label}
       </div>
-      <div className="mt-1 text-xl font-semibold">
+      <div className="mt-1 font-display text-2xl font-semibold text-gold">
         {value == null ? "N/A" : value.toFixed(4)}
       </div>
     </div>
@@ -104,27 +104,35 @@ export default function EvalPage() {
     }
   }
 
+  const selectCls =
+    "rounded-md border border-line bg-abyss px-2 py-1 text-ink outline-none focus:border-signal";
+
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-2xl font-semibold tracking-tight">
-        📊 Evaluation dashboard
-      </h1>
+      <div>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-signal">
+          Prove
+        </p>
+        <h1 className="mt-1 font-display text-3xl font-semibold tracking-tight text-ink">
+          Evaluation dashboard
+        </h1>
+      </div>
 
-      <section className="flex items-end gap-3 rounded-xl border border-zinc-200 bg-white p-4">
-        <label className="flex flex-col gap-1 text-sm">
+      <section className="flex flex-wrap items-end gap-3 rounded-xl border border-line bg-raised p-4">
+        <label className="flex flex-col gap-1 text-sm text-mist">
           QA set
           <input
             value={qaSet}
             onChange={(e) => setQaSet(e.target.value)}
-            className="rounded border border-zinc-300 px-2 py-1"
+            className="rounded-md border border-line bg-abyss px-2 py-1 text-ink outline-none focus:border-signal"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm">
+        <label className="flex flex-col gap-1 text-sm text-mist">
           Mode
           <select
             value={mode}
             onChange={(e) => setMode(e.target.value)}
-            className="rounded border border-zinc-300 px-2 py-1"
+            className={selectCls}
           >
             <option value="hybrid">hybrid</option>
             <option value="vector_only">vector_only</option>
@@ -133,33 +141,43 @@ export default function EvalPage() {
         <button
           onClick={runEval}
           disabled={running}
-          className="rounded-lg bg-zinc-900 px-4 py-1.5 text-sm font-medium text-white disabled:opacity-40"
+          className="rounded-lg bg-signal px-4 py-1.5 text-sm font-semibold text-signal-ink transition hover:brightness-110 disabled:opacity-40"
         >
-          {running ? "Running… (minutes)" : "▶️ Run evaluation"}
+          {running ? "Running… (minutes)" : "Run evaluation"}
         </button>
       </section>
 
       {error && (
-        <p className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+        <p className="rounded-lg border border-bad/50 bg-bad/10 p-3 text-sm text-ink">
           {error}
         </p>
       )}
 
       {latest && (
         <section className="flex flex-col gap-3">
-          <h2 className="font-medium">
-            ✅ {latest.run_id} ({latest.retrieval_mode})
+          <h2 className="font-display text-lg font-semibold text-ink">
+            <span className="font-mono text-sm font-medium text-good">
+              {latest.run_id}
+            </span>{" "}
+            <span className="text-sm font-medium text-mist">
+              ({latest.retrieval_mode})
+            </span>
           </h2>
           <Scores scores={latest.scores} />
         </section>
       )}
 
       <section className="flex flex-col gap-3">
-        <h2 className="font-medium">📜 Past runs ({runs.length})</h2>
-        <div className="overflow-x-auto rounded-xl border border-zinc-200 bg-white">
+        <h2 className="font-display text-lg font-semibold text-ink">
+          Past runs{" "}
+          <span className="font-mono text-sm font-medium text-gold">
+            ({runs.length})
+          </span>
+        </h2>
+        <div className="overflow-x-auto rounded-xl border border-line bg-raised">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-zinc-200 text-xs uppercase text-zinc-500">
+              <tr className="border-b border-line text-[11px] uppercase tracking-[0.14em] text-dim">
                 <th className="px-3 py-2">Run</th>
                 <th className="px-3 py-2">Mode</th>
                 <th className="px-3 py-2">Faith.</th>
@@ -170,19 +188,24 @@ export default function EvalPage() {
             </thead>
             <tbody>
               {runs.map((r) => (
-                <tr key={r.run_id} className="border-b border-zinc-100">
-                  <td className="px-3 py-2 font-mono text-xs">{r.run_id}</td>
+                <tr
+                  key={r.run_id}
+                  className="border-b border-line-soft text-mist last:border-0"
+                >
+                  <td className="px-3 py-2 font-mono text-xs text-ink">
+                    {r.run_id}
+                  </td>
                   <td className="px-3 py-2">{r.retrieval_mode}</td>
-                  <td className="px-3 py-2">
+                  <td className="px-3 py-2 font-mono">
                     {r.scores.faithfulness?.toFixed(4) ?? "N/A"}
                   </td>
-                  <td className="px-3 py-2">
+                  <td className="px-3 py-2 font-mono">
                     {r.scores.answer_relevancy?.toFixed(4) ?? "N/A"}
                   </td>
-                  <td className="px-3 py-2">
+                  <td className="px-3 py-2 font-mono">
                     {r.scores.context_precision?.toFixed(4) ?? "N/A"}
                   </td>
-                  <td className="px-3 py-2">
+                  <td className="px-3 py-2 font-mono">
                     {r.scores.context_recall?.toFixed(4) ?? "N/A"}
                   </td>
                 </tr>
@@ -193,13 +216,15 @@ export default function EvalPage() {
       </section>
 
       {runs.length >= 2 && (
-        <section className="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-4">
-          <h2 className="font-medium">🔄 Compare two runs</h2>
-          <div className="flex items-center gap-3 text-sm">
+        <section className="flex flex-col gap-3 rounded-xl border border-line bg-raised p-4">
+          <h2 className="font-display text-lg font-semibold text-ink">
+            Compare two runs
+          </h2>
+          <div className="flex flex-wrap items-center gap-3 text-sm text-mist">
             <select
               value={run1}
               onChange={(e) => setRun1(e.target.value)}
-              className="rounded border border-zinc-300 px-2 py-1 font-mono text-xs"
+              className={`${selectCls} font-mono text-xs`}
             >
               {runs.map((r) => (
                 <option key={r.run_id} value={r.run_id}>
@@ -211,7 +236,7 @@ export default function EvalPage() {
             <select
               value={run2}
               onChange={(e) => setRun2(e.target.value)}
-              className="rounded border border-zinc-300 px-2 py-1 font-mono text-xs"
+              className={`${selectCls} font-mono text-xs`}
             >
               {runs.map((r) => (
                 <option key={r.run_id} value={r.run_id}>
@@ -221,9 +246,9 @@ export default function EvalPage() {
             </select>
             <button
               onClick={compare}
-              className="rounded-lg bg-zinc-900 px-4 py-1.5 text-sm font-medium text-white"
+              className="rounded-lg bg-signal px-4 py-1.5 text-sm font-semibold text-signal-ink transition hover:brightness-110"
             >
-              📊 Compare
+              Compare
             </button>
           </div>
           {comparison && "delta" in comparison && (
@@ -232,12 +257,14 @@ export default function EvalPage() {
                 {Object.entries(comparison.delta).map(([metric, d]) => (
                   <div
                     key={metric}
-                    className="rounded-lg bg-zinc-50 px-3 py-2"
+                    className="rounded-lg bg-abyss px-3 py-2"
                   >
-                    <div className="text-xs capitalize text-zinc-500">
+                    <div className="text-xs capitalize text-dim">
                       {metric.replace("_", " ")}
                     </div>
-                    <div className="font-semibold">
+                    <div
+                      className={`font-mono font-semibold ${d == null ? "text-mist" : d > 0 ? "text-good" : d < 0 ? "text-bad" : "text-mist"}`}
+                    >
                       {d == null
                         ? "N/A"
                         : `${d > 0 ? "↑" : d < 0 ? "↓" : "="} ${Math.abs(d).toFixed(4)}`}
@@ -245,7 +272,7 @@ export default function EvalPage() {
                   </div>
                 ))}
               </div>
-              <pre className="whitespace-pre-wrap rounded-lg bg-zinc-950 p-3 text-xs text-zinc-100">
+              <pre className="whitespace-pre-wrap rounded-lg bg-abyss p-3 font-mono text-xs leading-5 text-mist">
                 {comparison.summary}
               </pre>
             </>

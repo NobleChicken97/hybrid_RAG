@@ -78,6 +78,13 @@
 - [x] `web/` parity verified 2026-09-04 against live backend (fresh process; a stale 2026-09-02 backend was squatting on port 8001 and had to be killed — it served 404s for the new routes): `/health` (3 docs / 237 chunks / 8 eval runs), `/config`, `/documents`, `/eval/runs` all live; all 6 web routes (`/`, `/ask`, `/ingest`, `/eval`, `/system`, `/topology`) return 200 via `next dev --webpack` (Turbopack native binding still broken on this Windows box)
 - [x] Caddy cutover DONE 2026-09-04: `web/lib/api.ts` uses relative `/api/*` when `NEXT_PUBLIC_BACKEND_URL` is unset (direct backend only in local dev); `next.config.ts` rewrite proxies `/api/*` for `npm run dev` (`BACKEND_INTERNAL_URL` override, needed as port 8000 is taken on this box); `deploy/Caddyfile` strips `/api` → `backend:8000`, everything else → `web:3000`; `streamlit` service retired from compose (code/image kept for rollback); `Dockerfile.web` bakes empty backend URL; `DEPLOY.md` updated. Verified: `tsc`+`eslint` clean, `docker compose config` lists backend/web/caddy, Caddyfile `caddy validate` green for both `:80` and domain (adapted JSON confirms strip+proxy), live `/api/health|config|documents|eval/runs` through `next dev --webpack` → backend `:8001`, `npm run build` (prod bake) green with all 7 routes static. Note: `caddy validate` needs `-e DOMAIN=...` in the container — without it even the old file fails (pre-existing quirk, not a regression).
 
+## Frontend redesign (2026-09-05, in progress)
+
+- [x] Audit: shipped code is light-themed (zinc-50/white) but screenshots show black — client-side forced-dark is mangling it; fix = ship an intentional dark theme. `globals.css` is still the Next scaffold (unused Geist vars, Arial fallback). No real type system.
+- [x] New dark-first design system (Tailwind v4 `@theme` tokens) + Jost (display, Futura-geometric) / Mulish (body) / JetBrains Mono (data) via `next/font`
+- [x] Restyled layout + all 6 pages, data logic identical; `tsc` + `eslint` + `npm run build` green (7/7 routes static)
+- [ ] Commit, push, update DEPLOY/docs; user redeploys on the box (`git pull` + `up -d --build`)
+
 ## Status note (2026-09-04, updated 2026-09-05)
 
 The full stack is installed, tested (53/53), and validated end-to-end with live generation. The clean hybrid vs vector-only scorecard is captured (README scorecard populated). The simplification batch is committed/pushed (`916a81c`) and `web/` parity is verified at route + contract + live-endpoint level.
