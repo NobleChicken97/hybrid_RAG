@@ -79,26 +79,56 @@ def test_ingest_and_duplicate_guard(client: TestClient):
     assert client.get("/health").json()["documents_count"] == 1
 
 
+# Deliberately disjoint from RAW_DOC (no shared content hash, no shared rare
+# terms) so this seed neither trips the duplicate guard nor competes with
+# "Smoke Guide" at retrieval time, regardless of execution order.
+QUERY_DOC = """# Query Smoke Doc
+
+Uvicorn is the recommended ASGI server for running FastAPI applications in
+production. It supports WebSockets and HTTP/1.1 on an uvloop-backed event
+loop for high throughput.
+"""
+
+
+def _ensure_query_doc(client: TestClient):
+    """Seed the shared test store with the query test's own document.
+
+    Makes test_query_pipeline_with_mocked_generation independent of execution
+    order: it no longer relies on test_ingest_and_duplicate_guard having run
+    first. Accepts 409 (already seeded) as well as 200.
+    """
+    resp = client.post(
+        "/ingest",
+        data={"title": "Query Smoke Doc", "raw_text": QUERY_DOC},
+    )
+    assert resp.status_code in (200, 409), resp.text
+
+
 def test_query_pipeline_with_mocked_generation(client: TestClient, monkeypatch):
     """Full retrieval -> rerank -> compress -> prompt -> citations path with
     the LLM mocked: the answer should carry citations resolvable to chunks."""
     from app.api import query as query_module
 
+    _ensure_query_doc(client)
+
     monkeypatch.setattr(
         query_module, "generate",
-        lambda *a, **kw: "FastAPI is built on top of Starlette and Pydantic [1].",
+        lambda *a, **kw: "Uvicorn is the recommended ASGI server for FastAPI [1].",
     )
 
     resp = client.post(
         "/query",
-        json={"question": "What is FastAPI built on top of?", "mode": "hybrid", "top_k": 3},
+        json={"question": "Which ASGI server is recommended for running FastAPI?", "mode": "hybrid", "top_k": 3},
     )
     assert resp.status_code == 200, resp.text
     body = resp.json()
-    assert "Starlette" in body["answer"]
+    assert "Uvicorn" in body["answer"]
     assert len(body["citations"]) >= 1
+    # Rank-1 is deterministic here: the query's rare terms (Uvicorn, ASGI,
+    # server) appear only in the seeded doc, so both BM25 and vector rank it
+    # first whether or not "Smoke Guide" shares the store.
     citation = body["citations"][0]
-    assert citation["doc_title"] == "Smoke Guide"
+    assert citation["doc_title"] == "Query Smoke Doc"
     assert citation["snippet"]
     debug = body["retrieval_debug"]
     assert debug["vector_hits"], "vector search must return hits"
