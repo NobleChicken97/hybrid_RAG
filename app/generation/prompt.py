@@ -48,18 +48,3 @@ QUESTION: {question}
 Please answer the question using ONLY the context passages above. Include citation markers [1], [2], etc. for every factual claim."""
 
     return prompt
-
-
-def build_prompt_with_metadata(
-    question: str,
-    context_chunks: list[tuple[str, str, str]],
-    metadata: dict | None = None,
-) -> tuple[str, str]:
-    """
-    Build both the system prompt and user prompt.
-
-    Returns:
-        Tuple of (system_prompt, user_prompt).
-    """
-    user_prompt = build_prompt(question, context_chunks)
-    return SYSTEM_PROMPT, user_prompt

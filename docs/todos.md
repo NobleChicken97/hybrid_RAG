@@ -59,6 +59,18 @@
 - [ ] Expand the QA set with project-specific scenarios
 - [ ] Improve deployment packaging and environment automation
 
+## Code quality review (2026-09-03)
+
+- [x] Single-frontend decision: `ui/` deleted 2026-09-03 (disconnected, not in Docker image, fake demo data); `frontend/` Streamlit kept as interim
+- [x] Vite scaffold removed with `ui/` (`src/`, `dist/`, `node_modules/`, package files all gone)
+- [x] New frontend: `web/` scaffolded 2026-09-03 (Next 16 + React 19 + Tailwind v4, TS, ESLint clean, webpack prod build green) — routes `/`, `/ask`, `/ingest`, `/eval`, `/system`, `/topology` (Option 1: real retrieval path), typed `lib/api.ts`, `Dockerfile.web`; Streamlit stays until parity cutover
+- [x] Dead symbols removed 2026-09-03: `QAEvalItem` (+docstring), `IngestRequest`, `build_prompt_with_metadata`, `get_embedding_dimension`, `bm25.get_chunk_count`, unused `db` param in `POST /query`, `sqlite_url` — 53/53 tests pass
+- [x] Shared pipeline 2026-09-03: `app/retrieval/pipeline.py` serves `query.py` + `harness.py`; metadata lookup batched (was N+1); `tests/test_pipeline.py` locks wiring (model-backed paths still covered by smoke tests)
+- [x] One-shot scripts archived 2026-09-03: `scripts/archive/` + README; `README.md` table repointed
+- [x] `web/` in compose 2026-09-03: additive `web` service (`docker compose config` lists backend/streamlit/caddy/web); Caddy still on Streamlit until parity cutover
+- [x] Env cleanup 2026-09-03: free-tier primaries only (gemini `flash-lite` + groq `gpt-oss-120b`); stale `LLM_PROVIDER`/`LLM_MODEL` removed from `.env`; `config.py` defaults + `.env.example` synced; ollama/cerebras/claude kept as opt-in code paths
+- [x] Real-data endpoints 2026-09-03: `GET /documents` + `GET /config` (no secrets, covered by smoke tests) power `web/` System/Topology pages
+
 ## Status note
 
 The full stack is installed, tested (31/31), and validated end-to-end with live generation. The retrieval pipeline, generation with citations, and the RAGAS harness have all run. The remaining work is capturing a clean hybrid vs vector-only scorecard (re-run in progress) and the two retrieval-quality open items listed above.

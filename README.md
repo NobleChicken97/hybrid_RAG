@@ -154,14 +154,14 @@ pytest tests/test_compressor.py -v
 └── .env.example              # Environment variable template
 ```
 
-### Repo tooling scripts
+### Repo tooling scripts (archived — see `scripts/archive/README.md`)
 
 | Script | Purpose |
 |--------|---------|
-| `eval_full_run.py` | Runs the full QA set through the harness in both retrieval modes → `eval_results.json` |
-| `eval_vector_only.py` | Re-captures only the vector-only arm (quota-probe-guarded) and merges it into `eval_results.json` |
-| `diagnose_retrieval.py` | Traces ground-truth evidence through each retrieval stage (no LLM calls) — used to pinpoint the compression evidence loss |
-| `dedupe_corpus.py` | One-shot corpus cleanup: removes duplicate documents, backfills content hashes |
+| `scripts/archive/eval_full_run.py` | Runs the full QA set through the harness in both retrieval modes → `eval_results.json` |
+| `scripts/archive/eval_vector_only.py` | Re-captures only the vector-only arm (quota-probe-guarded) and merges it into `eval_results.json` |
+| `scripts/archive/diagnose_retrieval.py` | Traces ground-truth evidence through each retrieval stage (no LLM calls) — used to pinpoint the compression evidence loss |
+| `scripts/archive/dedupe_corpus.py` | One-shot corpus cleanup: removes duplicate documents, backfills content hashes |
 
 ---
 

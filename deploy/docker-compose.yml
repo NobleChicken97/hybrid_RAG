@@ -33,6 +33,22 @@ services:
       - "8501"
     restart: unless-stopped
 
+  # Next.js frontend (new). Runs alongside Streamlit until the parity
+  # cutover; Caddy still routes to Streamlit — switch it to `web:3000`
+  # only after you confirm Ask/Ingest/Eval parity (see docs/todos.md).
+  web:
+    build:
+      context: ../web
+      dockerfile: Dockerfile.web
+      args:
+        NEXT_PUBLIC_BACKEND_URL: http://backend:8000
+    expose:
+      - "3000"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
   caddy:
     image: caddy:2-alpine
     ports:

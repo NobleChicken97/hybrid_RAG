@@ -13,6 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.eval import router as eval_router
 from app.api.ingest import router as ingest_router
 from app.api.query import router as query_router
+from app.api.system import router as system_router
 from app.config import get_settings
 from app.database import Chunk, Document, EvalRun, get_session_factory, init_db
 from app.models import HealthResponse
@@ -75,6 +76,7 @@ app.add_middleware(
 app.include_router(ingest_router)
 app.include_router(query_router)
 app.include_router(eval_router)
+app.include_router(system_router)
 
 
 @app.get("/health", response_model=HealthResponse)

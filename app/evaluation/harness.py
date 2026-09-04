@@ -15,17 +15,16 @@ from app.config import get_settings
 from app.database import EvalRun, get_session_factory
 from app.generation.llm import generate
 from app.generation.prompt import SYSTEM_PROMPT, build_prompt
-from app.ingestion.embedder import embed_query
 from app.models import EvalScores, QAItem, QuestionScore
-from app.retrieval import bm25_index, vector_store
-from app.retrieval.compressor import compress_context
-from app.retrieval.fusion import fuse
-from app.retrieval.reranker import rerank
+from app.retrieval.pipeline import run_retrieval_pipeline
 
 
 def _run_pipeline(question: str, mode: str = "hybrid", top_k: int | None = None) -> tuple[str, list[str]]:
     """
     Run the retrieval + generation pipeline for a single question.
+
+    Retrieval itself lives in `app.retrieval.pipeline` (shared with
+    POST /query); this wrapper only adds prompt assembly + generation.
 
     Returns:
         Tuple of (answer, list_of_retrieved_context_texts).
@@ -34,43 +33,14 @@ def _run_pipeline(question: str, mode: str = "hybrid", top_k: int | None = None)
     if top_k is None:
         top_k = settings.rerank_top_n
 
-    # Vector search
-    query_embedding = embed_query(question)
-    vector_results = vector_store.search(query_embedding, top_k=settings.retrieval_top_k)
-
-    if mode == "hybrid":
-        # BM25 search
-        bm25_results = bm25_index.search(question, top_k=settings.retrieval_top_k)
-
-        # RRF fusion
-        fused = fuse(
-            bm25_results=[(r.chunk_id, r.score, r.text) for r in bm25_results],
-            vector_results=[(r.chunk_id, r.score, r.text) for r in vector_results],
-            k=settings.rrf_k,
-        )
-
-        candidates = [(r.chunk_id, r.text, r.sources) for r in fused]
-    else:
-        candidates = [(r.chunk_id, r.text, ["vector"]) for r in vector_results]
-
-    # Rerank
-    reranked = rerank(question, candidates[:settings.retrieval_top_k], top_n=top_k)
-
-    if not reranked:
+    pipeline = run_retrieval_pipeline(question, mode=mode, top_n=top_k)
+    if not pipeline.reranked:
         return "No relevant context found.", []
 
-    # Compress context
-    compressed = compress_context(question, [(r.chunk_id, r.text) for r in reranked])
-
-    # Build prompt and generate
-    context_for_prompt = []
-    context_texts = []
-
-    for comp in compressed:
-        chunk_meta = vector_store.get_chunks_by_ids([comp.chunk_id])
-        doc_title = chunk_meta[0].metadata.get("doc_title", "Unknown") if chunk_meta else "Unknown"
-        context_for_prompt.append((comp.chunk_id, comp.compressed_text, doc_title))
-        context_texts.append(comp.compressed_text)
+    context_for_prompt = [
+        (chunk_id, text, doc_title) for chunk_id, text, doc_title, _ in pipeline.contexts
+    ]
+    context_texts = [text for _, text, _, _ in pipeline.contexts]
 
     user_prompt = build_prompt(question, context_for_prompt)
     answer = generate(user_prompt, system_prompt=SYSTEM_PROMPT)

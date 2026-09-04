@@ -1,0 +1,26 @@
+# Next.js frontend for the Hybrid RAG System.
+# Built from the repo root:  docker build -f web/Dockerfile.web -t hybrid-rag-web web/
+# (build context = web/ so node_modules/.next never leave the image layer cache).
+FROM node:22-slim AS deps
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci
+
+FROM node:22-slim AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+# Backend URL is baked as NEXT_PUBLIC_* at build time; override per environment.
+ARG NEXT_PUBLIC_BACKEND_URL=http://backend:8000
+ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL
+RUN npm run build
+
+FROM node:22-slim AS runner
+WORKDIR /app
+ENV NODE_ENV=production
+COPY --from=builder /app/package.json /app/package-lock.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+EXPOSE 3000
+CMD ["npm", "run", "start", "--", "-p", "3000"]

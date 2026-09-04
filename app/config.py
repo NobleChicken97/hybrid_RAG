@@ -19,31 +19,35 @@ class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
     # --- LLM Backends ---
+    # Free-tier primaries (2026-09-03): gemini (flash-lite) + groq (gpt-oss-120b).
+    # ollama / cerebras / claude branches stay in llm.py as opt-in fallbacks.
     environment: str = Field(default="local", description="Environment: 'local' or 'production'")
-    llm_backend: str = Field(default="ollama_qwen3", description="Primary LLM backend to use")
-    ragas_judge_backend: str = Field(default="cerebras", description="LLM backend to use for RAGAS eval judge")
+    llm_backend: str = Field(default="gemini", description="Primary LLM backend to use")
+    ragas_judge_backend: str = Field(default="gemini", description="LLM backend to use for RAGAS eval judge")
 
     # API Keys & Hosts
     ollama_host: str = Field(default="http://localhost:11434", description="Ollama API base URL")
     ollama_model_primary: str = Field(default="qwen3:4b", description="Primary local Ollama model")
     ollama_model_secondary: str = Field(default="phi4-mini", description="Secondary local Ollama model")
 
-    cerebras_api_key: str = Field(default="", description="Cerebras API key")
-    cerebras_model: str = Field(default="llama3.3-70b", description="Cerebras model")
+    cerebras_api_key: str = Field(default="", description="Cerebras API key (optional fallback)")
+    cerebras_model: str = Field(default="gpt-oss-120b", description="Cerebras model")
     cerebras_base_url: str = Field(default="https://api.cerebras.ai/v1", description="Cerebras base URL")
 
-    gemini_api_key: str = Field(default="", description="Google Gemini API key")
-    gemini_model: str = Field(default="gemini-3.7-flash", description="Gemini model for generation")
+    gemini_api_key: str = Field(default="", description="Google Gemini API key (free-tier primary)")
+    # flash-lite is permanent (2026-09-02): flash returns 503 high-demand on free tier + 20 req/day cap.
+    gemini_model: str = Field(default="gemini-3.5-flash-lite", description="Gemini model for generation")
     gemini_base_url: str = Field(
         default="https://generativelanguage.googleapis.com/v1beta/openai/",
         description="Gemini OpenAI-compatible base URL",
     )
 
-    groq_api_key: str = Field(default="", description="Groq API key")
-    groq_model: str = Field(default="llama-3.3-70b-versatile", description="Groq model")
+    groq_api_key: str = Field(default="", description="Groq API key (free-tier fallback)")
+    # llama-3.3-70b-versatile decommissioned on Groq; gpt-oss-120b is the live free model.
+    groq_model: str = Field(default="openai/gpt-oss-120b", description="Groq model")
     groq_base_url: str = Field(default="https://api.groq.com/openai/v1", description="Groq base URL")
 
-    ragas_judge_model: str = Field(default="llama-3.3-70b-versatile", description="RAGAS Judge model name")
+    ragas_judge_model: str = Field(default="gemini-3.5-flash-lite", description="RAGAS Judge model name")
 
     anthropic_api_key: str = Field(default="", description="Anthropic API key for Claude")
 
@@ -117,10 +121,6 @@ class Settings(BaseSettings):
     @property
     def upload_abs_path(self) -> Path:
         return PROJECT_ROOT / self.upload_dir
-
-    @property
-    def sqlite_url(self) -> str:
-        return f"sqlite+aiosqlite:///{self.sqlite_db_abs_path}"
 
 
 @lru_cache

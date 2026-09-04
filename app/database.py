@@ -4,8 +4,10 @@ SQLAlchemy database models and session management for the Hybrid RAG System.
 Tables:
   - documents: Ingested document metadata
   - chunks: Text chunks with offsets and token counts
-  - qa_eval_items: Held-out QA pairs for evaluation
   - eval_runs: Evaluation run results and scorecards
+
+NOTE: QA pairs live in data/qa_sets/*.json (loaded per eval run), not in
+the database — there is intentionally no QA table.
 """
 
 import json
@@ -61,25 +63,6 @@ class Chunk(Base):
 
     def __repr__(self) -> str:
         return f"<Chunk(chunk_id={self.chunk_id!r}, doc_id={self.doc_id!r}, tokens={self.token_count})>"
-
-
-class QAEvalItem(Base):
-    """A held-out question/answer pair for evaluation."""
-    __tablename__ = "qa_eval_items"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    qa_id = Column(String(64), unique=True, nullable=False, index=True)
-    qa_set_name = Column(String(128), nullable=False, default="default")
-    question = Column(Text, nullable=False)
-    ground_truth_answer = Column(Text, nullable=False)
-    ground_truth_chunk_ids = Column(Text, nullable=False)  # JSON array of chunk IDs
-
-    def get_chunk_ids(self) -> list[str]:
-        """Parse the JSON chunk IDs."""
-        return json.loads(self.ground_truth_chunk_ids)
-
-    def __repr__(self) -> str:
-        return f"<QAEvalItem(qa_id={self.qa_id!r}, question={self.question[:50]!r}...)>"
 
 
 class EvalRun(Base):

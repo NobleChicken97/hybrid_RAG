@@ -74,9 +74,3 @@ def embed_query(query: str) -> list[float]:
         normalize_embeddings=True,
     )
     return embedding.tolist()
-
-
-def get_embedding_dimension() -> int:
-    """Get the embedding dimension of the loaded model."""
-    model = _get_model()
-    return model.get_embedding_dimension()

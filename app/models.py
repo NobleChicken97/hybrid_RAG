@@ -9,12 +9,8 @@ from datetime import datetime
 from pydantic import BaseModel, Field
 
 # ─── Ingest ──────────────────────────────────────────────────────────────────
-
-class IngestRequest(BaseModel):
-    """Request body for POST /ingest."""
-    title: str = Field(..., description="Document title")
-    raw_text: str | None = Field(None, description="Raw text content (alternative to file upload)")
-
+# NOTE: POST /ingest takes multipart File/Form params directly (file upload
+# doesn't map to a JSON body model), so there is intentionally no request model.
 
 class ChunkPreview(BaseModel):
     """A preview of a single chunk (returned after ingestion)."""

@@ -35,6 +35,11 @@ vs_BuildTools.exe
 .DS_Store
 Thumbs.db
 
+# === Next.js frontend ===
+web/node_modules/
+web/.next/
+web/out/
+
 # === Model cache (sentence-transformers downloads) ===
 # These are large and auto-downloaded on first run
 # Uncomment if you want to exclude them from version control:

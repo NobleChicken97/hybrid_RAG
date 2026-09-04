@@ -154,12 +154,6 @@ def remove_document(doc_id: str) -> None:
         _save_index()
 
 
-def get_chunk_count() -> int:
-    """Get the total number of indexed chunks."""
-    _ensure_loaded()
-    return len(_chunk_ids)
-
-
 # ─── Persistence ─────────────────────────────────────────────────────────────
 
 def _save_index() -> None:

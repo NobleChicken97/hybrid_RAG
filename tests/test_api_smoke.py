@@ -118,3 +118,25 @@ def test_eval_runs_listing(client: TestClient):
     resp = client.get("/eval/runs")
     assert resp.status_code == 200
     assert isinstance(resp.json(), list)
+
+
+def test_documents_listing(client: TestClient):
+    # Order-independent: structure always, content when the smoke ingest ran.
+    resp = client.get("/documents")
+    assert resp.status_code == 200
+    docs = resp.json()
+    assert isinstance(docs, list)
+    for d in docs:
+        assert d["doc_id"] and d["title"] and d["chunk_count"] >= 1
+
+
+def test_public_config_has_no_secrets(client: TestClient):
+    resp = client.get("/config")
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["llm_backend"] in (
+        "gemini", "groq", "ollama_qwen3", "ollama_phi4mini", "cerebras", "claude",
+    )
+    assert body["generation_model"], "backend must resolve to a concrete model"
+    assert not any("api_key" in k or "base_url" in k for k in body)
+    assert "gsk_" not in resp.text and "AIza" not in resp.text
