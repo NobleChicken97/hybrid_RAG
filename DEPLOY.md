@@ -9,7 +9,8 @@
 
 - Provider / service: AWS Lightsail
 - Instance name: `hybrid-rag-prod`
-- Blueprint: Ubuntu 24.04 LTS (OS Only — no app blueprint)
+- Blueprint: Ubuntu 22.04 LTS (OS Only — no app blueprint; 24.04 was planned but 22.04 is what shipped — irrelevant, stack runs in Docker)
+- Docker: CE 29.8.0 + compose plugin 5.5.1 from Docker's official repo (`docker-compose-plugin` is not in Ubuntu 22.04's default repos)
 - Plan type: general_purpose, 4 GB RAM / 2 vCPU tier
 - Network: dual-stack (public IPv4 + IPv6)
 - Automatic snapshots: ON (daily — cheapest DR for local ChromaDB/SQLite state)
