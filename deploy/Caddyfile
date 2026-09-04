@@ -1,6 +1,14 @@
 # No DOMAIN set: plain HTTP on whatever IP/hostname reaches the server.
 # With a domain: `DOMAIN=rag.example.com docker compose ...` (or put it in
 # deploy/.env) and Caddy obtains/renews Let's Encrypt TLS automatically.
+#
+# /api/* goes to the FastAPI backend (prefix stripped, so /api/query →
+# backend /query); everything else is the Next.js frontend. The browser only
+# ever talks to this origin — it must never resolve the internal `backend`
+# hostname (see web/lib/api.ts).
 {$DOMAIN} {
-	reverse_proxy streamlit:8501
+	handle_path /api/* {
+		reverse_proxy backend:8000
+	}
+	reverse_proxy web:3000
 }

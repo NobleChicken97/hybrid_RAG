@@ -50,7 +50,7 @@ export default function RootLayout({
           <div className="mx-auto max-w-5xl px-4 py-3 text-xs text-zinc-500">
             BM25 + Vector → RRF → Reranker → Compression → LLM · Backend:{" "}
             <code className="font-mono">
-              {process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000"}
+              {process.env.NEXT_PUBLIC_BACKEND_URL || "/api (same origin)"}
             </code>
           </div>
         </footer>

@@ -69,8 +69,9 @@ docker compose -f deploy/docker-compose.yml ps       # all 3 services Up/healthy
 curl -s http://localhost/health                      # (or via caddy) http://localhost:8000/health from inside
 ```
 
-Then open **`http://<PUBLIC_IP>`** — that's the Streamlit UI; all backend calls
-go over the internal Docker network (`BACKEND_URL=http://backend:8000`, already set).
+Then open **`http://<PUBLIC_IP>`** — that's the Next.js UI; browser API calls
+go to the same origin under `/api/*`, which Caddy strips and proxies to the
+backend over the internal Docker network (no CORS or hostname issues).
 
 Verify: `docker compose -f deploy/docker-compose.yml logs -f backend` shows
 `[Embedder] Model loaded` once, then `Uvicorn running`.
@@ -104,5 +105,6 @@ docker compose -f deploy/docker-compose.yml up -d --build
 ## Troubleshooting
 
 - **Backend restarts / OOM**: confirm swap is on (`free -h` shows 2G swap).
-- **502 from Caddy**: `docker compose -f deploy/docker-compose.yml logs streamlit` — the UI is usually up but backend not yet healthy; wait for the healthcheck.
+- **502 from Caddy**: `docker compose -f deploy/docker-compose.yml logs web` — the UI is usually up but backend not yet healthy; wait for the healthcheck.
+- **Rollback to Streamlit**: `frontend/` is still in the repo/image; re-add a `streamlit` service (pre-cutover compose had one on `:8501`) and point the Caddyfile's fallback `reverse_proxy` back at `streamlit:8501`.
 - **Port 80/443 unreachable**: check the instance's security group allows 80+443 from `0.0.0.0/0` and your DuckDNS IP matches.

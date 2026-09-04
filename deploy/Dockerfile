@@ -1,4 +1,6 @@
-# One image, two services (backend + streamlit) — see deploy/docker-compose.yml.
+# Backend image (also still builds the Streamlit UI — the `streamlit` compose
+# service was retired in the 2026-09-04 cutover but frontend/ is kept in the
+# repo and image for rollback; see deploy/docker-compose.yml.
 # Base is multi-arch: x86 locally, ARM64 on Graviton (t4g) — pip resolves wheels.
 FROM python:3.11-slim
 

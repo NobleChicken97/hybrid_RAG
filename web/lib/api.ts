@@ -1,16 +1,19 @@
 /**
  * Typed client for the Hybrid RAG FastAPI backend.
  *
- * The backend URL is runtime configuration (the API lives on a separate
- * host/port from this UI), so every page fetches client-side against
- * NEXT_PUBLIC_BACKEND_URL with a localhost default for `npm run dev`.
+ * Two modes (2026-09-04 cutover):
+ * - Local dev: set NEXT_PUBLIC_BACKEND_URL=http://localhost:8000 and the
+ *   client talks to the backend directly (or via the Next rewrite below).
+ * - Production (compose/Caddy): leave it UNSET and calls go to the relative
+ *   `/api/*` prefix — Caddy strips it and proxies to backend:8000, so the
+ *   browser never needs to resolve the internal `backend` hostname.
  */
 
-export const BACKEND_URL =
-  process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8000";
+const DIRECT = process.env.NEXT_PUBLIC_BACKEND_URL || undefined;
+const PREFIX = DIRECT ?? "/api";
 
 async function req<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${BACKEND_URL}${path}`, init);
+  const res = await fetch(`${PREFIX}${path}`, init);
   if (!res.ok) {
     const detail = await res.text().catch(() => res.statusText);
     throw new Error(`${res.status} ${detail}`);

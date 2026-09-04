@@ -17,33 +17,23 @@ services:
       start_period: 60s
     restart: unless-stopped
 
-  streamlit:
-    build:
-      context: ..
-      dockerfile: deploy/Dockerfile
-    command: >
-      streamlit run frontend/app.py
-      --server.port 8501 --server.address 0.0.0.0 --server.headless true
-    environment:
-      BACKEND_URL: http://backend:8000   # server-side calls go over the compose network
-    depends_on:
-      backend:
-        condition: service_healthy
-    expose:
-      - "8501"
-    restart: unless-stopped
-
-  # Next.js frontend (new). Runs alongside Streamlit until the parity
-  # cutover; Caddy still routes to Streamlit — switch it to `web:3000`
-  # only after you confirm Ask/Ingest/Eval parity (see docs/todos.md).
+  # Next.js frontend (primary UI since the 2026-09-04 cutover). Browsers hit
+  # it through Caddy; API calls use the relative /api/* prefix, which Caddy
+  # strips and proxies to the backend. NEXT_PUBLIC_BACKEND_URL stays UNSET
+  # in this image so the client uses that same-origin path.
   web:
     build:
       context: ../web
       dockerfile: Dockerfile.web
-      args:
-        NEXT_PUBLIC_BACKEND_URL: http://backend:8000
     expose:
       - "3000"
+    healthcheck:
+      # node:22-slim ships no curl/wget — use node's built-in fetch.
+      test: ["CMD-SHELL", "node -e \"fetch('http://localhost:3000/').then(r=>{process.exit(r.ok?0:1)}).catch(()=>process.exit(1))\""]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
     depends_on:
       backend:
         condition: service_healthy
@@ -61,7 +51,10 @@ services:
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
-      - streamlit
+      backend:
+        condition: service_healthy
+      web:
+        condition: service_healthy
     restart: unless-stopped
 
 volumes:
