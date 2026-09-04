@@ -2,7 +2,9 @@
 
 A production-grade Retrieval-Augmented Generation pipeline featuring hybrid retrieval (BM25 + vector), cross-encoder reranking, context compression, citation grounding, and a RAGAS evaluation harness — built to prove it works with numbers, not vibes.
 
-> **Resume Line**: "Built a hybrid retrieval RAG system (BM25 + vector + cross-encoder reranking) with a RAGAS evaluation harness measuring faithfulness and context precision, deployed as a FastAPI + Streamlit service."
+> **Resume Line**: "Built a hybrid retrieval RAG system (BM25 + vector + cross-encoder reranking) with a RAGAS evaluation harness measuring faithfulness and context precision, deployed as a FastAPI + Next.js service."
+>
+> **Live:** https://rag.noblechicken.me (Lightsail, Caddy TLS — deployed 2026-09-05, see `DEPLOY.md`).
 
 ---
 
@@ -70,13 +72,14 @@ python run.py
 ```
 
 The backend starts at **http://localhost:8000** (API docs at `/docs`).
-The frontend starts at **http://localhost:8501**.
+The primary UI is **`web/` (Next.js)**: `cd web && npm run dev` → **http://localhost:3000** (proxies `/api/*` to the backend).
+Legacy Streamlit rollback UI (not served in prod): **http://localhost:8501**.
 
 ### Run Only Backend or Frontend
 
 ```bash
 python run.py backend   # FastAPI only
-python run.py frontend  # Streamlit only
+python run.py frontend  # Streamlit only (legacy rollback UI)
 ```
 
 ---
@@ -141,12 +144,13 @@ pytest tests/test_compressor.py -v
 │       ├── ingest.py         # POST /ingest
 │       ├── query.py          # POST /query
 │       └── eval.py           # Eval endpoints
-├── frontend/
+├── frontend/               # LEGACY Streamlit app (retired from prod 2026-09-04, kept for rollback)
 │   ├── app.py                # Streamlit main app
 │   └── pages/
 │       ├── 1_Ingest.py       # Document upload page
 │       ├── 2_Ask.py          # Q&A with citations + debug panel
 │       └── 3_Eval.py         # Eval dashboard with comparison
+├── web/                    # PRIMARY UI (Next.js 16 + Tailwind v4) — /, /ask, /ingest, /eval, /system, /topology
 ├── data/
 │   └── qa_sets/              # Held-out QA evaluation sets
 ├── sample_docs/              # Sample documents for testing
@@ -176,9 +180,9 @@ pytest tests/test_compressor.py -v
 | Vector Store | ChromaDB | Local, persistent, zero-infra |
 | Keyword Search | rank_bm25 | Pure Python, no infra |
 | Reranker | BAAI/bge-reranker-base | Won the 2026-09-04 A/B (precision +6.6, Q14 fixed); MiniLM fallback via env |
-| LLM | Claude API | Low cost, high quality |
+| LLM | Gemini flash-lite (+ Groq fallback) | Free tier, permanent since flash-503s on 2026-09-02 |
 | Eval | RAGAS | Industry-standard RAG metrics |
-| Frontend | Streamlit | Rapid UI development |
+| Frontend | Next.js 16 + Tailwind v4 | Dark-first redesign 2026-09-05; Streamlit retired, kept for rollback |
 | Persistence | SQLite | Zero-config metadata store |
 
 ---
