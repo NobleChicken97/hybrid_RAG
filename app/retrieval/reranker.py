@@ -1,11 +1,16 @@
 """
-Cross-encoder reranker using ms-marco-MiniLM-L-6-v2.
+Cross-encoder reranker (model is config-driven: `settings.reranker_model`).
+
+Default since 2026-09-04 is BAAI/bge-reranker-base (~1.1 GB) — it won the
+benchmarked A/B over ms-marco-MiniLM-L-6-v2 (~80 MB, still available as the
+lightweight fallback via RERANKER_MODEL) on question-form queries.
 
 Takes the fused candidate list from RRF and re-scores each chunk
 against the query using a cross-encoder model. This produces much
 more accurate relevance scores than embedding similarity alone.
 
-Runs on CPU — small enough (~80MB) for the target hardware.
+Runs on CPU — fine for the target hardware (bge-base is slower per pair
+than MiniLM but the candidate list is small).
 """
 
 from dataclasses import dataclass

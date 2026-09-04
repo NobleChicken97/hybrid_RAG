@@ -37,7 +37,7 @@ Eval → Held-out QA Set → Full Pipeline → RAGAS Metrics → Scorecard
 
 > **History:** an earlier eval run was discarded — transient free-tier API failures were scored as answers, invalidating the baseline, and diagnosis (`diagnose_retrieval.py`) showed sentence-level compression was destroying ground-truth evidence on 13/20 questions (fixed: compression is now budget-conditional). Failed generations are now excluded from aggregate scores and reported separately. The compression fix lifted context_recall from 0.4 (discarded run) to 0.95–1.0 (clean runs).
 >
-> **Retrieval experiments (2026-09-04, same 20-Q set, 0 failures):** raising `rerank_top_n` 5→8 with MiniLM (`eval_dad102ce`) fixes Q14 recall (null→1.0, cited [8]) but dilutes precision (0.857→0.829); swapping to `BAAI/bge-reranker-base` at top-5 (`eval_81ec4f6c`) fixes Q14 perfectly (1.0 on all four metrics, cited [1]) and lifts precision to **0.9235**, with small faithfulness (−0.022) / relevancy (−0.034) costs. Local capture-rank analysis agrees (MiniLM covers 16/20 @top-5, bge 17/20 with Q14 at rank 1 vs 8). Reranker default switch still under decision — see `docs/todos.md`.
+> **Retrieval experiments (2026-09-04, same 20-Q set, 0 failures):** raising `rerank_top_n` 5→8 with MiniLM (`eval_dad102ce`) fixes Q14 recall (null→1.0, cited [8]) but dilutes precision (0.857→0.829); swapping to `BAAI/bge-reranker-base` at top-5 (`eval_81ec4f6c`) fixes Q14 perfectly (1.0 on all four metrics, cited [1]) and lifts precision to **0.9235**, with small faithfulness (−0.022) / relevancy (−0.034) costs. Local capture-rank analysis agrees (MiniLM covers 16/20 @top-5, bge 17/20 with Q14 at rank 1 vs 8). Decision 2026-09-04: bge-reranker-base is now the default reranker (MiniLM stays as env-var fallback).
 
 ---
 
@@ -127,7 +127,7 @@ pytest tests/test_compressor.py -v
 │   │   ├── vector_store.py   # ChromaDB wrapper
 │   │   ├── bm25_index.py     # BM25 keyword search (rank_bm25)
 │   │   ├── fusion.py         # Reciprocal Rank Fusion (RRF)
-│   │   ├── reranker.py       # Cross-encoder reranker (ms-marco-MiniLM)
+│   │   ├── reranker.py       # Cross-encoder reranker (bge-reranker-base; MiniLM fallback)
 │   │   └── compressor.py     # Context compression (sentence-level)
 │   ├── generation/
 │   │   ├── llm.py            # Claude API client
@@ -175,7 +175,7 @@ pytest tests/test_compressor.py -v
 | Embeddings | BGE-small-en-v1.5 | Runs on CPU, no GPU dependency |
 | Vector Store | ChromaDB | Local, persistent, zero-infra |
 | Keyword Search | rank_bm25 | Pure Python, no infra |
-| Reranker | ms-marco-MiniLM-L-6-v2 | Small enough for CPU |
+| Reranker | BAAI/bge-reranker-base | Won the 2026-09-04 A/B (precision +6.6, Q14 fixed); MiniLM fallback via env |
 | LLM | Claude API | Low cost, high quality |
 | Eval | RAGAS | Industry-standard RAG metrics |
 | Frontend | Streamlit | Rapid UI development |

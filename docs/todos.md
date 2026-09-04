@@ -39,9 +39,9 @@
 - MiniLM `rerank_top_n=8` (`eval_dad102ce`): faith 0.9875, relev 0.9356, precis 0.8292, recall 1.0. Q14 answered with citation [8] (recall null→1.0) but precision on Q14 only 0.125 — the predicted dilution is real (delta vs baseline: −0.0125/−0.0146/−0.0279/+0.0). Verdict: fixes Q14, taxes everything else.
 - bge-reranker-base `top_n=5` (`eval_81ec4f6c`): faith 0.9778, relev 0.9160, precis **0.9235**, recall 1.0. Q14 perfect across all four metrics, evidence cited [1]; precision UP +0.066 vs baseline. Minor costs: faith −0.022, relev −0.034. Verdict: best overall arm; costs ~1.1 GB model weight + slower CPU rerank (generation phase still fast).
 - Operational notes: first bge attempt failed on a trailing space in `set RERANKER_MODEL=... &&` (cmd quirk — quote the assignment); the all-None junk run `eval_d6d714a1` was deleted from the local DB. Judge needed retries through transient 503/429s on the free tier.
-- [ ] DECISION PENDING: make `BAAI/bge-reranker-base` the default reranker (config default + Dockerfile bake + docs) or keep MiniLM? Evidence favors bge; tradeoffs above.
+- [x] DECISION DONE 2026-09-04: `BAAI/bge-reranker-base` is now the default (`config.py` default + `.env.example` + Dockerfile bake; MiniLM fallback kept) — evidence above.
 - [ ] Small chunking losses on 2 questions (pool coverage 0.89–0.93) — inspect chunk boundaries for the affected docs. 2026-09-04 re-run suggests these may be stemming artifacts of the keyword-overlap heuristic, not real losses: Q7 misses only 'providing', Q13 only 'explain' (inflections of words present in the pool). Downgrade priority; confirm with stemmed overlap before touching the chunker.
-- [ ] Cross-encoder upgrade experiment (e.g. bge-reranker-base) — Q14-style ranking failures are a known ms-marco-MiniLM weakness on question-form queries; needs a benchmarked A/B before switching
+- [x] Cross-encoder upgrade experiment — DONE 2026-09-04: benchmarked A/B (capture-rank + full RAGAS) picked bge-reranker-base; now the default. Q14-style ranking failures were a known ms-marco-MiniLM weakness on question-form queries.
 
 ## Documentation / maintainability
 

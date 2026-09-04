@@ -59,8 +59,11 @@ class Settings(BaseSettings):
     embedding_dimension: int = Field(default=384, description="Embedding vector dimension for BGE-small")
 
     # --- Reranker Model ---
+    # Default since 2026-09-04: bge-reranker-base won the benchmarked A/B
+    # (precision 0.857 -> 0.924, Q14 fixed at rank 1; costs ~1.1 GB + slower
+    # CPU rerank). MiniLM stays one env var away as the lightweight fallback.
     reranker_model: str = Field(
-        default="cross-encoder/ms-marco-MiniLM-L-6-v2",
+        default="BAAI/bge-reranker-base",
         description="HuggingFace model ID for cross-encoder reranking",
     )
 

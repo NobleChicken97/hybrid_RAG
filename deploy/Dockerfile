@@ -26,7 +26,8 @@ COPY frontend/ frontend/
 COPY run.py .
 
 # Bake the embedding + cross-encoder models into the image so the first
-# request isn't cold (adds ~400 MB; still well under t4g.small's 20 GB disk).
-RUN python -c "from sentence_transformers import SentenceTransformer, CrossEncoder; SentenceTransformer('BAAI/bge-small-en-v1.5'); CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')"
+# request isn't cold (bge-base is ~1.1 GB; MiniLM stays baked as the
+# lightweight fallback — total still well under t4g.small's 20 GB disk).
+RUN python -c "from sentence_transformers import SentenceTransformer, CrossEncoder; SentenceTransformer('BAAI/bge-small-en-v1.5'); CrossEncoder('BAAI/bge-reranker-base'); CrossEncoder('cross-encoder/ms-marco-MiniLM-L-6-v2')"
 
 EXPOSE 8000 8501
