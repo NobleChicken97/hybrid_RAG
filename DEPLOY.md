@@ -16,7 +16,7 @@
 - SSH key pair (Lightsail account): `trakplus-lightsail`
 - Local copy of the private key: `C:\Users\arpan.ARPAN\.ssh\trakplus-lightsail.pem`
 - SSH user: `ubuntu`
-- Static IP: (fill in once attached)
+- Static IP: `65.2.210.233` (attached 2026-09-05)
 - Domain / A record → static IP: (fill in once set)
 - TLS: Caddy automatic Let's Encrypt once the domain resolves to the box
 - LLM keys on the box: `GEMINI_API_KEY` + `GROQ_API_KEY` (matches config defaults: gemini flash-lite primary, groq fallback)
