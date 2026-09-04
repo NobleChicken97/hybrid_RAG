@@ -83,7 +83,7 @@
 - [x] Audit: shipped code is light-themed (zinc-50/white) but screenshots show black — client-side forced-dark is mangling it; fix = ship an intentional dark theme. `globals.css` is still the Next scaffold (unused Geist vars, Arial fallback). No real type system.
 - [x] New dark-first design system (Tailwind v4 `@theme` tokens) + Jost (display, Futura-geometric) / Mulish (body) / JetBrains Mono (data) via `next/font`
 - [x] Restyled layout + all 6 pages, data logic identical; `tsc` + `eslint` + `npm run build` green (7/7 routes static)
-- [ ] Commit, push, update DEPLOY/docs; user redeploys on the box (`git pull` + `up -d --build`)
+- [x] Commit, push, update DEPLOY/docs (`a526274` on origin/main); user redeploys on the box (`git pull` + `up -d --build`)
 
 ## Status note (2026-09-04, updated 2026-09-05)
 
