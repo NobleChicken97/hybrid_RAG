@@ -36,6 +36,8 @@ Eval → Held-out QA Set → Full Pipeline → RAGAS Metrics → Scorecard
 > Reading: hybrid wins answer relevancy (+5.3) and context recall (+5.3, capturing every ground-truth evidence span), matches faithfulness, and trades −1.1 context precision — the reranked top-5 carries slightly more non-evidence text than pure vector search. With budget-conditional compression, both arms are strong; BM25 fusion's value shows where lexical terms matter.
 
 > **History:** an earlier eval run was discarded — transient free-tier API failures were scored as answers, invalidating the baseline, and diagnosis (`diagnose_retrieval.py`) showed sentence-level compression was destroying ground-truth evidence on 13/20 questions (fixed: compression is now budget-conditional). Failed generations are now excluded from aggregate scores and reported separately. The compression fix lifted context_recall from 0.4 (discarded run) to 0.95–1.0 (clean runs).
+>
+> **Retrieval experiments (2026-09-04, same 20-Q set, 0 failures):** raising `rerank_top_n` 5→8 with MiniLM (`eval_dad102ce`) fixes Q14 recall (null→1.0, cited [8]) but dilutes precision (0.857→0.829); swapping to `BAAI/bge-reranker-base` at top-5 (`eval_81ec4f6c`) fixes Q14 perfectly (1.0 on all four metrics, cited [1]) and lifts precision to **0.9235**, with small faithfulness (−0.022) / relevancy (−0.034) costs. Local capture-rank analysis agrees (MiniLM covers 16/20 @top-5, bge 17/20 with Q14 at rank 1 vs 8). Reranker default switch still under decision — see `docs/todos.md`.
 
 ---
 
