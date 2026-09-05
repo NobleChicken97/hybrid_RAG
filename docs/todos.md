@@ -78,12 +78,19 @@
 - [x] `web/` parity verified 2026-09-04 against live backend (fresh process; a stale 2026-09-02 backend was squatting on port 8001 and had to be killed — it served 404s for the new routes): `/health` (3 docs / 237 chunks / 8 eval runs), `/config`, `/documents`, `/eval/runs` all live; all 6 web routes (`/`, `/ask`, `/ingest`, `/eval`, `/system`, `/topology`) return 200 via `next dev --webpack` (Turbopack native binding still broken on this Windows box)
 - [x] Caddy cutover DONE 2026-09-04: `web/lib/api.ts` uses relative `/api/*` when `NEXT_PUBLIC_BACKEND_URL` is unset (direct backend only in local dev); `next.config.ts` rewrite proxies `/api/*` for `npm run dev` (`BACKEND_INTERNAL_URL` override, needed as port 8000 is taken on this box); `deploy/Caddyfile` strips `/api` → `backend:8000`, everything else → `web:3000`; `streamlit` service retired from compose (code/image kept for rollback); `Dockerfile.web` bakes empty backend URL; `DEPLOY.md` updated. Verified: `tsc`+`eslint` clean, `docker compose config` lists backend/web/caddy, Caddyfile `caddy validate` green for both `:80` and domain (adapted JSON confirms strip+proxy), live `/api/health|config|documents|eval/runs` through `next dev --webpack` → backend `:8001`, `npm run build` (prod bake) green with all 7 routes static. Note: `caddy validate` needs `-e DOMAIN=...` in the container — without it even the old file fails (pre-existing quirk, not a regression).
 
-## Frontend redesign v4 — card-catalog library via Impeccable (2026-09-05, in progress)
+## Frontend redesign v4 — card-catalog library via Impeccable (2026-09-05, superseded by v5 before review)
 
 Process: `npx impeccable install` (v4.0.1, into `.github`) → PRODUCT.md → live config (no CSP; :3000 owned by TrakPlus, dev goes `-p 3100` with prod-data rewrite) → dice roll `0bf4af60` assigned grounded candidate #6 → user locked the Library → direction contract in `.impeccable/surfaces/` → code-led build (no image gen) → detector clean → finish review BLOCKED on captures (no browser tool; owner screenshots substitute).
 - World: dark oak chrome, paper evidence slips, brass rules, verified stamps; Zilla Slab / Saira / Roboto Mono (all outside the banned-face list); sharp corners pinned; kickers/eyebrows, nested boxes, scattered motion removed per craft floor; single motion moment (evidence arrival, rise+deblur); ledger rows replace hero-metric stats.
 - [x] Build + `tsc`/`eslint`/`build` green + `impeccable detect` 0 findings
 - [ ] Owner screenshots of deployed v4 → full verdict review → DESIGN.md (documenter) → close
+  (Superseded: owner reviewed the v4 screenshot as harsh/muddy/empty/text-only and sent MAFIA/TERRAIN/portfolio/poster refs — see v5 below. The formal verdict pass folds into v5's review.)
+
+## Frontend redesign v5 — paper reading room (2026-09-05, pushed, CD deploying)
+
+Same locked Library world, lights on: paper ground `#F2EAD8` (body ~13:1, muted ~5:1), stamp-red `#B33A2B` signals, brass numerals, dark oak reserved for console readouts/footer. Oswald 700 display + Saira + Roboto Mono; sharp corners kept.
+- [x] Product-truth visuals: SVG pipeline schematic (mirrors `pipeline.py`) on the overview hero; RAGAS score bars from real numbers on eval; giant condensed headlines; mixed paper/console grounds
+- [x] `tsc` + `eslint` + `npm run build` green (9/9) + `impeccable detect` 0 findings; pushed — CD auto-deploys, screenshots pending for the verdict review
 
 Brief: kill the AI-made feel. Research: 2026 dashboard consensus (dark-first, bold type, character) + font authorities (Fraunces/Space Grotesk/Mulish documented; vibe-code guidance = one distinctive display face). Motion: animejs v4 skill + Motion-generated CSS spring.
 - [x] Type: Space Grotesk 700 display (documented Mulish pairing, technical character) / Mulish body kept / JetBrains Mono kept; Archivo dropped (too brutalist for premium); 800→700 weights (Grotesk max)

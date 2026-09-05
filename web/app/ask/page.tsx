@@ -16,7 +16,7 @@ function Hits({
   return (
     <details className="border border-line bg-panel">
       <summary className="cursor-pointer list-none border-b border-line-soft px-4 py-2 marker:hidden [&::-webkit-details-marker]:hidden">
-        <span className="text-sm font-semibold uppercase tracking-[0.14em] text-ink">
+        <span className="text-sm font-bold uppercase tracking-[0.14em] text-ink">
           {title}
         </span>{" "}
         <span className="font-mono text-xs font-semibold text-gold">
@@ -86,11 +86,12 @@ export default function AskPage() {
 
   return (
     <div className="flex flex-col gap-px border border-line bg-line">
-      <div className="bg-panel p-6">
-        <h1 className="font-display text-4xl font-bold tracking-tight text-ink">
-          Ask a question
+      <div className="bg-abyss p-6 sm:p-10">
+        <h1 className="font-display text-5xl font-bold uppercase leading-[0.95] tracking-tight text-ink sm:text-7xl">
+          Ask a<br />
+          question.
         </h1>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-mist">
+        <p className="mt-3 max-w-xl text-sm leading-6 text-mist">
           Pose it plainly. The room answers on a slip, with every claim
           stamped to its shelf mark.
         </p>
@@ -102,21 +103,21 @@ export default function AskPage() {
           onChange={(e) => setQuestion(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && question && !loading && ask()}
           placeholder="What would you like to know?"
-          className="border-line bg-abyss text-[15px] text-ink placeholder:text-dim focus-visible:ring-signal"
+          className="border-line bg-raised text-[15px] text-ink placeholder:text-dim focus-visible:ring-signal"
         />
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-mist">
-          <label className="flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[0.14em]">
+          <label className="flex items-center gap-2 text-[13px] font-bold uppercase tracking-[0.14em]">
             Mode
             <select
               value={mode}
               onChange={(e) => setMode(e.target.value)}
-              className="border border-line bg-abyss px-2 py-1 text-ink outline-none focus:border-signal"
+              className="border border-line bg-raised px-2 py-1 text-ink outline-none focus:border-signal"
             >
               <option value="hybrid">hybrid</option>
               <option value="vector_only">vector_only</option>
             </select>
           </label>
-          <label className="flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[0.14em]">
+          <label className="flex items-center gap-2 text-[13px] font-bold uppercase tracking-[0.14em]">
             Top-K
             <input
               type="number"
@@ -124,7 +125,7 @@ export default function AskPage() {
               max={20}
               value={topK}
               onChange={(e) => setTopK(Number(e.target.value))}
-              className="w-16 border border-line bg-abyss px-2 py-1 text-ink outline-none focus:border-signal"
+              className="w-16 border border-line bg-raised px-2 py-1 text-ink outline-none focus:border-signal"
             />
           </label>
           <Button
@@ -145,23 +146,23 @@ export default function AskPage() {
 
       {result && (
         <>
-          <section className="evidence-in border-y-2 border-signal bg-paper p-6 text-paper-ink">
-            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-paper-ink/20 pb-2">
-              <span className="font-display text-xl font-bold">
+          <section className="evidence-in border-y-4 border-signal bg-paper p-6 text-paper-ink sm:p-8">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-paper-ink/70 pb-2">
+              <span className="font-display text-2xl font-bold uppercase">
                 Evidence slip
               </span>
-              <span className="border border-paper-ink/40 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.2em]">
-                Verified against {result.citations.length} shelf mark
+              <span className="bg-signal px-2 py-0.5 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-signal-ink">
+                {result.citations.length} shelf mark
                 {result.citations.length === 1 ? "" : "s"}
               </span>
             </div>
-            <p className="mt-3 whitespace-pre-wrap text-[15px] leading-7">
+            <p className="mt-3 whitespace-pre-wrap font-display text-xl font-medium leading-8">
               {result.answer}
             </p>
           </section>
 
           <section className="flex flex-col gap-px bg-line-soft">
-            <h2 className="bg-panel px-6 pb-1 pt-4 font-display text-xl font-bold text-ink">
+            <h2 className="bg-panel px-6 pb-1 pt-4 font-display text-2xl font-bold uppercase text-ink">
               Pulled cards{" "}
               <span className="font-mono text-sm font-semibold text-gold">
                 [{result.citations.length}]
@@ -174,9 +175,7 @@ export default function AskPage() {
                     <Badge className="bg-signal font-mono text-[11px] font-bold text-signal-ink">
                       [{i + 1}]
                     </Badge>
-                    <span className="font-semibold text-ink">
-                      {c.doc_title}
-                    </span>
+                    <span className="font-bold text-ink">{c.doc_title}</span>
                   </div>
                   <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.14em] text-gold">
                     Call no. {c.chunk_id}
@@ -190,7 +189,7 @@ export default function AskPage() {
           </section>
 
           <section className="flex flex-col gap-2 bg-panel p-6">
-            <h2 className="font-display text-xl font-bold text-ink">
+            <h2 className="font-display text-2xl font-bold uppercase text-ink">
               Retrieval ledger
             </h2>
             <Hits title="BM25 entries" hits={result.retrieval_debug.bm25_hits} />

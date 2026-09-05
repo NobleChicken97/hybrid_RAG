@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Roboto_Mono, Saira, Zilla_Slab } from "next/font/google";
+import { Oswald, Roboto_Mono, Saira } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 
-const display = Zilla_Slab({
+const display = Oswald({
   subsets: ["latin"],
   variable: "--font-head",
   weight: ["500", "600", "700"],
@@ -46,30 +46,36 @@ export default function RootLayout({
       <body
         className={`${display.variable} ${body.variable} ${mono.variable} min-h-screen bg-abyss font-sans text-ink antialiased`}
       >
-        <header className="border-b-2 border-signal bg-panel">
-          <div className="mx-auto flex max-w-6xl items-stretch justify-between px-4">
-            <Link href="/" className="flex items-center gap-3 py-3">
+        <div className="bg-console text-console-mist">
+          <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.24em]">
+            <span>Retrieval reading room</span>
+            <span>
+              Backend{" "}
+              <span className="text-console-ink">
+                {process.env.NEXT_PUBLIC_BACKEND_URL || "/api (same origin)"}
+              </span>
+            </span>
+          </div>
+        </div>
+        <header className="border-b-4 border-signal bg-abyss">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-4 px-4 pb-4 pt-5">
+            <Link href="/" className="flex items-center gap-3">
               <span
                 aria-hidden="true"
-                className="border border-signal px-2 py-1 font-display text-lg font-bold leading-none text-signal"
+                className="bg-signal px-2.5 py-1 font-display text-2xl font-bold leading-none text-signal-ink"
               >
                 HR
               </span>
-              <span className="flex flex-col leading-tight">
-                <span className="font-display text-xl font-bold tracking-tight text-ink">
-                  Hybrid RAG
-                </span>
-                <span className="font-mono text-[10px] uppercase tracking-[0.28em] text-dim">
-                  Retrieval reading room
-                </span>
+              <span className="font-display text-3xl font-bold uppercase leading-none tracking-tight text-ink">
+                Hybrid&nbsp;RAG
               </span>
             </Link>
-            <nav className="flex items-stretch">
+            <nav className="flex flex-wrap border border-line">
               {NAV.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="flex items-center border-l border-line-soft px-4 text-[13px] font-semibold uppercase tracking-[0.14em] text-mist transition-colors last:border-r hover:bg-hover hover:text-signal"
+                  className="border-l border-line px-4 py-2 text-[13px] font-bold uppercase tracking-[0.14em] text-mist transition-colors first:border-l-0 hover:bg-ink hover:text-abyss"
                 >
                   {item.label}
                 </Link>
@@ -80,18 +86,13 @@ export default function RootLayout({
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">
           {children}
         </main>
-        <footer className="border-t border-line bg-panel">
-          <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-1 px-4 py-3 font-mono text-[11px] tracking-wide text-dim">
+        <footer className="bg-console text-console-mist">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-1 px-4 py-4 font-mono text-[11px] tracking-wide">
             <span>BM25 + VECTOR · RRF · RERANKER · COMPRESSION · LLM</span>
             <span aria-hidden="true" className="text-signal">
               ·
             </span>
-            <span>
-              BACKEND{" "}
-              <span className="text-mist">
-                {process.env.NEXT_PUBLIC_BACKEND_URL || "/api (same origin)"}
-              </span>
-            </span>
+            <span>SET IN OSWALD, SAIRA & ROBOTO MONO · PRINTED ON PIXELS</span>
           </div>
         </footer>
       </body>

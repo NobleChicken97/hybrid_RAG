@@ -18,14 +18,26 @@ import {
   type EvalScores,
 } from "@/lib/api";
 
-function ScoreSlip({ label, value }: { label: string; value: number | null }) {
+function ScoreBar({ label, value }: { label: string; value: number | null }) {
   return (
     <div className="bg-paper p-4 text-paper-ink">
-      <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-paper-dim">
-        {label}
+      <div className="flex items-baseline justify-between gap-2">
+        <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-paper-dim">
+          {label}
+        </div>
+        <div className="font-display text-3xl font-bold tabular-nums">
+          {value == null ? "N/A" : value.toFixed(2)}
+        </div>
       </div>
-      <div className="mt-1 font-display text-3xl font-bold tabular-nums">
-        {value == null ? "N/A" : value.toFixed(4)}
+      <div
+        className="mt-2 h-2 w-full bg-paper-ink/15"
+        role="img"
+        aria-label={`${label}: ${value == null ? "not scored" : value.toFixed(4)}`}
+      >
+        <div
+          className="h-2 bg-signal"
+          style={{ width: `${Math.round((value ?? 0) * 100)}%` }}
+        />
       </div>
     </div>
   );
@@ -33,11 +45,11 @@ function ScoreSlip({ label, value }: { label: string; value: number | null }) {
 
 function Scores({ scores }: { scores: EvalScores }) {
   return (
-    <div className="grid grid-cols-4 gap-px border border-line bg-line">
-      <ScoreSlip label="Faithfulness" value={scores.faithfulness} />
-      <ScoreSlip label="Answer relevancy" value={scores.answer_relevancy} />
-      <ScoreSlip label="Context precision" value={scores.context_precision} />
-      <ScoreSlip label="Context recall" value={scores.context_recall} />
+    <div className="grid grid-cols-2 gap-px border border-line bg-line lg:grid-cols-4">
+      <ScoreBar label="Faithfulness" value={scores.faithfulness} />
+      <ScoreBar label="Answer relevancy" value={scores.answer_relevancy} />
+      <ScoreBar label="Context precision" value={scores.context_precision} />
+      <ScoreBar label="Context recall" value={scores.context_recall} />
     </div>
   );
 }
@@ -115,30 +127,32 @@ export default function EvalPage() {
   }
 
   const selectCls =
-    "border border-line bg-abyss px-2 py-1 text-ink outline-none focus:border-signal";
+    "border border-line bg-raised px-2 py-1 text-ink outline-none focus:border-signal";
 
   return (
     <div className="flex flex-col gap-px border border-line bg-line">
-      <div className="bg-panel p-6">
-        <h1 className="font-display text-4xl font-bold tracking-tight text-ink">
-          Audit ledger
+      <div className="bg-abyss p-6 sm:p-10">
+        <h1 className="font-display text-5xl font-bold uppercase leading-[0.95] tracking-tight text-ink sm:text-7xl">
+          Audit
+          <br />
+          ledger.
         </h1>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-mist">
+        <p className="mt-3 max-w-xl text-sm leading-6 text-mist">
           Run the holdings against the question set. Each audit is filed as
           a slip and kept on record for comparison.
         </p>
       </div>
 
       <section className="flex flex-wrap items-end gap-3 bg-panel p-6">
-        <label className="flex flex-col gap-1 text-[13px] font-semibold uppercase tracking-[0.14em] text-mist">
+        <label className="flex flex-col gap-1 text-[13px] font-bold uppercase tracking-[0.14em] text-mist">
           QA set
           <Input
             value={qaSet}
             onChange={(e) => setQaSet(e.target.value)}
-            className="border-line bg-abyss normal-case tracking-normal text-ink focus-visible:ring-signal"
+            className="border-line bg-raised normal-case tracking-normal text-ink focus-visible:ring-signal"
           />
         </label>
-        <label className="flex flex-col gap-1 text-[13px] font-semibold uppercase tracking-[0.14em] text-mist">
+        <label className="flex flex-col gap-1 text-[13px] font-bold uppercase tracking-[0.14em] text-mist">
           Mode
           <select
             value={mode}
@@ -179,7 +193,7 @@ export default function EvalPage() {
       )}
 
       <section className="flex flex-col bg-panel">
-        <h2 className="px-6 pb-1 pt-4 font-display text-xl font-bold text-ink">
+        <h2 className="px-6 pb-1 pt-4 font-display text-2xl font-bold uppercase text-ink">
           Audits on record{" "}
           <span className="font-mono text-sm font-semibold text-gold">
             [{runs.length}]
@@ -226,7 +240,7 @@ export default function EvalPage() {
 
       {runs.length >= 2 && (
         <section className="flex flex-col gap-3 bg-panel p-6">
-          <h2 className="font-display text-xl font-bold text-ink">
+          <h2 className="font-display text-2xl font-bold uppercase text-ink">
             Set two slips side by side
           </h2>
           <div className="flex flex-wrap items-center gap-3 text-sm text-mist">

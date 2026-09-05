@@ -63,17 +63,19 @@ export default function SystemPage() {
 
   return (
     <div className="flex flex-col gap-px border border-line bg-line">
-      <div className="bg-panel p-6">
-        <h1 className="font-display text-4xl font-bold tracking-tight text-ink">
-          Stacks inventory
+      <div className="bg-abyss p-6 sm:p-10">
+        <h1 className="font-display text-5xl font-bold uppercase leading-[0.95] tracking-tight text-ink sm:text-7xl">
+          Stacks
+          <br />
+          inventory.
         </h1>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-mist">
+        <p className="mt-3 max-w-xl text-sm leading-6 text-mist">
           What the room holds and how it is configured — counts, machinery,
           and every shelved document.
         </p>
       </div>
 
-      <div className="grid grid-cols-3 gap-px bg-line">
+      <div className="grid grid-cols-3 divide-x divide-console-line bg-console">
         {(
           [
             ["Documents shelved", health.documents_count],
@@ -81,11 +83,11 @@ export default function SystemPage() {
             ["Audits on record", health.eval_runs_count],
           ] as [string, number][]
         ).map(([label, value]) => (
-          <div key={label} className="bg-panel p-6">
-            <div className="text-sm font-semibold uppercase tracking-[0.14em] text-mist">
+          <div key={label} className="bg-console p-6">
+            <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-console-mist">
               {label}
             </div>
-            <div className="mt-1 font-display text-5xl font-bold tabular-nums text-gold">
+            <div className="mt-1 font-display text-6xl font-bold tabular-nums text-console-ink">
               {value}
             </div>
           </div>
@@ -93,7 +95,9 @@ export default function SystemPage() {
       </div>
 
       <section className="bg-panel p-6">
-        <h2 className="font-display text-xl font-bold text-ink">Machinery</h2>
+        <h2 className="font-display text-2xl font-bold uppercase text-ink">
+          Machinery
+        </h2>
         <dl className="mt-2 divide-y divide-line-soft border-y border-line-soft text-sm">
           {rows.map(([k, v]) => (
             <div key={k} className="flex justify-between gap-4 py-2">
@@ -105,7 +109,7 @@ export default function SystemPage() {
       </section>
 
       <section className="bg-panel">
-        <h2 className="px-6 pb-1 pt-4 font-display text-xl font-bold text-ink">
+        <h2 className="px-6 pb-1 pt-4 font-display text-2xl font-bold uppercase text-ink">
           Shelved documents{" "}
           <span className="font-mono text-sm font-semibold text-gold">
             [{docs.length}]

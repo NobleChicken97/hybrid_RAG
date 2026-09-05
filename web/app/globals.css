@@ -5,34 +5,45 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Hybrid RAG v4 — card-catalog library (seed 0bf4af60).
- * Dark oak chrome, paper evidence slips, brass rules, verified stamps.
- * Radius structurally 0 (pinned geometry). shadcn tokens mapped so
- * Button / Badge / Table / Input render native to this world.
+ * Hybrid RAG v5 — paper reading room (same Library world, lights on).
+ * Cream paper grounds with ink type, stamp-red signals, dark oak reserved
+ * for console readouts and the footer. Radius structurally 0 (pinned).
+ * shadcn tokens mapped so Button / Badge / Table / Input render native.
  */
 @theme {
-  --color-abyss: #14110d; /* umber-black ground */
-  --color-panel: #1e1913; /* oak panels */
-  --color-raised: #28211a; /* drawers, inputs */
-  --color-hover: #2e2620; /* hover fill */
-  --color-line: #3a3125; /* brass-dim hairlines */
-  --color-line-soft: #241e16; /* subtle dividers */
+  --color-abyss: #f2ead8; /* paper ground */
+  --color-panel: #e9dfc9; /* panel paper, slightly deeper */
+  --color-raised: #fffdf6; /* lifted slips, inputs */
+  --color-hover: #e2d5ba; /* hover fill */
+  --color-line: #c9b992; /* hairlines */
+  --color-line-soft: #ddd0b4; /* subtle dividers */
 
-  --color-ink: #ece4d2; /* warm ivory text */
-  --color-mist: #b3a68d; /* secondary text */
-  --color-dim: #7a6e58; /* muted labels */
+  --color-ink: #1e1811; /* ink text */
+  --color-mist: #4d4433; /* secondary text */
+  --color-dim: #7d7059; /* muted labels */
 
-  --color-paper: #efe6d2; /* evidence slips */
-  --color-paper-ink: #221c12; /* ink on paper */
-  --color-paper-dim: #6b5f4b; /* secondary text on paper */
+  --color-console: #14110d; /* dark readout strip */
+  --color-console-line: #3a3125; /* dividers on console */
+  --color-console-ink: #ece4d2; /* ivory numerals */
+  --color-console-mist: #b3a68d; /* labels on console */
 
-  --color-signal: #c6a15b; /* brass: actions, active states */
-  --color-signal-ink: #201503; /* text on brass fill */
-  --color-gold: #e0be7a; /* bright brass: numerals, highlights */
-  --color-good: #4e9b5e; /* verified stamps */
-  --color-bad: #d97362; /* fired clay errors */
+  --color-console: #14110d; /* dark oak readout ground */
+  --color-console-panel: #1e1913;
+  --color-console-line: #3a3125;
+  --color-console-ink: #ece4d2;
+  --color-console-mist: #b3a68d;
 
-  --font-display: var(--font-head), Georgia, "Times New Roman", serif;
+  --color-paper: #fffdf6;
+  --color-paper-ink: #221c12;
+  --color-paper-dim: #6b5f4b;
+
+  --color-signal: #b33a2b; /* rubber-stamp red: actions, active states */
+  --color-signal-ink: #fdf6e8; /* text on stamp fill */
+  --color-gold: #8a6d2f; /* brass numerals, stamps */
+  --color-good: #2f7d44; /* verified stamps */
+  --color-bad: #b33a2b; /* errors share the stamp red */
+
+  --font-display: var(--font-head), "Arial Narrow", "Segoe UI", sans-serif;
   --font-sans: var(--font-body), "Segoe UI", system-ui, sans-serif;
   --font-mono: var(--font-code), ui-monospace, SFMono-Regular, monospace;
 
@@ -47,12 +58,12 @@
   --color-primary-foreground: var(--color-signal-ink);
   --color-secondary: var(--color-raised);
   --color-secondary-foreground: var(--color-ink);
-  --color-muted: var(--color-raised);
+  --color-muted: var(--color-panel);
   --color-muted-foreground: var(--color-mist);
   --color-accent: var(--color-hover);
   --color-accent-foreground: var(--color-ink);
   --color-destructive: var(--color-bad);
-  --color-destructive-foreground: var(--color-ink);
+  --color-destructive-foreground: var(--color-signal-ink);
   --color-border: var(--color-line);
   --color-input: var(--color-line);
   --color-ring: var(--color-signal);
@@ -68,7 +79,7 @@
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 html {
@@ -87,7 +98,7 @@ body {
   color: var(--color-signal-ink);
 }
 
-/* Square brass focus. */
+/* Square stamp-red focus. */
 :focus-visible {
   outline: 2px solid var(--color-signal);
   outline-offset: 1px;

@@ -28,15 +28,16 @@ export default function IngestPage() {
   }
 
   const inputCls =
-    "border-line bg-abyss text-ink placeholder:text-dim focus-visible:ring-signal";
+    "border-line bg-raised text-ink placeholder:text-dim focus-visible:ring-signal";
 
   return (
     <div className="flex flex-col gap-px border border-line bg-line">
-      <div className="bg-panel p-6">
-        <h1 className="font-display text-4xl font-bold tracking-tight text-ink">
-          Shelve a document
+      <div className="bg-abyss p-6 sm:p-10">
+        <h1 className="font-display text-5xl font-bold uppercase leading-[0.95] tracking-tight text-ink sm:text-7xl">
+          Shelve a<br />
+          document.
         </h1>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-mist">
+        <p className="mt-3 max-w-xl text-sm leading-6 text-mist">
           Hand over a file or paste text. The room catalogs it into indexed
           chunks, each with its own call number.
         </p>
@@ -44,14 +45,14 @@ export default function IngestPage() {
 
       <div className="grid grid-cols-2 gap-px bg-line-soft">
         <section className="flex flex-col gap-3 bg-panel p-6">
-          <h2 className="font-display text-xl font-bold text-ink">
+          <h2 className="font-display text-2xl font-bold uppercase text-ink">
             Deposit a file
           </h2>
           <input
             type="file"
             accept=".pdf,.md,.markdown,.txt"
             onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-            className="text-sm text-mist file:mr-3 file:border file:border-line file:bg-abyss file:px-3 file:py-1.5 file:font-mono file:text-[11px] file:font-bold file:uppercase file:tracking-[0.14em] file:text-ink hover:file:border-signal"
+            className="text-sm text-mist file:mr-3 file:border file:border-line file:bg-raised file:px-3 file:py-1.5 file:font-mono file:text-[11px] file:font-bold file:uppercase file:tracking-[0.14em] file:text-ink hover:file:border-signal"
           />
           <Input
             value={fileTitle}
@@ -69,7 +70,7 @@ export default function IngestPage() {
         </section>
 
         <section className="flex flex-col gap-3 bg-panel p-6">
-          <h2 className="font-display text-xl font-bold text-ink">
+          <h2 className="font-display text-2xl font-bold uppercase text-ink">
             Transcribe text
           </h2>
           <textarea
@@ -77,7 +78,7 @@ export default function IngestPage() {
             onChange={(e) => setRawText(e.target.value)}
             rows={6}
             placeholder="Paste your document text here…"
-            className="border border-line bg-abyss px-3 py-2 text-sm text-ink outline-none placeholder:text-dim focus:border-signal"
+            className="border border-line bg-raised px-3 py-2 text-sm text-ink outline-none placeholder:text-dim focus:border-signal"
           />
           <Input
             value={textTitle}
@@ -108,8 +109,8 @@ export default function IngestPage() {
         </p>
       )}
       {result && (
-        <section className="border-t-2 border-good bg-panel p-6">
-          <p className="font-display text-xl font-bold text-ink">
+        <section className="border-t-4 border-good bg-panel p-6">
+          <p className="font-display text-2xl font-bold uppercase text-ink">
             Shelved under {result.chunk_count} call numbers
           </p>
           <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.16em] text-mist">

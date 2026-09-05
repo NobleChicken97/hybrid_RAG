@@ -38,11 +38,15 @@ export default function TopologyPage() {
 
   return (
     <div className="flex flex-col gap-px border border-line bg-line">
-      <div className="bg-panel p-6">
-        <h1 className="font-display text-4xl font-bold tracking-tight text-ink">
-          Cross-reference index
+      <div className="bg-abyss p-6 sm:p-10">
+        <h1 className="font-display text-5xl font-bold uppercase leading-[0.95] tracking-tight text-ink sm:text-7xl">
+          Cross-
+          <br />
+          reference
+          <br />
+          index.
         </h1>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-mist">
+        <p className="mt-3 max-w-xl text-sm leading-6 text-mist">
           The true retrieval path behind your question — every entry is a
           chunk the pipeline actually returned, with its cross-encoder score.
         </p>
@@ -92,7 +96,7 @@ export default function TopologyPage() {
             <span className="flex-1 border-b border-line-soft" />
           </div>
 
-          <div className="border-y-2 border-signal bg-panel px-6 py-3 text-sm font-semibold text-ink">
+          <div className="border-y-4 border-signal bg-paper px-6 py-3 text-sm font-bold text-paper-ink">
             {question}
           </div>
           <div className="bg-panel px-6 pb-1 pt-3 font-mono text-[11px] uppercase tracking-[0.24em] text-dim">
@@ -103,7 +107,7 @@ export default function TopologyPage() {
             return (
               <div key={h.chunk_id} className="bg-panel px-6 py-2 text-sm">
                 <div
-                  className={`border px-4 py-3 ${
+                  className={`border p-4 ${
                     isCited ? "border-good bg-good/10" : "border-line"
                   }`}
                 >
@@ -113,11 +117,11 @@ export default function TopologyPage() {
                       {h.chunk_id}
                     </span>
                     <span className="flex items-center gap-2">
-                      <span className="font-mono text-xs font-bold tabular-nums text-gold">
+                      <span className="font-mono text-sm font-bold tabular-nums text-ink">
                         {h.score.toFixed(2)}
                       </span>
                       {isCited && (
-                        <Badge className="bg-good font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-abyss">
+                        <Badge className="bg-good font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-signal-ink">
                           Cited
                         </Badge>
                       )}
@@ -130,7 +134,7 @@ export default function TopologyPage() {
               </div>
             );
           })}
-          <p className="bg-panel px-6 py-3 font-mono text-[11px] leading-5 text-dim">
+          <p className="bg-console px-6 py-3 font-mono text-[11px] leading-5 text-console-mist">
             {result.citations.length} CITATIONS · BM25{" "}
             {result.retrieval_debug.bm25_hits.length} · VECTOR{" "}
             {result.retrieval_debug.vector_hits.length} · FUSED{" "}
