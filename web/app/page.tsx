@@ -2,9 +2,15 @@
 
 import { Button } from "@/components/ui/button";
 import { PipelineDiagram } from "@/components/pipeline-diagram";
+import { Reveal } from "@/components/reveal";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { api, type Health } from "@/lib/api";
+import {
+  api,
+  type DocumentInfo,
+  type EvalRunSummary,
+  type Health,
+} from "@/lib/api";
 
 const DRAWERS = [
   {
@@ -27,8 +33,47 @@ const DRAWERS = [
   },
 ];
 
+function Meter({
+  label,
+  value,
+  max,
+  suffix,
+}: {
+  label: string;
+  value: number;
+  max: number;
+  suffix: string;
+}) {
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    const r = requestAnimationFrame(() => setOn(true));
+    return () => cancelAnimationFrame(r);
+  }, []);
+  const pct = max > 0 ? Math.round((value / max) * 100) : 0;
+  return (
+    <div>
+      <div className="flex items-baseline justify-between gap-2">
+        <span className="truncate text-sm font-semibold text-ink">
+          {label}
+        </span>
+        <span className="font-mono text-xs tabular-nums text-mist">
+          {value} {suffix}
+        </span>
+      </div>
+      <div className="mt-1 h-2 w-full bg-ink/10">
+        <div
+          className="h-2 bg-signal transition-[width] duration-700 ease-out"
+          style={{ width: on ? `${pct}%` : "0%" }}
+        />
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   const [health, setHealth] = useState<Health | null>(null);
+  const [docs, setDocs] = useState<DocumentInfo[]>([]);
+  const [runs, setRuns] = useState<EvalRunSummary[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -36,35 +81,95 @@ export default function Home() {
       .health()
       .then(setHealth)
       .catch((e: Error) => setError(e.message));
+    api.documents().then(setDocs).catch(() => {});
+    api.evalRuns().then(setRuns).catch(() => {});
   }, []);
+
+  const maxChunks = Math.max(1, ...docs.map((d) => d.chunk_count));
+  const latest = runs[0];
 
   return (
     <div className="flex flex-col gap-px border border-line bg-line">
       <div className="bg-abyss p-6 sm:p-10">
-        <p className="font-mono text-xs font-semibold uppercase tracking-[0.28em] text-signal">
-          A retrieval console · EST. holdings verified nightly
-        </p>
-        <h1 className="mt-3 font-display text-6xl font-bold uppercase leading-[0.95] tracking-tight text-ink sm:text-8xl">
-          Every claim
-          <br />
-          has a call number.
-        </h1>
-        <p className="mt-4 max-w-xl leading-6 text-mist">
-          A production-grade retrieval-augmented generation pipeline with
-          hybrid retrieval, cross-encoder reranking, context compression, and
-          RAGAS evaluation. Nothing here answers from memory — everything is
-          shelved, cited, and auditable.
-        </p>
-        <div className="mt-6 border border-line bg-panel p-4">
-          <PipelineDiagram />
+        <div className="grid gap-8 xl:grid-cols-12">
+          <div className="xl:col-span-7">
+            <h1 className="font-display text-6xl font-bold uppercase leading-[0.95] tracking-tight text-ink sm:text-8xl">
+              Every claim
+              <br />
+              has a call number.
+            </h1>
+            <p className="mt-4 max-w-xl leading-6 text-mist">
+              A production-grade retrieval-augmented generation pipeline
+              with hybrid retrieval, cross-encoder reranking, context
+              compression, and RAGAS evaluation. Nothing here answers from
+              memory — everything is shelved, cited, and auditable.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Link href="/ask">
+                <Button className="font-mono text-xs font-bold uppercase tracking-[0.18em]">
+                  Ask the stacks →
+                </Button>
+              </Link>
+              <Link href="/ingest">
+                <Button
+                  variant="outline"
+                  className="font-mono text-xs font-bold uppercase tracking-[0.18em]"
+                >
+                  Shelve a document
+                </Button>
+              </Link>
+            </div>
+            {health && (
+              <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.2em] text-mist">
+                Environment <span className="text-ink">{health.environment}</span>
+                {"  ·  "}LLM backend{" "}
+                <span className="text-ink">{health.llm_backend}</span>
+              </p>
+            )}
+          </div>
+          <div className="flex flex-col gap-px border border-line bg-line xl:col-span-5">
+            <div className="bg-panel px-5 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-signal">
+              Reading-room index
+            </div>
+            <div className="flex flex-1 flex-col justify-center gap-4 bg-panel p-5">
+              <div className="flex items-baseline justify-between border-b border-line-soft pb-3">
+                <span className="text-sm font-semibold uppercase tracking-[0.14em] text-mist">
+                  Retrieval
+                </span>
+                <span className="font-mono text-xs text-ink">
+                  BM25 + vector · RRF
+                </span>
+              </div>
+              <div className="flex items-baseline justify-between border-b border-line-soft pb-3">
+                <span className="text-sm font-semibold uppercase tracking-[0.14em] text-mist">
+                  Reranker
+                </span>
+                <span className="font-mono text-xs text-ink">
+                  bge-base · top 5
+                </span>
+              </div>
+              <div className="flex items-baseline justify-between border-b border-line-soft pb-3">
+                <span className="text-sm font-semibold uppercase tracking-[0.14em] text-mist">
+                  Judge
+                </span>
+                <span className="font-mono text-xs text-ink">
+                  RAGAS · 4 metrics
+                </span>
+              </div>
+              <div className="flex items-baseline justify-between">
+                <span className="text-sm font-semibold uppercase tracking-[0.14em] text-mist">
+                  Corpus
+                </span>
+                <span className="font-mono text-xs text-ink">
+                  {health ? `${health.documents_count} docs` : "…"}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
-        {health && (
-          <p className="mt-4 font-mono text-[11px] uppercase tracking-[0.2em] text-mist">
-            Environment <span className="text-ink">{health.environment}</span>
-            {"  ·  "}LLM backend{" "}
-            <span className="text-ink">{health.llm_backend}</span>
-          </p>
-        )}
+        <Reveal className="mt-6 border border-line bg-graph bg-panel p-4">
+          <PipelineDiagram />
+        </Reveal>
       </div>
 
       <div className="grid grid-cols-3 divide-x divide-console-line bg-console">
@@ -75,7 +180,7 @@ export default function Home() {
             ["Audits on record", health?.eval_runs_count],
           ] as [string, number | undefined][]
         ).map(([label, value]) => (
-          <div key={label} className="bg-console p-6">
+          <div key={label} className="p-6">
             <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-console-mist">
               {label}
             </div>
@@ -95,7 +200,80 @@ export default function Home() {
         </p>
       )}
 
-      <div className="grid grid-cols-3 gap-px bg-line">
+      <div className="grid gap-px bg-line lg:grid-cols-2">
+        <Reveal className="bg-panel p-6">
+          <div className="flex items-baseline justify-between">
+            <h2 className="font-display text-2xl font-bold uppercase text-ink">
+              On the shelves
+            </h2>
+            <Link
+              href="/system"
+              className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-signal hover:underline"
+            >
+              Full inventory →
+            </Link>
+          </div>
+          <div className="mt-4 flex flex-col gap-4">
+            {docs.length === 0 && (
+              <p className="text-sm text-mist">
+                {error ? "Cannot reach the backend." : "Loading holdings…"}
+              </p>
+            )}
+            {docs.map((d) => (
+              <Meter
+                key={d.doc_id}
+                label={d.title}
+                value={d.chunk_count}
+                max={maxChunks}
+                suffix="chunks"
+              />
+            ))}
+          </div>
+        </Reveal>
+        <Reveal className="bg-panel p-6" delay={120}>
+          <div className="flex items-baseline justify-between">
+            <h2 className="font-display text-2xl font-bold uppercase text-ink">
+              Latest audit
+            </h2>
+            <Link
+              href="/eval"
+              className="font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-signal hover:underline"
+            >
+              Audit ledger →
+            </Link>
+          </div>
+          {!latest ? (
+            <p className="mt-4 text-sm leading-6 text-mist">
+              No audits on record yet. Run the holdings against the question
+              set to file the first slip.
+            </p>
+          ) : (
+            <div className="mt-4 flex flex-col gap-4">
+              <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-mist">
+                {latest.run_id} · {latest.retrieval_mode}
+              </p>
+              {(
+                [
+                  ["Faithfulness", latest.scores.faithfulness],
+                  ["Answer relevancy", latest.scores.answer_relevancy],
+                  ["Context precision", latest.scores.context_precision],
+                  ["Context recall", latest.scores.context_recall],
+                ] as [string, number | null][]
+              ).map(([label, v]) => (
+                <Meter
+                  key={label}
+                  label={label}
+                  value={v ?? 0}
+                  max={1}
+                  suffix={v == null ? "N/A" : v.toFixed(2)}
+                />
+              ))}
+            </div>
+          )}
+        </Reveal>
+      </div>
+
+      <div className="grid gap-px bg-line sm:grid-cols-3">
         {DRAWERS.map((card) => (
           <Link
             key={card.href}

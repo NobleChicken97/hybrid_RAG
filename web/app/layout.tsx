@@ -47,7 +47,7 @@ export default function RootLayout({
         className={`${display.variable} ${body.variable} ${mono.variable} min-h-screen bg-abyss font-sans text-ink antialiased`}
       >
         <div className="bg-console text-console-mist">
-          <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.24em]">
+          <div className="flex w-full items-center justify-between px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.24em]">
             <span>Retrieval reading room</span>
             <span>
               Backend{" "}
@@ -58,7 +58,7 @@ export default function RootLayout({
           </div>
         </div>
         <header className="border-b-4 border-signal bg-abyss">
-          <div className="mx-auto flex max-w-6xl flex-wrap items-end justify-between gap-4 px-4 pb-4 pt-5">
+          <div className="flex w-full flex-wrap items-end justify-between gap-4 px-4 pb-4 pt-5">
             <Link href="/" className="flex items-center gap-3">
               <span
                 aria-hidden="true"
@@ -83,11 +83,11 @@ export default function RootLayout({
             </nav>
           </div>
         </header>
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">
+        <main className="w-full flex-1 px-4 py-6">
           {children}
         </main>
         <footer className="bg-console text-console-mist">
-          <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-3 gap-y-1 px-4 py-4 font-mono text-[11px] tracking-wide">
+          <div className="flex w-full flex-wrap items-center gap-x-3 gap-y-1 px-4 py-4 font-mono text-[11px] tracking-wide">
             <span>BM25 + VECTOR · RRF · RERANKER · COMPRESSION · LLM</span>
             <span aria-hidden="true" className="text-signal">
               ·

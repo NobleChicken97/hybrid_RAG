@@ -145,8 +145,9 @@ export default function AskPage() {
       )}
 
       {result && (
-        <>
-          <section className="evidence-in border-y-4 border-signal bg-paper p-6 text-paper-ink sm:p-8">
+        <div className="grid items-start gap-px bg-line-soft xl:grid-cols-12">
+          <div className="flex flex-col gap-px bg-line-soft xl:col-span-7">
+            <section className="evidence-in border-y-4 border-signal bg-paper p-6 text-paper-ink sm:p-8">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-paper-ink/70 pb-2">
               <span className="font-display text-2xl font-bold uppercase">
                 Evidence slip
@@ -187,8 +188,9 @@ export default function AskPage() {
               </div>
             ))}
           </section>
+          </div>
 
-          <section className="flex flex-col gap-2 bg-panel p-6">
+          <section className="flex flex-col gap-2 bg-panel p-6 xl:sticky xl:top-4">
             <h2 className="font-display text-2xl font-bold uppercase text-ink">
               Retrieval ledger
             </h2>
@@ -206,7 +208,7 @@ export default function AskPage() {
               hits={result.retrieval_debug.reranked_order}
             />
           </section>
-        </>
+        </div>
       )}
     </div>
   );

@@ -86,7 +86,11 @@ Process: `npx impeccable install` (v4.0.1, into `.github`) → PRODUCT.md → li
 - [ ] Owner screenshots of deployed v4 → full verdict review → DESIGN.md (documenter) → close
   (Superseded: owner reviewed the v4 screenshot as harsh/muddy/empty/text-only and sent MAFIA/TERRAIN/portfolio/poster refs — see v5 below. The formal verdict pass folds into v5's review.)
 
-## Frontend redesign v5 — paper reading room (2026-09-05, pushed, CD deploying)
+## Frontend redesign v6 — full-bleed + data-viz (2026-09-05, pushed, CD deploying)
+
+Owner review of v5 screenshots: (1) COMPRESS label breached its node (fixed: wider nodes, looser tracking), (2) centered max-w column wastes ultrawide (fixed: full-bleed shell + asymmetric grids + sticky debug rail), (3) flat/text-only (fixed: corpus meters + audit board from live API data, graph-paper figure ground, orchestrated reveals + animated meters).
+- [x] Schematic rebuilt at 1000px grid with real clearance; `impeccable detect` 1 advisory kept with justification (grid lives ONLY on the schematic figure = measurement surface per the rule's own exception)
+- [x] `tsc` + `eslint` (fixed Reveal ref-cleanup warning) + `npm run build` green (9/9); pushed — CD auto-deploys, screenshots pending
 
 Same locked Library world, lights on: paper ground `#F2EAD8` (body ~13:1, muted ~5:1), stamp-red `#B33A2B` signals, brass numerals, dark oak reserved for console readouts/footer. Oswald 700 display + Saira + Roboto Mono; sharp corners kept.
 - [x] Product-truth visuals: SVG pipeline schematic (mirrors `pipeline.py`) on the overview hero; RAGAS score bars from real numbers on eval; giant condensed headlines; mixed paper/console grounds

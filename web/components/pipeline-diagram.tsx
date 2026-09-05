@@ -30,7 +30,7 @@ function Node({
   hot?: boolean;
   dark?: boolean;
 }) {
-  const h = 52;
+  const h = 54;
   return (
     <g>
       <rect
@@ -46,27 +46,27 @@ function Node({
       />
       <text
         x={x + w / 2}
-        y={y + 23}
+        y={y + 24}
         textAnchor="middle"
         style={{
           fill: hot ? SIGNAL_INK : dark ? PANEL : INK,
           fontFamily: "var(--font-mono)",
-          fontSize: 13,
+          fontSize: 12.5,
           fontWeight: 700,
-          letterSpacing: "0.12em",
+          letterSpacing: "0.06em",
         }}
       >
         {label}
       </text>
       <text
         x={x + w / 2}
-        y={y + 40}
+        y={y + 41}
         textAnchor="middle"
         style={{
           fill: hot ? SIGNAL_INK : dark ? PANEL : DIM,
           fontFamily: "var(--font-mono)",
           fontSize: 10.5,
-          letterSpacing: "0.08em",
+          letterSpacing: "0.06em",
         }}
       >
         {sub}
@@ -92,7 +92,7 @@ export function PipelineDiagram() {
   const cy = 110; // trunk centerline
   return (
     <svg
-      viewBox="0 0 960 220"
+      viewBox="0 0 1000 232"
       role="img"
       aria-label="Schematic of the hybrid retrieval pipeline"
       className="h-auto w-full font-mono"
@@ -110,23 +110,23 @@ export function PipelineDiagram() {
           <path d="M 0 1 L 9 5 L 0 9 z" style={{ fill: DIM }} />
         </marker>
       </defs>
-      <Node x={8} y={cy - 26} w={104} label="QUERY" sub="top_k 20" />
-      <Node x={152} y={20} w={140} label="BM25" sub="keyword" />
-      <Node x={152} y={148} w={140} label="VECTOR" sub="bge-small" />
-      <Node x={332} y={cy - 26} w={120} label="RRF" sub="k = 60" />
-      <Node x={492} y={cy - 26} w={120} label="RERANK" sub="bge-base · top 5" hot />
-      <Node x={652} y={cy - 26} w={120} label="COMPRESS" sub="budget" />
-      <Node x={812} y={cy - 26} w={140} label="ANSWER" sub="+ citations" dark />
-      <Wire x1={112} y1={cy} x2={146} y2={46} />
-      <Wire x1={112} y1={cy} x2={146} y2={174} />
-      <Wire x1={292} y1={46} x2={326} y2={cy - 12} />
-      <Wire x1={292} y1={174} x2={326} y2={cy + 12} />
-      <Wire x1={452} y1={cy} x2={486} y2={cy} />
-      <Wire x1={612} y1={cy} x2={646} y2={cy} />
-      <Wire x1={772} y1={cy} x2={806} y2={cy} />
+      <Node x={8} y={cy - 27} w={112} label="QUERY" sub="top_k 20" />
+      <Node x={160} y={20} w={148} label="BM25" sub="keyword" />
+      <Node x={160} y={148} w={148} label="VECTOR" sub="bge-small" />
+      <Node x={348} y={cy - 27} w={128} label="RRF" sub="k = 60" />
+      <Node x={516} y={cy - 27} w={136} label="RERANK" sub="bge-base · top 5" hot />
+      <Node x={692} y={cy - 27} w={136} label="COMPRESS" sub="budget" />
+      <Node x={868} y={cy - 27} w={124} label="ANSWER" sub="+ citations" dark />
+      <Wire x1={120} y1={cy} x2={154} y2={46} />
+      <Wire x1={120} y1={cy} x2={154} y2={174} />
+      <Wire x1={308} y1={46} x2={342} y2={cy - 12} />
+      <Wire x1={308} y1={174} x2={342} y2={cy + 12} />
+      <Wire x1={476} y1={cy} x2={510} y2={cy} />
+      <Wire x1={652} y1={cy} x2={686} y2={cy} />
+      <Wire x1={828} y1={cy} x2={862} y2={cy} />
       <text
         x={8}
-        y={208}
+        y={220}
         style={{
           fill: GOLD,
           fontFamily: "var(--font-mono)",
