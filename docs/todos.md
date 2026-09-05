@@ -89,8 +89,8 @@
 
 - [x] `.github/workflows/cd.yml`: build+push backend/web (`:<sha>` + `:latest`) → SSH deploy (fresh ECR login, pinned pull, health gate); docs-only pushes skip
 - [x] Compose on `image:` + `pull_policy: always` (Dockerfiles kept for emergency local builds); DEPLOY.md CD section (IAM policy, secrets table, rollback)
-- [ ] Owner console steps: 2 ECR repos (ap-south-1) + lifecycle keep-3, IAM user + keys, 7 GitHub secrets, box `awscli` + `aws configure` + `ECR_REGISTRY` in `deploy/.env`
-- [ ] First CD run green (push or re-run → watch Actions → prod health on new SHA)
+- [x] Owner console steps DONE 2026-09-05 via CLI (no console needed): 2 ECR repos (ap-south-1) + lifecycle keep-3, IAM user `github-actions-deploy` + inline policy + access key, 7 GitHub secrets set, box `awscli` + `aws configure` + `ECR_REGISTRY` in `deploy/.env`
+- [ ] First CD run green (triggered via `workflow_dispatch` support commit → watch Actions → prod health on new SHA)
 
 ## Status note (2026-09-04, updated 2026-09-05)
 

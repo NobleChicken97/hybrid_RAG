@@ -30,6 +30,7 @@ on:
       - "scripts/archive/**"
       - "frontend/**"
       - "eval_results*.json"
+  workflow_dispatch: {}  # manual re-run / re-deploy from the Actions tab
 
 permissions:
   contents: read
