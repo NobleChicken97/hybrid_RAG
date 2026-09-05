@@ -205,6 +205,11 @@ Rollback: on the box,
 `IMAGE_TAG=<older-sha> docker compose -f deploy/docker-compose.yml up -d`
 (SHAs are in the Actions run log; ECR keeps the last 3).
 
+Live state 2026-09-05: repos + lifecycle active, IAM user
+`github-actions-deploy` with key in GH secrets + box `~/.aws`, all 7 GH
+secrets set, box `awscli` configured. First green run 33945990241
+(`9f509d6`): both services on pinned ECR images, Healthy, public health ok.
+
 ## Troubleshooting
 
 - **Backend restarts / OOM**: confirm swap is on (`free -h` shows 2G swap).

@@ -90,7 +90,7 @@
 - [x] `.github/workflows/cd.yml`: build+push backend/web (`:<sha>` + `:latest`) → SSH deploy (fresh ECR login, pinned pull, health gate); docs-only pushes skip
 - [x] Compose on `image:` + `pull_policy: always` (Dockerfiles kept for emergency local builds); DEPLOY.md CD section (IAM policy, secrets table, rollback)
 - [x] Owner console steps DONE 2026-09-05 via CLI (no console needed): 2 ECR repos (ap-south-1) + lifecycle keep-3, IAM user `github-actions-deploy` + inline policy + access key, 7 GitHub secrets set, box `awscli` + `aws configure` + `ECR_REGISTRY` in `deploy/.env`
-- [ ] First CD run green (triggered via `workflow_dispatch` support commit → watch Actions → prod health on new SHA)
+- [x] First CD run GREEN 2026-09-05 (run 33945990241): build-push backend+web → ECR `:9f509d6`+`:latest` → box pulled pinned SHA, both Healthy, public `/api/health` ok (1 doc / 20 chunks survived). Prior run failed in 12s on missing secrets (expected, pre-setup).
 
 ## Status note (2026-09-04, updated 2026-09-05)
 
