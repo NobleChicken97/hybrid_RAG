@@ -1,5 +1,15 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import {
   api,
@@ -10,11 +20,11 @@ import {
 
 function ScoreRow({ label, value }: { label: string; value: number | null }) {
   return (
-    <div className="rounded-lg border border-line bg-raised p-4">
-      <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-dim">
+    <div className="bg-panel p-4">
+      <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-dim">
         {label}
       </div>
-      <div className="mt-1 font-display text-2xl font-semibold text-gold">
+      <div className="mt-1 font-display text-3xl font-extrabold tabular-nums text-gold">
         {value == null ? "N/A" : value.toFixed(4)}
       </div>
     </div>
@@ -23,7 +33,7 @@ function ScoreRow({ label, value }: { label: string; value: number | null }) {
 
 function Scores({ scores }: { scores: EvalScores }) {
   return (
-    <div className="grid grid-cols-4 gap-3">
+    <div className="grid grid-cols-4 gap-px border border-line bg-line">
       <ScoreRow label="Faithfulness" value={scores.faithfulness} />
       <ScoreRow label="Answer relevancy" value={scores.answer_relevancy} />
       <ScoreRow label="Context precision" value={scores.context_precision} />
@@ -105,29 +115,29 @@ export default function EvalPage() {
   }
 
   const selectCls =
-    "rounded-md border border-line bg-abyss px-2 py-1 text-ink outline-none focus:border-signal";
+    "border border-line bg-abyss px-2 py-1 text-ink outline-none focus:border-signal";
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-signal">
-          Prove
+    <div className="flex flex-col gap-px border border-line bg-line">
+      <div className="bg-panel p-5">
+        <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-signal">
+          03 / Prove
         </p>
-        <h1 className="mt-1 font-display text-3xl font-semibold tracking-tight text-ink">
+        <h1 className="mt-1 font-display text-3xl font-extrabold uppercase tracking-tight text-ink">
           Evaluation dashboard
         </h1>
       </div>
 
-      <section className="flex flex-wrap items-end gap-3 rounded-xl border border-line bg-raised p-4">
-        <label className="flex flex-col gap-1 text-sm text-mist">
+      <section className="flex flex-wrap items-end gap-3 bg-panel p-5">
+        <label className="flex flex-col gap-1 font-mono text-[11px] uppercase tracking-[0.18em] text-mist">
           QA set
-          <input
+          <Input
             value={qaSet}
             onChange={(e) => setQaSet(e.target.value)}
-            className="rounded-md border border-line bg-abyss px-2 py-1 text-ink outline-none focus:border-signal"
+            className="rounded-none border-line bg-abyss text-sm normal-case tracking-normal text-ink focus-visible:ring-signal"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm text-mist">
+        <label className="flex flex-col gap-1 font-mono text-[11px] uppercase tracking-[0.18em] text-mist">
           Mode
           <select
             value={mode}
@@ -138,28 +148,30 @@ export default function EvalPage() {
             <option value="vector_only">vector_only</option>
           </select>
         </label>
-        <button
+        <Button
           onClick={runEval}
           disabled={running}
-          className="rounded-lg bg-signal px-4 py-1.5 text-sm font-semibold text-signal-ink transition hover:brightness-110 disabled:opacity-40"
+          className="rounded-none font-mono text-xs font-bold uppercase tracking-[0.18em]"
         >
           {running ? "Running… (minutes)" : "Run evaluation"}
-        </button>
+        </Button>
       </section>
 
       {error && (
-        <p className="rounded-lg border border-bad/50 bg-bad/10 p-3 text-sm text-ink">
+        <p className="border-y border-bad bg-bad/10 p-4 text-sm text-ink">
+          <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-bad">
+            Error
+          </span>
+          <br />
           {error}
         </p>
       )}
 
       {latest && (
-        <section className="flex flex-col gap-3">
-          <h2 className="font-display text-lg font-semibold text-ink">
-            <span className="font-mono text-sm font-medium text-good">
-              {latest.run_id}
-            </span>{" "}
-            <span className="text-sm font-medium text-mist">
+        <section className="flex flex-col gap-px bg-line-soft">
+          <h2 className="bg-panel px-5 pb-1 pt-4 font-mono text-sm font-semibold text-good">
+            {latest.run_id}{" "}
+            <span className="text-xs font-medium text-mist">
               ({latest.retrieval_mode})
             </span>
           </h2>
@@ -167,57 +179,55 @@ export default function EvalPage() {
         </section>
       )}
 
-      <section className="flex flex-col gap-3">
-        <h2 className="font-display text-lg font-semibold text-ink">
+      <section className="flex flex-col bg-panel">
+        <h2 className="px-5 pb-1 pt-4 font-display text-lg font-extrabold uppercase text-ink">
           Past runs{" "}
-          <span className="font-mono text-sm font-medium text-gold">
-            ({runs.length})
+          <span className="font-mono text-sm font-semibold text-gold">
+            [{runs.length}]
           </span>
         </h2>
-        <div className="overflow-x-auto rounded-xl border border-line bg-raised">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-line text-[11px] uppercase tracking-[0.14em] text-dim">
-                <th className="px-3 py-2">Run</th>
-                <th className="px-3 py-2">Mode</th>
-                <th className="px-3 py-2">Faith.</th>
-                <th className="px-3 py-2">Rel.</th>
-                <th className="px-3 py-2">Prec.</th>
-                <th className="px-3 py-2">Recall</th>
-              </tr>
-            </thead>
-            <tbody>
+        <div className="overflow-x-auto p-5 pt-2">
+          <Table className="border border-line-soft font-mono text-xs">
+            <TableHeader className="bg-raised">
+              <TableRow className="border-b border-line hover:bg-transparent">
+                <TableHead className="text-dim">RUN</TableHead>
+                <TableHead className="text-dim">MODE</TableHead>
+                <TableHead className="text-dim">FAITH.</TableHead>
+                <TableHead className="text-dim">REL.</TableHead>
+                <TableHead className="text-dim">PREC.</TableHead>
+                <TableHead className="text-dim">RECALL</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {runs.map((r) => (
-                <tr
+                <TableRow
                   key={r.run_id}
-                  className="border-b border-line-soft text-mist last:border-0"
+                  className="border-b border-line-soft text-mist last:border-0 hover:bg-hover"
                 >
-                  <td className="px-3 py-2 font-mono text-xs text-ink">
-                    {r.run_id}
-                  </td>
-                  <td className="px-3 py-2">{r.retrieval_mode}</td>
-                  <td className="px-3 py-2 font-mono">
+                  <TableCell className="text-ink">{r.run_id}</TableCell>
+                  <TableCell>{r.retrieval_mode}</TableCell>
+                  <TableCell className="tabular-nums">
                     {r.scores.faithfulness?.toFixed(4) ?? "N/A"}
-                  </td>
-                  <td className="px-3 py-2 font-mono">
+                  </TableCell>
+                  <TableCell className="tabular-nums">
                     {r.scores.answer_relevancy?.toFixed(4) ?? "N/A"}
-                  </td>
-                  <td className="px-3 py-2 font-mono">
+                  </TableCell>
+                  <TableCell className="tabular-nums">
                     {r.scores.context_precision?.toFixed(4) ?? "N/A"}
-                  </td>
-                  <td className="px-3 py-2 font-mono">
+                  </TableCell>
+                  <TableCell className="tabular-nums">
                     {r.scores.context_recall?.toFixed(4) ?? "N/A"}
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </section>
 
       {runs.length >= 2 && (
-        <section className="flex flex-col gap-3 rounded-xl border border-line bg-raised p-4">
-          <h2 className="font-display text-lg font-semibold text-ink">
+        <section className="flex flex-col gap-3 bg-panel p-5">
+          <h2 className="font-display text-lg font-extrabold uppercase text-ink">
             Compare two runs
           </h2>
           <div className="flex flex-wrap items-center gap-3 text-sm text-mist">
@@ -232,7 +242,7 @@ export default function EvalPage() {
                 </option>
               ))}
             </select>
-            <span>vs</span>
+            <span className="font-mono text-[11px] text-dim">VS</span>
             <select
               value={run2}
               onChange={(e) => setRun2(e.target.value)}
@@ -244,35 +254,32 @@ export default function EvalPage() {
                 </option>
               ))}
             </select>
-            <button
+            <Button
               onClick={compare}
-              className="rounded-lg bg-signal px-4 py-1.5 text-sm font-semibold text-signal-ink transition hover:brightness-110"
+              className="rounded-none font-mono text-xs font-bold uppercase tracking-[0.18em]"
             >
               Compare
-            </button>
+            </Button>
           </div>
           {comparison && "delta" in comparison && (
             <>
-              <div className="grid grid-cols-4 gap-3 text-sm">
+              <div className="grid grid-cols-4 gap-px border border-line bg-line text-sm">
                 {Object.entries(comparison.delta).map(([metric, d]) => (
-                  <div
-                    key={metric}
-                    className="rounded-lg bg-abyss px-3 py-2"
-                  >
-                    <div className="text-xs capitalize text-dim">
+                  <div key={metric} className="bg-abyss px-3 py-2">
+                    <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-dim">
                       {metric.replace("_", " ")}
                     </div>
                     <div
-                      className={`font-mono font-semibold ${d == null ? "text-mist" : d > 0 ? "text-good" : d < 0 ? "text-bad" : "text-mist"}`}
+                      className={`font-mono font-bold tabular-nums ${d == null ? "text-mist" : d > 0 ? "text-good" : d < 0 ? "text-bad" : "text-mist"}`}
                     >
                       {d == null
                         ? "N/A"
-                        : `${d > 0 ? "↑" : d < 0 ? "↓" : "="} ${Math.abs(d).toFixed(4)}`}
+                        : `${d > 0 ? "+" : d < 0 ? "-" : "="} ${Math.abs(d).toFixed(4)}`}
                     </div>
                   </div>
                 ))}
               </div>
-              <pre className="whitespace-pre-wrap rounded-lg bg-abyss p-3 font-mono text-xs leading-5 text-mist">
+              <pre className="whitespace-pre-wrap border border-line-soft bg-abyss p-3 font-mono text-xs leading-5 text-mist">
                 {comparison.summary}
               </pre>
             </>

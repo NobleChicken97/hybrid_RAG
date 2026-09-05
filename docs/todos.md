@@ -78,12 +78,15 @@
 - [x] `web/` parity verified 2026-09-04 against live backend (fresh process; a stale 2026-09-02 backend was squatting on port 8001 and had to be killed — it served 404s for the new routes): `/health` (3 docs / 237 chunks / 8 eval runs), `/config`, `/documents`, `/eval/runs` all live; all 6 web routes (`/`, `/ask`, `/ingest`, `/eval`, `/system`, `/topology`) return 200 via `next dev --webpack` (Turbopack native binding still broken on this Windows box)
 - [x] Caddy cutover DONE 2026-09-04: `web/lib/api.ts` uses relative `/api/*` when `NEXT_PUBLIC_BACKEND_URL` is unset (direct backend only in local dev); `next.config.ts` rewrite proxies `/api/*` for `npm run dev` (`BACKEND_INTERNAL_URL` override, needed as port 8000 is taken on this box); `deploy/Caddyfile` strips `/api` → `backend:8000`, everything else → `web:3000`; `streamlit` service retired from compose (code/image kept for rollback); `Dockerfile.web` bakes empty backend URL; `DEPLOY.md` updated. Verified: `tsc`+`eslint` clean, `docker compose config` lists backend/web/caddy, Caddyfile `caddy validate` green for both `:80` and domain (adapted JSON confirms strip+proxy), live `/api/health|config|documents|eval/runs` through `next dev --webpack` → backend `:8001`, `npm run build` (prod bake) green with all 7 routes static. Note: `caddy validate` needs `-e DOMAIN=...` in the container — without it even the old file fails (pre-existing quirk, not a regression).
 
-## Frontend redesign (2026-09-05, in progress)
+## Frontend redesign v2 — boxy dashboard (2026-09-05, built locally, NOT pushed)
 
-- [x] Audit: shipped code is light-themed (zinc-50/white) but screenshots show black — client-side forced-dark is mangling it; fix = ship an intentional dark theme. `globals.css` is still the Next scaffold (unused Geist vars, Arial fallback). No real type system.
-- [x] New dark-first design system (Tailwind v4 `@theme` tokens) + Jost (display, Futura-geometric) / Mulish (body) / JetBrains Mono (data) via `next/font`
-- [x] Restyled layout + all 6 pages, data logic identical; `tsc` + `eslint` + `npm run build` green (7/7 routes static)
-- [x] Commit, push, update DEPLOY/docs (`a526274` on origin/main); user redeploys on the box (`git pull` + `up -d --build`)
+Brief: sharp corners, interlocked gapless grid boxes, metrics-first. Skills: frontend-design (Operate mode), watermelon-ui (registry needs shadcn — installed; no catalogued component fit the boxy brief at 95% confidence, shadcn covers it — skipped honestly), animejs v4 (restrained 220ms stagger on ask/topology results, reduced-motion respected), impeccable (brief-wins, bounded verification; no new doc files per repo docs rule).
+- [x] shadcn v4 init (Base-UI primitives, C `cn`, lucide) + Button/Badge/Table/Input; reconciled Geist clash (removed — Mulish restored as `--font-sans`)
+- [x] v2 system: radius structurally 0, machine-room palette (abyss `#0A0B0D`, blaze `#FF5A1F`, gold numerals), Archivo display (Futura-brief → geometric grotesk better fit for boxes) / Mulish body / JetBrains Mono data; shadcn tokens mapped so primitives render native
+- [x] Shell + 6 pages rewritten (gap-px interlocked grids, mono eyebrows, stage strip on topology, shadcn tables); logic/copy identical; `tsc` + `eslint` + `npm run build` green (9/9 static)
+- [ ] PUSH HELD: do not push until the prod eval relaunches land — CD would restart the backend mid-run. Pushing alone deploys (CD live).
+
+History: v1 redesign (dark-first, Jost, `a526274`, deployed via CD) superseded by this v2 boxy pass before any user review — v1 never reached eyeballs, no migration notes needed.
 
 ## Prod eval bug — nested event loop (found + fixed 2026-09-05)
 - Prod run `eval_963a9e98` (Groq, 3-doc corpus): generation 20/20 fine, ALL RAGAS scores null. Cause: `ragas.evaluate()` runs nested async code, which crashes on the running uvloop (`uvicorn[standard]`) — `POST /eval/run` called sync `run_evaluation` on the loop thread. Local script runs never hit it (no outer loop). The null run stays in the prod DB as evidence.

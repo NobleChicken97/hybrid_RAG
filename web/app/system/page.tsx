@@ -1,5 +1,13 @@
 "use client";
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { useEffect, useState } from "react";
 import {
   api,
@@ -26,12 +34,20 @@ export default function SystemPage() {
 
   if (error)
     return (
-      <p className="rounded-lg border border-bad/50 bg-bad/10 p-3 text-sm text-ink">
-        Cannot reach backend: {error}
+      <p className="border border-bad bg-bad/10 p-4 text-sm text-ink">
+        <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-bad">
+          Backend unreachable
+        </span>
+        <br />
+        {error}
       </p>
     );
   if (!health || !config)
-    return <p className="text-sm text-mist">Loading system state…</p>;
+    return (
+      <p className="font-mono text-xs uppercase tracking-[0.2em] text-mist">
+        Loading system state…
+      </p>
+    );
 
   const rows: [string, string][] = [
     ["Environment", config.environment],
@@ -50,85 +66,86 @@ export default function SystemPage() {
   ];
 
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-signal">
+    <div className="flex flex-col gap-px border border-line bg-line">
+      <div className="bg-panel p-5">
+        <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-signal">
           Inspect
         </p>
-        <h1 className="mt-1 font-display text-3xl font-semibold tracking-tight text-ink">
+        <h1 className="mt-1 font-display text-3xl font-extrabold uppercase tracking-tight text-ink">
           System
         </h1>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-px bg-line">
         {[
           ["Documents", health.documents_count],
           ["Chunks", health.chunks_count],
           ["Eval runs", health.eval_runs_count],
         ].map(([label, value]) => (
-          <div
-            key={label as string}
-            className="rounded-xl border border-line bg-raised p-5"
-          >
-            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-dim">
+          <div key={label as string} className="bg-panel p-5">
+            <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-dim">
               {label}
             </div>
-            <div className="mt-1 font-display text-4xl font-semibold text-gold">
+            <div className="mt-1 font-display text-5xl font-extrabold tabular-nums text-gold">
               {value}
             </div>
           </div>
         ))}
       </div>
 
-      <section className="rounded-xl border border-line bg-raised p-5">
-        <h2 className="font-display text-lg font-semibold text-ink">
+      <section className="bg-panel p-5">
+        <h2 className="font-display text-lg font-extrabold uppercase text-ink">
           Configuration
         </h2>
-        <dl className="mt-2 divide-y divide-line-soft text-sm">
+        <dl className="mt-2 divide-y divide-line-soft border-y border-line-soft text-sm">
           {rows.map(([k, v]) => (
-            <div key={k} className="flex justify-between gap-4 py-1.5">
-              <dt className="text-mist">{k}</dt>
+            <div key={k} className="flex justify-between gap-4 py-2">
+              <dt className="font-mono text-[11px] uppercase tracking-[0.16em] text-mist">
+                {k}
+              </dt>
               <dd className="text-right font-mono text-xs text-ink">{v}</dd>
             </div>
           ))}
         </dl>
       </section>
 
-      <section className="rounded-xl border border-line bg-raised p-5">
-        <h2 className="font-display text-lg font-semibold text-ink">
+      <section className="bg-panel">
+        <h2 className="px-5 pb-1 pt-4 font-display text-lg font-extrabold uppercase text-ink">
           Documents{" "}
-          <span className="font-mono text-sm font-medium text-gold">
-            ({docs.length})
+          <span className="font-mono text-sm font-semibold text-gold">
+            [{docs.length}]
           </span>
         </h2>
-        <div className="mt-2 overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-line text-[11px] uppercase tracking-[0.14em] text-dim">
-                <th className="px-3 py-2">Title</th>
-                <th className="px-3 py-2">Doc ID</th>
-                <th className="px-3 py-2">Chunks</th>
-                <th className="px-3 py-2">Ingested</th>
-              </tr>
-            </thead>
-            <tbody>
+        <div className="overflow-x-auto p-5 pt-2">
+          <Table className="border border-line-soft font-mono text-xs">
+            <TableHeader className="bg-raised">
+              <TableRow className="border-b border-line hover:bg-transparent">
+                <TableHead className="text-dim">TITLE</TableHead>
+                <TableHead className="text-dim">DOC ID</TableHead>
+                <TableHead className="text-dim">CHUNKS</TableHead>
+                <TableHead className="text-dim">INGESTED</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {docs.map((d) => (
-                <tr
+                <TableRow
                   key={d.doc_id}
-                  className="border-b border-line-soft text-mist last:border-0"
+                  className="border-b border-line-soft text-mist last:border-0 hover:bg-hover"
                 >
-                  <td className="px-3 py-2 font-medium text-ink">{d.title}</td>
-                  <td className="px-3 py-2 font-mono text-xs text-dim">
-                    {d.doc_id}
-                  </td>
-                  <td className="px-3 py-2 font-mono">{d.chunk_count}</td>
-                  <td className="px-3 py-2 text-xs text-dim">
+                  <TableCell className="font-sans text-sm font-semibold text-ink">
+                    {d.title}
+                  </TableCell>
+                  <TableCell className="text-dim">{d.doc_id}</TableCell>
+                  <TableCell className="tabular-nums text-gold">
+                    {d.chunk_count}
+                  </TableCell>
+                  <TableCell className="text-dim">
                     {d.ingested_at ?? "—"}
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </section>
     </div>

@@ -1,32 +1,67 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
 
 /*
- * Hybrid RAG design system — dark-first, single theme.
- * No light/dark flip-flop: one deliberate palette, tuned for contrast
- * (body text >= 7:1 on page bg, muted >= 4.5:1).
+ * Hybrid RAG v2 — "machine room": boxy, sharp-cornered, interlocked.
+ * Single dark theme. Radius is structurally 0: every box joins its
+ * neighbors through 1px hairlines (see the gap-px grid pattern in pages).
+ * shadcn tokens below are mapped onto the same palette so Button / Badge /
+ * Table / Input render native to this world.
  */
 @theme {
-  --color-abyss: #070b12; /* page background */
-  --color-panel: #0d1420; /* header/footer/surface */
-  --color-raised: #16202e; /* cards, inputs */
-  --color-hover: #1b2740; /* hover fill */
-  --color-line: #24334c; /* visible hairlines */
-  --color-line-soft: #182437; /* subtle dividers */
+  --color-abyss: #0a0b0d; /* page background */
+  --color-panel: #121417; /* header / footer / surface */
+  --color-raised: #191d22; /* boxes, inputs */
+  --color-hover: #20262d; /* hover fill */
+  --color-line: #262b33; /* visible hairlines */
+  --color-line-soft: #1b1f25; /* subtle dividers */
 
-  --color-ink: #eaf0f8; /* primary text */
-  --color-mist: #a9b8cd; /* secondary text */
-  --color-dim: #71829c; /* muted labels */
+  --color-ink: #f0f3f5; /* primary text */
+  --color-mist: #a7b0b9; /* secondary text */
+  --color-dim: #67707a; /* muted labels */
 
-  --color-signal: #2dd4bf; /* primary accent: actions, active nav */
-  --color-signal-ink: #032622; /* text on signal fill */
-  --color-gold: #fbbf24; /* scores, highlights */
-  --color-good: #34d399;
-  --color-bad: #fb7185;
+  --color-signal: #ff5a1f; /* blaze: actions, active states */
+  --color-signal-ink: #1a0b06; /* text on signal fill */
+  --color-gold: #ffc53d; /* scores, numerals */
+  --color-good: #3ddc84;
+  --color-bad: #ff5470;
 
-  --font-display: var(--font-jost), "Avenir Next", "Segoe UI", sans-serif;
-  --font-sans: var(--font-mulish), "Segoe UI", system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular,
-    monospace;
+  --font-display: var(--font-head), "Arial Narrow", "Segoe UI", sans-serif;
+  --font-sans: var(--font-body), "Segoe UI", system-ui, sans-serif;
+  --font-mono: var(--font-code), ui-monospace, SFMono-Regular, monospace;
+
+  /* shadcn contract — same palette, square geometry. */
+  --color-background: var(--color-abyss);
+  --color-foreground: var(--color-ink);
+  --color-card: var(--color-panel);
+  --color-card-foreground: var(--color-ink);
+  --color-popover: var(--color-raised);
+  --color-popover-foreground: var(--color-ink);
+  --color-primary: var(--color-signal);
+  --color-primary-foreground: var(--color-signal-ink);
+  --color-secondary: var(--color-raised);
+  --color-secondary-foreground: var(--color-ink);
+  --color-muted: var(--color-raised);
+  --color-muted-foreground: var(--color-mist);
+  --color-accent: var(--color-hover);
+  --color-accent-foreground: var(--color-ink);
+  --color-destructive: var(--color-bad);
+  --color-destructive-foreground: var(--color-ink);
+  --color-border: var(--color-line);
+  --color-input: var(--color-line);
+  --color-ring: var(--color-signal);
+
+  --radius: 0rem;
+  --radius-sm: 0rem;
+  --radius-md: 0rem;
+  --radius-lg: 0rem;
+  --radius-xl: 0rem;
+  --radius-2xl: 0rem;
+  --radius-3xl: 0rem;
+  --radius-4xl: 0rem;
 }
 
 :root {
@@ -49,14 +84,12 @@ body {
   color: var(--color-signal-ink);
 }
 
-/* Visible keyboard focus everywhere (quality floor). */
+/* Square, brutal focus: 2px signal outline, no rounding. */
 :focus-visible {
   outline: 2px solid var(--color-signal);
-  outline-offset: 2px;
-  border-radius: 4px;
+  outline-offset: 1px;
 }
 
-/* Thin, theme-matched scrollbars for debug panes and tables. */
 * {
   scrollbar-width: thin;
   scrollbar-color: var(--color-line) transparent;
@@ -68,5 +101,14 @@ body {
   *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
