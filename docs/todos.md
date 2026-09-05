@@ -86,9 +86,9 @@
 - [x] Commit, push, update DEPLOY/docs (`a526274` on origin/main); user redeploys on the box (`git pull` + `up -d --build`)
 
 ## Prod eval bug — nested event loop (found + fixed 2026-09-05)
-
 - Prod run `eval_963a9e98` (Groq, 3-doc corpus): generation 20/20 fine, ALL RAGAS scores null. Cause: `ragas.evaluate()` runs nested async code, which crashes on the running uvloop (`uvicorn[standard]`) — `POST /eval/run` called sync `run_evaluation` on the loop thread. Local script runs never hit it (no outer loop). The null run stays in the prod DB as evidence.
 - [x] Fix: endpoint awaits `run_in_threadpool(run_evaluation, ...)` — worker thread has no running loop, matching local runs. Regression test `test_eval_run_offloads_event_loop` verified to FAIL without the fix / PASS with it (suite now 58).
+- Decision 2026-09-05 (researched, on hold): OpenCode Zen (`https://opencode.ai/zen/v1`, OpenAI-compatible, no-card key, ~7 free coding/reasoning models) is technically integrable as another opt-in fallback, BUT free-tier rate limits are unpublished, judge-suitability unproven, and free status is time-limited/usage-data-funded. Groq 429s never actually occurred (nulls were the uvloop bug) — so: re-run on Groq first, add Zen only on evidence. If added later, mirror the groq/cerebras branch + trial-validate generation AND judge before trusting scores.
 
 ## CD via ECR (2026-09-05, code done — console steps pending)
 
