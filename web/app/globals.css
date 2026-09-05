@@ -132,6 +132,30 @@ select {
   background-size: 28px 28px;
 }
 
+/* Marquee band: slow linear loop of pipeline vocabulary. */
+@keyframes marquee-x {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee-x 36s linear infinite;
+}
+
+/* Marching-ants signal flow for schematic wires. */
+@keyframes wire-march {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+.wire-flow {
+  stroke-dasharray: 7 5;
+  animation: wire-march 1.1s linear infinite;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

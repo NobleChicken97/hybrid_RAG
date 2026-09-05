@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { ChunkFigure } from "@/components/chunk-figure";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { api, type IngestResponse } from "@/lib/api";
@@ -33,14 +34,21 @@ export default function IngestPage() {
   return (
     <div className="flex flex-col gap-px border border-line bg-line">
       <div className="bg-abyss p-6 sm:p-10">
-        <h1 className="font-display text-5xl font-bold uppercase leading-[0.95] tracking-tight text-ink sm:text-7xl">
-          Shelve a<br />
-          document.
-        </h1>
-        <p className="mt-3 max-w-xl text-sm leading-6 text-mist">
-          Hand over a file or paste text. The room catalogs it into indexed
-          chunks, each with its own call number.
-        </p>
+        <div className="grid items-center gap-8 xl:grid-cols-12">
+          <div className="xl:col-span-7">
+            <h1 className="font-display text-5xl font-bold uppercase leading-[0.95] tracking-tight text-ink sm:text-7xl">
+              Shelve a<br />
+              document.
+            </h1>
+            <p className="mt-3 max-w-xl text-sm leading-6 text-mist">
+              Hand over a file or paste text. The room catalogs it into
+              indexed chunks, each with its own call number.
+            </p>
+          </div>
+          <div className="border border-line bg-graph bg-panel p-4 xl:col-span-5">
+            <ChunkFigure />
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-px bg-line-soft">

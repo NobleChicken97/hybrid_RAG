@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { PipelineDiagram } from "@/components/pipeline-diagram";
 import { Reveal } from "@/components/reveal";
+import { Ticker } from "@/components/ticker";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
@@ -87,6 +88,24 @@ export default function Home() {
 
   const maxChunks = Math.max(1, ...docs.map((d) => d.chunk_count));
   const latest = runs[0];
+  const fmt2 = (v: number | null) => (v == null ? "—" : v.toFixed(2));
+  const tickerItems = runs.map((r) => ({
+    top: `${r.run_id} · ${r.retrieval_mode}`,
+    bottom: `faith ${fmt2(r.scores.faithfulness)} · rel ${fmt2(r.scores.answer_relevancy)} · prec ${fmt2(r.scores.context_precision)} · rec ${fmt2(r.scores.context_recall)}`,
+  }));
+
+  const MARQUEE = [
+    "BM25",
+    "VECTOR SEARCH",
+    "RRF FUSION",
+    "CROSS-ENCODER RERANK",
+    "TOP-20 POOL",
+    "TOP-5 CUT",
+    "COMPRESSION",
+    "CITATIONS",
+    "RAGAS FAITHFULNESS",
+    "EVIDENCE SLIPS",
+  ];
 
   return (
     <div className="flex flex-col gap-px border border-line bg-line">
@@ -172,6 +191,22 @@ export default function Home() {
         </Reveal>
       </div>
 
+      <div
+        aria-hidden="true"
+        className="overflow-hidden border-y-2 border-signal bg-signal py-2"
+      >
+        <div className="marquee-track flex w-max whitespace-nowrap">
+          {[...MARQUEE, ...MARQUEE].map((w, i) => (
+            <span
+              key={i}
+              className="px-6 font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-signal-ink"
+            >
+              {w} <span className="opacity-60">{"///"}</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
       <div className="grid grid-cols-3 divide-x divide-console-line bg-console">
         {(
           [
@@ -199,6 +234,8 @@ export default function Home() {
           .
         </p>
       )}
+
+      <Ticker items={tickerItems} />
 
       <div className="grid gap-px bg-line lg:grid-cols-2">
         <Reveal className="bg-panel p-6">

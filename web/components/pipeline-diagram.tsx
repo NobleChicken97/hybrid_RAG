@@ -82,6 +82,7 @@ function Wire({ x1, y1, x2, y2 }: { x1: number; y1: number; x2: number; y2: numb
       y1={y1}
       x2={x2}
       y2={y2}
+      className="wire-flow"
       style={{ stroke: DIM, strokeWidth: 2 }}
       markerEnd="url(#arrow)"
     />

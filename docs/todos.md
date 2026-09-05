@@ -86,7 +86,13 @@ Process: `npx impeccable install` (v4.0.1, into `.github`) → PRODUCT.md → li
 - [ ] Owner screenshots of deployed v4 → full verdict review → DESIGN.md (documenter) → close
   (Superseded: owner reviewed the v4 screenshot as harsh/muddy/empty/text-only and sent MAFIA/TERRAIN/portfolio/poster refs — see v5 below. The formal verdict pass folds into v5's review.)
 
-## Frontend redesign v6 — full-bleed + data-viz (2026-09-05, pushed, CD deploying)
+## Frontend redesign v7 — filled voids + motion (2026-09-05, pushed, CD deploying)
+
+Owner review of v6 screenshots: voids just moved; wants imagery, motion, full-bleed used. Response, all product-truth (no stock hotlinks, no invented pixels):
+- [x] Schematic rebuilt wider (COMPRESS breach fixed with real clearance); wires now march (CSS dash-flow) so the pipeline reads alive
+- [x] Ingest hero void filled with authored ChunkFigure SVG (sheet → 3 stamped slips); overview gained a signal-red marquee band + a live ledger ticker rotating real run records (anime crossfade, 4.6s)
+- [x] Ask results split into answer column + sticky debug rail on xl; scroll reveals share one rise/deblur vocabulary; `impeccable detect` holds at the single grid advisory (now on two diagram surfaces — the rule's own exception)
+- [x] `tsc` + `eslint` (fixed comment-textnode + ref-cleanup) + `npm run build` green (9/9); pushed — CD auto-deploys, screenshots pending
 
 Owner review of v5 screenshots: (1) COMPRESS label breached its node (fixed: wider nodes, looser tracking), (2) centered max-w column wastes ultrawide (fixed: full-bleed shell + asymmetric grids + sticky debug rail), (3) flat/text-only (fixed: corpus meters + audit board from live API data, graph-paper figure ground, orchestrated reveals + animated meters).
 - [x] Schematic rebuilt at 1000px grid with real clearance; `impeccable detect` 1 advisory kept with justification (grid lives ONLY on the schematic figure = measurement surface per the rule's own exception)
