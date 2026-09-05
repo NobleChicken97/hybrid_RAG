@@ -87,7 +87,7 @@ export default function AskPage() {
         <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-signal">
           02 / Query
         </p>
-        <h1 className="mt-1 font-display text-3xl font-extrabold uppercase tracking-tight text-ink">
+        <h1 className="mt-1 font-display text-3xl font-bold uppercase tracking-tight text-ink">
           Ask a question
         </h1>
       </div>
@@ -155,7 +155,7 @@ export default function AskPage() {
           </section>
 
           <section className="flex flex-col gap-px bg-line-soft">
-            <h2 className="bg-panel px-5 pb-1 pt-4 font-display text-lg font-extrabold uppercase text-ink">
+            <h2 className="bg-panel px-5 pb-1 pt-4 font-display text-lg font-bold uppercase text-ink">
               Citations{" "}
               <span className="font-mono text-sm font-semibold text-gold">
                 [{result.citations.length}]
@@ -178,7 +178,7 @@ export default function AskPage() {
           </section>
 
           <section className="flex flex-col gap-2 bg-panel p-5">
-            <h2 className="font-display text-lg font-extrabold uppercase text-ink">
+            <h2 className="font-display text-lg font-bold uppercase text-ink">
               Retrieval debug
             </h2>
             <Hits title="BM25 hits" hits={result.retrieval_debug.bm25_hits} />

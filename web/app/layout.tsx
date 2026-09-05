@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Archivo, JetBrains_Mono, Mulish } from "next/font/google";
+import { JetBrains_Mono, Mulish, Space_Grotesk } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 
-const display = Archivo({
+const display = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-head",
-  weight: ["600", "700", "800"],
+  weight: ["500", "600", "700"],
 });
 
 const body = Mulish({
@@ -51,7 +51,7 @@ export default function RootLayout({
             <Link href="/" className="flex items-center gap-3 py-3">
               <span
                 aria-hidden="true"
-                className="flex h-8 w-8 items-center justify-center bg-signal font-display text-lg font-extrabold text-signal-ink"
+                className="flex h-8 w-8 items-center justify-center bg-signal font-display text-lg font-bold text-signal-ink"
               >
                 R
               </span>

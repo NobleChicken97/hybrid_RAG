@@ -1,6 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { CountUp } from "@/components/ui/count-up";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { api, type Health } from "@/lib/api";
@@ -39,11 +40,11 @@ export default function Home() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="border border-line bg-panel p-5">
+      <div className="texture-dots border border-line bg-panel p-5">
         <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-signal">
           Overview
         </p>
-        <h1 className="mt-1 font-display text-4xl font-extrabold uppercase tracking-tight text-ink">
+        <h1 className="mt-1 font-display text-4xl font-bold uppercase tracking-tight text-ink">
           Hybrid RAG System
         </h1>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-mist">
@@ -60,17 +61,19 @@ export default function Home() {
       </div>
 
       <div className="grid grid-cols-3 gap-px border border-line bg-line">
-        {[
-          ["Documents", health?.documents_count],
-          ["Chunks", health?.chunks_count],
-          ["Eval runs", health?.eval_runs_count],
-        ].map(([label, value]) => (
+        {(
+          [
+            ["Documents", health?.documents_count],
+            ["Chunks", health?.chunks_count],
+            ["Eval runs", health?.eval_runs_count],
+          ] as [string, number | undefined][]
+        ).map(([label, value]) => (
           <div key={label as string} className="bg-panel p-5">
             <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-dim">
               {label}
             </div>
-            <div className="mt-1 font-display text-5xl font-extrabold tabular-nums text-gold">
-              {value ?? (error ? "—" : "…")}
+            <div className="mt-1 font-display text-5xl font-bold tabular-nums text-gold">
+              {value == null ? error ? "—" : "…" : <CountUp value={value} />}
             </div>
           </div>
         ))}
@@ -94,12 +97,12 @@ export default function Home() {
           <Link
             key={card.href}
             href={card.href}
-            className="group flex flex-col bg-panel p-5 transition-colors hover:bg-hover"
+            className="group flex flex-col bg-panel p-5 transition-colors hover:bg-hover lift"
           >
             <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-signal">
               {card.step}
             </div>
-            <div className="mt-1 font-display text-2xl font-extrabold uppercase text-ink">
+            <div className="mt-1 font-display text-2xl font-bold uppercase text-ink">
               {card.title}
             </div>
             <p className="mt-1 flex-1 text-sm leading-5 text-mist">

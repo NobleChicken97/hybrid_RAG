@@ -36,14 +36,14 @@ export default function IngestPage() {
         <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-signal">
           01 / Load
         </p>
-        <h1 className="mt-1 font-display text-3xl font-extrabold uppercase tracking-tight text-ink">
+        <h1 className="mt-1 font-display text-3xl font-bold uppercase tracking-tight text-ink">
           Document ingestion
         </h1>
       </div>
 
       <div className="grid grid-cols-2 gap-px bg-line-soft">
         <section className="flex flex-col gap-3 bg-panel p-5">
-          <h2 className="font-display text-lg font-extrabold uppercase text-ink">
+          <h2 className="font-display text-lg font-bold uppercase text-ink">
             Upload file
           </h2>
           <input
@@ -68,7 +68,7 @@ export default function IngestPage() {
         </section>
 
         <section className="flex flex-col gap-3 bg-panel p-5">
-          <h2 className="font-display text-lg font-extrabold uppercase text-ink">
+          <h2 className="font-display text-lg font-bold uppercase text-ink">
             Paste text
           </h2>
           <textarea

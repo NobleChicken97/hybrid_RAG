@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { CountUp } from "@/components/ui/count-up";
 import { useEffect, useState } from "react";
 import {
   api,
@@ -71,30 +72,32 @@ export default function SystemPage() {
         <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-signal">
           Inspect
         </p>
-        <h1 className="mt-1 font-display text-3xl font-extrabold uppercase tracking-tight text-ink">
+        <h1 className="mt-1 font-display text-3xl font-bold uppercase tracking-tight text-ink">
           System
         </h1>
       </div>
 
       <div className="grid grid-cols-3 gap-px bg-line">
-        {[
-          ["Documents", health.documents_count],
-          ["Chunks", health.chunks_count],
-          ["Eval runs", health.eval_runs_count],
-        ].map(([label, value]) => (
+        {(
+          [
+            ["Documents", health.documents_count],
+            ["Chunks", health.chunks_count],
+            ["Eval runs", health.eval_runs_count],
+          ] as [string, number][]
+        ).map(([label, value]) => (
           <div key={label as string} className="bg-panel p-5">
             <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-dim">
               {label}
             </div>
-            <div className="mt-1 font-display text-5xl font-extrabold tabular-nums text-gold">
-              {value}
+            <div className="mt-1 font-display text-5xl font-bold tabular-nums text-gold">
+              <CountUp value={value} />
             </div>
           </div>
         ))}
       </div>
 
       <section className="bg-panel p-5">
-        <h2 className="font-display text-lg font-extrabold uppercase text-ink">
+        <h2 className="font-display text-lg font-bold uppercase text-ink">
           Configuration
         </h2>
         <dl className="mt-2 divide-y divide-line-soft border-y border-line-soft text-sm">
@@ -110,7 +113,7 @@ export default function SystemPage() {
       </section>
 
       <section className="bg-panel">
-        <h2 className="px-5 pb-1 pt-4 font-display text-lg font-extrabold uppercase text-ink">
+        <h2 className="px-5 pb-1 pt-4 font-display text-lg font-bold uppercase text-ink">
           Documents{" "}
           <span className="font-mono text-sm font-semibold text-gold">
             [{docs.length}]

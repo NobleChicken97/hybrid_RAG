@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { CountUp } from "@/components/ui/count-up";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -24,8 +25,8 @@ function ScoreRow({ label, value }: { label: string; value: number | null }) {
       <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-dim">
         {label}
       </div>
-      <div className="mt-1 font-display text-3xl font-extrabold tabular-nums text-gold">
-        {value == null ? "N/A" : value.toFixed(4)}
+      <div className="mt-1 font-display text-3xl font-bold tabular-nums text-gold">
+        {value == null ? "N/A" : <CountUp value={value} decimals={4} />}
       </div>
     </div>
   );
@@ -123,7 +124,7 @@ export default function EvalPage() {
         <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-signal">
           03 / Prove
         </p>
-        <h1 className="mt-1 font-display text-3xl font-extrabold uppercase tracking-tight text-ink">
+        <h1 className="mt-1 font-display text-3xl font-bold uppercase tracking-tight text-ink">
           Evaluation dashboard
         </h1>
       </div>
@@ -180,7 +181,7 @@ export default function EvalPage() {
       )}
 
       <section className="flex flex-col bg-panel">
-        <h2 className="px-5 pb-1 pt-4 font-display text-lg font-extrabold uppercase text-ink">
+        <h2 className="px-5 pb-1 pt-4 font-display text-lg font-bold uppercase text-ink">
           Past runs{" "}
           <span className="font-mono text-sm font-semibold text-gold">
             [{runs.length}]
@@ -227,7 +228,7 @@ export default function EvalPage() {
 
       {runs.length >= 2 && (
         <section className="flex flex-col gap-3 bg-panel p-5">
-          <h2 className="font-display text-lg font-extrabold uppercase text-ink">
+          <h2 className="font-display text-lg font-bold uppercase text-ink">
             Compare two runs
           </h2>
           <div className="flex flex-wrap items-center gap-3 text-sm text-mist">

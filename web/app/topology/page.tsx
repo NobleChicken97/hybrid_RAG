@@ -62,7 +62,7 @@ export default function TopologyPage() {
         <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-signal">
           Trace
         </p>
-        <h1 className="mt-1 font-display text-3xl font-extrabold uppercase tracking-tight text-ink">
+        <h1 className="mt-1 font-display text-3xl font-bold uppercase tracking-tight text-ink">
           Knowledge topology
         </h1>
         <p className="mt-2 max-w-2xl text-sm leading-5 text-mist">

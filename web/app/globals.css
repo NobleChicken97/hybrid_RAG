@@ -5,29 +5,28 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Hybrid RAG v2 — "machine room": boxy, sharp-cornered, interlocked.
- * Single dark theme. Radius is structurally 0: every box joins its
- * neighbors through 1px hairlines (see the gap-px grid pattern in pages).
- * shadcn tokens below are mapped onto the same palette so Button / Badge /
+ * Hybrid RAG v3 — warm premium dark. Ivory numerals, champagne signals,
+ * hairline rules, dot-grid texture. Radius stays structurally 0 (boxy).
+ * shadcn tokens are mapped onto the same palette so Button / Badge /
  * Table / Input render native to this world.
  */
 @theme {
-  --color-abyss: #0a0b0d; /* page background */
-  --color-panel: #121417; /* header / footer / surface */
-  --color-raised: #191d22; /* boxes, inputs */
-  --color-hover: #20262d; /* hover fill */
-  --color-line: #262b33; /* visible hairlines */
-  --color-line-soft: #1b1f25; /* subtle dividers */
+  --color-abyss: #0d0c0a; /* warm black page */
+  --color-panel: #141210; /* header / footer / surface */
+  --color-raised: #1c1915; /* boxes, inputs */
+  --color-hover: #242019; /* hover fill */
+  --color-line: #2c261d; /* visible hairlines */
+  --color-line-soft: #1e1a15; /* subtle dividers */
 
-  --color-ink: #f0f3f5; /* primary text */
-  --color-mist: #a7b0b9; /* secondary text */
-  --color-dim: #67707a; /* muted labels */
+  --color-ink: #f4efe4; /* warm ivory text */
+  --color-mist: #b7ac99; /* secondary text */
+  --color-dim: #6f6455; /* muted labels */
 
-  --color-signal: #ff5a1f; /* blaze: actions, active states */
-  --color-signal-ink: #1a0b06; /* text on signal fill */
-  --color-gold: #ffc53d; /* scores, numerals */
-  --color-good: #3ddc84;
-  --color-bad: #ff5470;
+  --color-signal: #e3a72f; /* champagne: actions, active states */
+  --color-signal-ink: #1d1405; /* text on signal fill */
+  --color-gold: #efe3c2; /* pale champagne numerals */
+  --color-good: #7fb685;
+  --color-bad: #e26d7f;
 
   --font-display: var(--font-head), "Arial Narrow", "Segoe UI", sans-serif;
   --font-sans: var(--font-body), "Segoe UI", system-ui, sans-serif;
@@ -102,6 +101,25 @@ body {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* Dot-grid texture for hero panels (pure CSS, fades downward). */
+.texture-dots {
+  background-image: radial-gradient(circle, var(--color-line) 1px, transparent 1px);
+  background-size: 22px 22px;
+  mask-image: linear-gradient(to bottom, black 30%, transparent 90%);
+}
+
+/* Spring hover lift for link-cards (transform-only, compositor-cheap).
+ * Easing generated for a 0.3s perceptual snap; siblings time off 0.3s. */
+.lift {
+  transition:
+    transform 550ms linear(0, 0.1176, 0.3457, 0.5719, 0.7519, 0.8746, 0.9503, 0.9911, 1.0095, 1.015, 1.0141, 1.0109, 1.0074, 1.0044, 1.0023, 1.001, 1.0003, 1),
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+.lift:hover {
+  transform: translateY(-2px);
 }
 
 @layer base {
