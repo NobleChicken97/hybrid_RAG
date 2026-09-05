@@ -118,7 +118,7 @@ History: v1 redesign (dark-first, Jost, `a526274`, deployed via CD) superseded b
 - [x] Fix: endpoint awaits `run_in_threadpool(run_evaluation, ...)` — worker thread has no running loop, matching local runs. Regression test `test_eval_run_offloads_event_loop` verified to FAIL without the fix / PASS with it (suite now 58).
 - Decision 2026-09-05 (researched, on hold): OpenCode Zen (`https://opencode.ai/zen/v1`, OpenAI-compatible, no-card key, ~7 free coding/reasoning models) is technically integrable as another opt-in fallback, BUT free-tier rate limits are unpublished, judge-suitability unproven, and free status is time-limited/usage-data-funded. Groq 429s never actually occurred (nulls were the uvloop bug) — so: re-run on Groq first, add Zen only on evidence. If added later, mirror the groq/cerebras branch + trial-validate generation AND judge before trusting scores.
 
-## CD via ECR (2026-09-05, code done — console steps pending)
+## CD via ECR (2026-09-05 — single `pipeline.yml`: lint/secrets/test + gated build/push/deploy; `ci.yml`/`cd.yml` merged and deleted)
 
 Incident 2026-09-05: manual `up -d backend` raced CD run #4's deploy → container-name conflict left backend DOWN (caught via `docker ps`, prod 502 on /api). Fixed with `concurrency: prod-deploy` queue (`95c7b44`); CD run green, both services on `:95c7b44` Healthy, health ok (gemini, 3 docs / 234 chunks). Standing rule: never run compose manually while a CD run is in progress.
 

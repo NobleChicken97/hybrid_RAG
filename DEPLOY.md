@@ -145,7 +145,7 @@ Note: compose no longer has `build:` sections (CD pulls ECR images), so plain
 IMAGE_TAG exported falls back to `:latest`, which CD keeps pointed at the last
 green main — always sane.
 
-## CD via ECR + GitHub Actions (`.github/workflows/cd.yml`)
+## CD via ECR + GitHub Actions (`.github/workflows/pipeline.yml` — the only workflow: lint + secrets + test, then build/push/deploy on code-changing pushes to main)
 
 Every push to `main` touching code (docs/sample/archive/frontend-only pushes
 skip via `paths-ignore`) does: build backend+web on GH runners → push
