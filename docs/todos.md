@@ -86,7 +86,9 @@ Process: `npx impeccable install` (v4.0.1, into `.github`) → PRODUCT.md → li
 - [ ] Owner screenshots of deployed v4 → full verdict review → DESIGN.md (documenter) → close
   (Superseded: owner reviewed the v4 screenshot as harsh/muddy/empty/text-only and sent MAFIA/TERRAIN/portfolio/poster refs — see v5 below. The formal verdict pass folds into v5's review.)
 
-## Frontend redesign v7 — filled voids + motion (2026-09-05, pushed, CD deploying)
+## Frontend redesign v8 — no empty heroes (2026-09-05, pushed, CD deploying)
+
+Owner review of v7 screenshots: voids moved, not filled (ask hero worst; index panel hollow; all pages). Response: every hero is now a 7/5 asymmetric grid with a live-data or real-guidance rail — ask status board (docs/chunks/engine, live), index densified to 6 rows, eval metric glossary, system machinery rail (live config), topology reading legend. `impeccable detect` fully clean (grid advisory gone too).
 
 Owner review of v6 screenshots: voids just moved; wants imagery, motion, full-bleed used. Response, all product-truth (no stock hotlinks, no invented pixels):
 - [x] Schematic rebuilt wider (COMPRESS breach fixed with real clearance); wires now march (CSS dash-flow) so the pipeline reads alive

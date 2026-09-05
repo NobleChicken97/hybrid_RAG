@@ -169,10 +169,26 @@ export default function Home() {
               </div>
               <div className="flex items-baseline justify-between border-b border-line-soft pb-3">
                 <span className="text-sm font-semibold uppercase tracking-[0.14em] text-mist">
+                  Embeddings
+                </span>
+                <span className="font-mono text-xs text-ink">
+                  bge-small · 384d
+                </span>
+              </div>
+              <div className="flex items-baseline justify-between border-b border-line-soft pb-3">
+                <span className="text-sm font-semibold uppercase tracking-[0.14em] text-mist">
                   Judge
                 </span>
                 <span className="font-mono text-xs text-ink">
                   RAGAS · 4 metrics
+                </span>
+              </div>
+              <div className="flex items-baseline justify-between border-b border-line-soft pb-3">
+                <span className="text-sm font-semibold uppercase tracking-[0.14em] text-mist">
+                  Compression
+                </span>
+                <span className="font-mono text-xs text-ink">
+                  budget · 2000 tok
                 </span>
               </div>
               <div className="flex items-baseline justify-between">

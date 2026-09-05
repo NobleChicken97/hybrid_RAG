@@ -10,6 +10,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Reveal } from "@/components/reveal";
 import { useState } from "react";
 import { api, type QueryResponse } from "@/lib/api";
 
@@ -39,17 +40,43 @@ export default function TopologyPage() {
   return (
     <div className="flex flex-col gap-px border border-line bg-line">
       <div className="bg-abyss p-6 sm:p-10">
-        <h1 className="font-display text-5xl font-bold uppercase leading-[0.95] tracking-tight text-ink sm:text-7xl">
-          Cross-
-          <br />
-          reference
-          <br />
-          index.
-        </h1>
-        <p className="mt-3 max-w-xl text-sm leading-6 text-mist">
-          The true retrieval path behind your question — every entry is a
-          chunk the pipeline actually returned, with its cross-encoder score.
-        </p>
+        <div className="grid items-center gap-8 xl:grid-cols-12">
+          <div className="xl:col-span-7">
+            <h1 className="font-display text-5xl font-bold uppercase leading-[0.95] tracking-tight text-ink sm:text-7xl">
+              Cross-
+              <br />
+              reference
+              <br />
+              index.
+            </h1>
+            <p className="mt-3 max-w-xl text-sm leading-6 text-mist">
+              The true retrieval path behind your question — every entry is
+              a chunk the pipeline actually returned, with its cross-encoder
+              score.
+            </p>
+          </div>
+          <Reveal className="flex flex-col gap-px border border-line bg-line xl:col-span-5">
+            <div className="bg-panel px-5 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-signal">
+              How to read an entry
+            </div>
+            <div className="flex flex-col bg-panel px-5 py-2 text-sm">
+              <div className="border-b border-line-soft py-2 text-mist">
+                <span className="font-bold text-ink">Node</span> — one
+                retrieved chunk, ranked by the cross-encoder.
+              </div>
+              <div className="border-b border-line-soft py-2 text-mist">
+                <span className="font-mono font-bold text-gold">1.42</span>{" "}
+                — the chunk&apos;s rerank score. Higher shelved first.
+              </div>
+              <div className="py-2 text-mist">
+                <span className="bg-good px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase text-signal-ink">
+                  Cited
+                </span>{" "}
+                — the chunk made it into the answer.
+              </div>
+            </div>
+          </Reveal>
+        </div>
       </div>
 
       <div className="flex gap-px bg-line-soft">

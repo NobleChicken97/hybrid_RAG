@@ -3,8 +3,9 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Reveal } from "@/components/reveal";
 import { useEffect, useState } from "react";
-import { api, type QueryResponse } from "@/lib/api";
+import { api, type Health, type QueryResponse } from "@/lib/api";
 
 function Hits({
   title,
@@ -47,6 +48,14 @@ export default function AskPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<QueryResponse | null>(null);
+  const [health, setHealth] = useState<Health | null>(null);
+
+  useEffect(() => {
+    api
+      .health()
+      .then(setHealth)
+      .catch(() => {});
+  }, []);
 
   // The single authored motion moment in this world: fresh evidence
   // arrives as a slip rising into lamplight (rise + deblur, one batch,
@@ -87,14 +96,49 @@ export default function AskPage() {
   return (
     <div className="flex flex-col gap-px border border-line bg-line">
       <div className="bg-abyss p-6 sm:p-10">
-        <h1 className="font-display text-5xl font-bold uppercase leading-[0.95] tracking-tight text-ink sm:text-7xl">
-          Ask a<br />
-          question.
-        </h1>
-        <p className="mt-3 max-w-xl text-sm leading-6 text-mist">
-          Pose it plainly. The room answers on a slip, with every claim
-          stamped to its shelf mark.
-        </p>
+        <div className="grid items-center gap-8 xl:grid-cols-12">
+          <div className="xl:col-span-7">
+            <h1 className="font-display text-5xl font-bold uppercase leading-[0.95] tracking-tight text-ink sm:text-7xl">
+              Ask a<br />
+              question.
+            </h1>
+            <p className="mt-3 max-w-xl text-sm leading-6 text-mist">
+              Pose it plainly. The room answers on a slip, with every claim
+              stamped to its shelf mark.
+            </p>
+          </div>
+          <Reveal className="flex flex-col gap-px border border-line bg-line xl:col-span-5">
+            <div className="bg-panel px-5 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-signal">
+              Today in the stacks
+            </div>
+            <div className="flex flex-col bg-panel px-5 py-4">
+              <div className="flex items-baseline justify-between border-b border-line-soft pb-2">
+                <span className="text-sm font-semibold uppercase tracking-[0.14em] text-mist">
+                  Documents
+                </span>
+                <span className="font-display text-2xl font-bold tabular-nums text-ink">
+                  {health?.documents_count ?? "…"}
+                </span>
+              </div>
+              <div className="flex items-baseline justify-between border-b border-line-soft py-2">
+                <span className="text-sm font-semibold uppercase tracking-[0.14em] text-mist">
+                  Chunks
+                </span>
+                <span className="font-display text-2xl font-bold tabular-nums text-ink">
+                  {health?.chunks_count ?? "…"}
+                </span>
+              </div>
+              <div className="flex items-baseline justify-between py-2">
+                <span className="text-sm font-semibold uppercase tracking-[0.14em] text-mist">
+                  Answer engine
+                </span>
+                <span className="font-mono text-xs text-ink">
+                  {health ? `${health.llm_backend} · top 5` : "…"}
+                </span>
+              </div>
+            </div>
+          </Reveal>
+        </div>
       </div>
 
       <div className="flex flex-col gap-3 bg-panel p-6">

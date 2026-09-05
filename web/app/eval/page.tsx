@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Reveal } from "@/components/reveal";
 import {
   Table,
   TableBody,
@@ -132,15 +133,42 @@ export default function EvalPage() {
   return (
     <div className="flex flex-col gap-px border border-line bg-line">
       <div className="bg-abyss p-6 sm:p-10">
-        <h1 className="font-display text-5xl font-bold uppercase leading-[0.95] tracking-tight text-ink sm:text-7xl">
-          Audit
-          <br />
-          ledger.
-        </h1>
-        <p className="mt-3 max-w-xl text-sm leading-6 text-mist">
-          Run the holdings against the question set. Each audit is filed as
-          a slip and kept on record for comparison.
-        </p>
+        <div className="grid items-center gap-8 xl:grid-cols-12">
+          <div className="xl:col-span-7">
+            <h1 className="font-display text-5xl font-bold uppercase leading-[0.95] tracking-tight text-ink sm:text-7xl">
+              Audit
+              <br />
+              ledger.
+            </h1>
+            <p className="mt-3 max-w-xl text-sm leading-6 text-mist">
+              Run the holdings against the question set. Each audit is filed
+              as a slip and kept on record for comparison.
+            </p>
+          </div>
+          <Reveal className="flex flex-col gap-px border border-line bg-line xl:col-span-5">
+            <div className="bg-panel px-5 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-signal">
+              What the four marks mean
+            </div>
+            <div className="flex flex-col bg-panel px-5 py-2 text-sm">
+              <div className="border-b border-line-soft py-2">
+                <span className="font-bold text-ink">Faithfulness</span>
+                <span className="text-mist"> — every claim backed by context.</span>
+              </div>
+              <div className="border-b border-line-soft py-2">
+                <span className="font-bold text-ink">Relevancy</span>
+                <span className="text-mist"> — the answer addresses the question.</span>
+              </div>
+              <div className="border-b border-line-soft py-2">
+                <span className="font-bold text-ink">Precision</span>
+                <span className="text-mist"> — retrieved chunks are on point.</span>
+              </div>
+              <div className="py-2">
+                <span className="font-bold text-ink">Recall</span>
+                <span className="text-mist"> — no evidence left on the shelf.</span>
+              </div>
+            </div>
+          </Reveal>
+        </div>
       </div>
 
       <section className="flex flex-wrap items-end gap-3 bg-panel p-6">

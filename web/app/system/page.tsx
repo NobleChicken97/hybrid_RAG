@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Reveal } from "@/components/reveal";
 import { useEffect, useState } from "react";
 import {
   api,
@@ -64,15 +65,42 @@ export default function SystemPage() {
   return (
     <div className="flex flex-col gap-px border border-line bg-line">
       <div className="bg-abyss p-6 sm:p-10">
-        <h1 className="font-display text-5xl font-bold uppercase leading-[0.95] tracking-tight text-ink sm:text-7xl">
-          Stacks
-          <br />
-          inventory.
-        </h1>
-        <p className="mt-3 max-w-xl text-sm leading-6 text-mist">
-          What the room holds and how it is configured — counts, machinery,
-          and every shelved document.
-        </p>
+        <div className="grid items-center gap-8 xl:grid-cols-12">
+          <div className="xl:col-span-7">
+            <h1 className="font-display text-5xl font-bold uppercase leading-[0.95] tracking-tight text-ink sm:text-7xl">
+              Stacks
+              <br />
+              inventory.
+            </h1>
+            <p className="mt-3 max-w-xl text-sm leading-6 text-mist">
+              What the room holds and how it is configured — counts,
+              machinery, and every shelved document.
+            </p>
+          </div>
+          <Reveal className="flex flex-col gap-px border border-line bg-line xl:col-span-5">
+            <div className="bg-panel px-5 py-3 font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-signal">
+              Machinery at a glance
+            </div>
+            <div className="flex flex-col bg-panel px-5 py-2 font-mono text-xs">
+              <div className="flex items-baseline justify-between gap-2 border-b border-line-soft py-2">
+                <span className="uppercase tracking-[0.14em] text-mist">Answer engine</span>
+                <span className="text-right text-ink">{config.llm_backend} ({config.generation_model})</span>
+              </div>
+              <div className="flex items-baseline justify-between gap-2 border-b border-line-soft py-2">
+                <span className="uppercase tracking-[0.14em] text-mist">Judge</span>
+                <span className="text-right text-ink">{config.judge_backend}</span>
+              </div>
+              <div className="flex items-baseline justify-between gap-2 border-b border-line-soft py-2">
+                <span className="uppercase tracking-[0.14em] text-mist">Embeddings</span>
+                <span className="text-right text-ink">{config.embedding_model}</span>
+              </div>
+              <div className="flex items-baseline justify-between gap-2 py-2">
+                <span className="uppercase tracking-[0.14em] text-mist">Reranker</span>
+                <span className="text-right text-ink">{config.reranker_model}</span>
+              </div>
+            </div>
+          </Reveal>
+        </div>
       </div>
 
       <div className="grid grid-cols-3 divide-x divide-console-line bg-console">
