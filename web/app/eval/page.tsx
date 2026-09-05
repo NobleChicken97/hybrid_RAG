@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Reveal } from "@/components/reveal";
+import { usePageTitle } from "@/components/use-page-title";
 import {
   Table,
   TableBody,
@@ -56,6 +57,7 @@ function Scores({ scores }: { scores: EvalScores }) {
 }
 
 export default function EvalPage() {
+  usePageTitle("Eval");
   const [qaSet, setQaSet] = useState("default");
   const [mode, setMode] = useState("hybrid");
   const [running, setRunning] = useState(false);

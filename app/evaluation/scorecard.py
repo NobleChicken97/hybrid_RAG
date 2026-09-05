@@ -28,7 +28,7 @@ def get_scorecard(run_id: str) -> dict:
             "timestamp": run.timestamp.isoformat() if run.timestamp else None,
             "retrieval_mode": run.retrieval_mode,
             "config": run.get_config(),
-            "aggregate_scores": {
+            "scores": {
                 "faithfulness": run.faithfulness,
                 "answer_relevancy": run.answer_relevancy,
                 "context_precision": run.context_precision,
@@ -55,8 +55,8 @@ def compare_runs(run_id_1: str, run_id_2: str) -> dict:
     if "error" in card1 or "error" in card2:
         return {"error": "One or both runs not found.", "run_1": card1, "run_2": card2}
 
-    scores1 = card1["aggregate_scores"]
-    scores2 = card2["aggregate_scores"]
+    scores1 = card1["scores"]
+    scores2 = card2["scores"]
 
     # Compute deltas
     delta = {}

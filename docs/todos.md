@@ -86,10 +86,21 @@ Process: `npx impeccable install` (v4.0.1, into `.github`) → PRODUCT.md → li
 - [ ] Owner screenshots of deployed v4 → full verdict review → DESIGN.md (documenter) → close
   (Superseded: owner reviewed the v4 screenshot as harsh/muddy/empty/text-only and sent MAFIA/TERRAIN/portfolio/poster refs — see v5 below. The formal verdict pass folds into v5's review.)
 
+## Harsh QA audit (2026-09-05 — 22/22 live checks green)
+
+Method: recon → static → live HTTP probe (real backend :8001, real keys, correctness assertions) → web/SEO → docs sweep. RAM discipline throughout (2 GB free; heavy steps sequential).
+- [x] Recon: tree clean; no secrets/data/logs tracked (172 files); `vs_BuildTools.exe` 5.4 MB untracked in root — owner decision pending (likely stray installer)
+- [x] Static: ruff clean (format drift in 23 files is pre-existing, unenforced — left alone); `pip check` flags langchain transitive pin conflicts — latent only, zero imports, working eval stack untouched by design
+- [x] Live probe 22/22: health/config-no-secrets/docs∑=health/ingest+409+400/query-correctness (Starlette+Pydantic)/citations-resolvable/vector_only/400s/eval-list+scorecard+compare/404s. Found + fixed: (1) scorecard `aggregate_scores` vs `scores` mismatch; (2) `compare_runs` dead code → 500s on valid IDs (pre-existing, never worked). Regression tests `test_scorecard.py` (3). Full suite 58/58 + new 3 = 61 green. Note: one "Harsh Audit Probe Doc" (2 chunks) lives in the LOCAL corpus only (no delete endpoint) — prod untouched.
+- [x] Web/SEO: per-route titles (hook, client pages can't export metadata), OG/Twitter/theme-color, robots.txt + sitemap.xml (emitted, verified in build); `.env.example` + `Dockerfile.web` claims verified true; committed dangling `web/.gitignore` impeccable block
+- [x] Docs sweep: prod.md ports line fixed (8501 dead); DEPLOY live costs added; README scorecard "4 docs/432 chunks" verified correct (pre-dedupe runs); dated logs left as history
+
 ## Frontend redesign v9 — layout bugfixes (2026-09-05, pushed, CD deploying)
 
 Owner screenshots caught three real bugs: (1) footer stranded mid-page on short routes — body was never actually flex so `flex-1` did nothing (fixed: `flex flex-col` on body, footer pins to viewport bottom); (2) ask debug rail overflowing — classic grid blowout from unbreakable mono chunk IDs (fixed: `min-w-0` on grid tracks + `break-all` on IDs, same hardening on topology/ingest/system mono); (3) same stranded footer on topology (same root cause as 1).
 - [x] `tsc` + `eslint` + `npm run build` green (9/9) + `impeccable detect` clean; pushed — CD auto-deploys
+
+## Superseded redesign passes v5–v8 (history, newest first — each replaced before/without review)
 
 Owner review of v7 screenshots: voids moved, not filled (ask hero worst; index panel hollow; all pages). Response: every hero is now a 7/5 asymmetric grid with a live-data or real-guidance rail — ask status board (docs/chunks/engine, live), index densified to 6 rows, eval metric glossary, system machinery rail (live config), topology reading legend. `impeccable detect` fully clean (grid advisory gone too).
 
@@ -125,8 +136,6 @@ History: v1 redesign (dark-first, Jost, `a526274`, deployed via CD) superseded b
 
 - Prod run `eval_963a9e98` (Groq, 3-doc corpus): generation 20/20 fine, ALL RAGAS scores null. Two stacked causes found in order: (1) `ragas.evaluate()` nested-async crash on uvloop — fixed via `run_in_threadpool` (+ regression test); (2) after the fix, `eval_43b1aba2` still null because `RAGAS_JUDGE_MODEL` still named the Gemini model while the judge backend was Groq → 80×404 → NaN → null. Fixed with the model name.
 - [x] PROD SCORECARD `eval_3ad9de1e` (2026-09-05, Groq gpt-oss-120b generator + judge, 3 docs / 234 chunks): faithfulness **0.8897**, relevancy **0.9277**, precision **0.9083**, recall **1.0**. Same ballpark as local hybrid (1.0 / 0.9502 / 0.8571 / 1.0; delta explained by different generator+judge, not a regression). Null runs kept in prod DB as evidence.
-- Prod run `eval_963a9e98` (Groq, 3-doc corpus): generation 20/20 fine, ALL RAGAS scores null. Cause: `ragas.evaluate()` runs nested async code, which crashes on the running uvloop (`uvicorn[standard]`) — `POST /eval/run` called sync `run_evaluation` on the loop thread. Local script runs never hit it (no outer loop). The null run stays in the prod DB as evidence.
-- [x] Fix: endpoint awaits `run_in_threadpool(run_evaluation, ...)` — worker thread has no running loop, matching local runs. Regression test `test_eval_run_offloads_event_loop` verified to FAIL without the fix / PASS with it (suite now 58).
 - Decision 2026-09-05 (researched, on hold): OpenCode Zen (`https://opencode.ai/zen/v1`, OpenAI-compatible, no-card key, ~7 free coding/reasoning models) is technically integrable as another opt-in fallback, BUT free-tier rate limits are unpublished, judge-suitability unproven, and free status is time-limited/usage-data-funded. Groq 429s never actually occurred (nulls were the uvloop bug) — so: re-run on Groq first, add Zen only on evidence. If added later, mirror the groq/cerebras branch + trial-validate generation AND judge before trusting scores.
 
 ## CD via ECR (2026-09-05 — single `pipeline.yml`: lint/secrets/test + gated build/push/deploy; `ci.yml`/`cd.yml` merged and deleted)
@@ -137,8 +146,6 @@ Incident 2026-09-05: manual `up -d backend` raced CD run #4's deploy → contain
 - [x] Compose on `image:` + `pull_policy: always` (Dockerfiles kept for emergency local builds); DEPLOY.md CD section (IAM policy, secrets table, rollback)
 - [x] Owner console steps DONE 2026-09-05 via CLI (no console needed): 2 ECR repos (ap-south-1) + lifecycle keep-3, IAM user `github-actions-deploy` + inline policy + access key, 7 GitHub secrets set, box `awscli` + `aws configure` + `ECR_REGISTRY` in `deploy/.env`
 - [x] First CD run GREEN 2026-09-05 (run 33945990241): build-push backend+web → ECR `:9f509d6`+`:latest` → box pulled pinned SHA, both Healthy, public `/api/health` ok (1 doc / 20 chunks survived). Prior run failed in 12s on missing secrets (expected, pre-setup).
-
-## Status note (2026-09-04, updated 2026-09-05)
 
 ## Status note (2026-09-04, updated 2026-09-05)
 

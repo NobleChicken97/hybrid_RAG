@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Reveal } from "@/components/reveal";
+import { usePageTitle } from "@/components/use-page-title";
 import { useEffect, useState } from "react";
 import {
   api,
@@ -18,6 +19,7 @@ import {
 } from "@/lib/api";
 
 export default function SystemPage() {
+  usePageTitle("System");
   const [health, setHealth] = useState<Health | null>(null);
   const [config, setConfig] = useState<PublicConfig | null>(null);
   const [docs, setDocs] = useState<DocumentInfo[]>([]);

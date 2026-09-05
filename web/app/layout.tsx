@@ -22,9 +22,29 @@ const mono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Hybrid RAG System",
+  metadataBase: new URL("https://rag.noblechicken.me"),
+  title: {
+    default: "Hybrid RAG System",
+    template: "%s · Hybrid RAG",
+  },
   description:
     "Hybrid retrieval (BM25 + vector) with reranking, compression, citations, and RAGAS evaluation.",
+  openGraph: {
+    title: "Hybrid RAG System",
+    description:
+      "Ask questions over your documents; every answer carries citations and a full retrieval debug trace.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Hybrid RAG System",
+    description:
+      "Hybrid retrieval (BM25 + vector) with reranking, compression, citations, and RAGAS evaluation.",
+  },
+};
+
+export const viewport = {
+  themeColor: "#F2EAD8",
 };
 
 const NAV = [

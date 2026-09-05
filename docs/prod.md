@@ -102,7 +102,7 @@ The system's storage is **local-persistent by design** (ChromaDB directory, BM25
   1. **Lightsail** (4 GB RAM plan, ~$24/mo, flat rate) — simplest; Docker or systemd.
   2. **EC2 t3.medium** (4 GB RAM, spot-able) — uses credits, full control; run both services via `docker compose` or the existing `run.py` behind Caddy/nginx with HTTPS.
   3. **ECS/Fargate** — only if container orchestration is the learning goal; overkill for a two-process demo.
-- Minimum spec: 4 GB RAM (models + ChromaDB in memory), 20 GB disk (models + corpus), ports 8000/8501 behind a reverse proxy.
+- Minimum spec: 4 GB RAM (models + ChromaDB in memory), 20 GB disk (models + corpus), ports 80/443 via Caddy (backend :8000 internal only; Streamlit retired 2026-09-04).
 
 ## Stretch items
 

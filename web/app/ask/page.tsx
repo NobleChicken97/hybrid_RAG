@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Reveal } from "@/components/reveal";
+import { usePageTitle } from "@/components/use-page-title";
 import { useEffect, useState } from "react";
 import { api, type Health, type QueryResponse } from "@/lib/api";
 
@@ -42,6 +43,7 @@ function Hits({
 }
 
 export default function AskPage() {
+  usePageTitle("Ask");
   const [question, setQuestion] = useState("");
   const [mode, setMode] = useState("hybrid");
   const [topK, setTopK] = useState(5);

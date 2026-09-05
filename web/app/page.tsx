@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { PipelineDiagram } from "@/components/pipeline-diagram";
 import { Reveal } from "@/components/reveal";
 import { Ticker } from "@/components/ticker";
+import { usePageTitle } from "@/components/use-page-title";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import {
@@ -72,6 +73,7 @@ function Meter({
 }
 
 export default function Home() {
+  usePageTitle("Overview");
   const [health, setHealth] = useState<Health | null>(null);
   const [docs, setDocs] = useState<DocumentInfo[]>([]);
   const [runs, setRuns] = useState<EvalRunSummary[]>([]);

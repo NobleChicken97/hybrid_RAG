@@ -3,10 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { ChunkFigure } from "@/components/chunk-figure";
 import { Input } from "@/components/ui/input";
+import { usePageTitle } from "@/components/use-page-title";
 import { useState } from "react";
 import { api, type IngestResponse } from "@/lib/api";
 
 export default function IngestPage() {
+  usePageTitle("Ingest");
   const [file, setFile] = useState<File | null>(null);
   const [fileTitle, setFileTitle] = useState("");
   const [rawText, setRawText] = useState("");

@@ -11,12 +11,14 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Reveal } from "@/components/reveal";
+import { usePageTitle } from "@/components/use-page-title";
 import { useState } from "react";
 import { api, type QueryResponse } from "@/lib/api";
 
 const STAGES = ["BM25", "VECTOR", "RRF", "RERANK", "CITE"];
 
 export default function TopologyPage() {
+  usePageTitle("Topology");
   const [question, setQuestion] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
