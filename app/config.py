@@ -24,6 +24,10 @@ class Settings(BaseSettings):
     environment: str = Field(default="local", description="Environment: 'local' or 'production'")
     llm_backend: str = Field(default="gemini", description="Primary LLM backend to use")
     ragas_judge_backend: str = Field(default="gemini", description="LLM backend to use for RAGAS eval judge")
+    # Empty = open (dev default). Set a random secret in production: POST
+    # /eval/run then requires the matching `x-eval-token` header, otherwise
+    # anyone on the internet can burn your LLM quota with full eval runs.
+    eval_token: str = Field(default="", description="Shared secret gating POST /eval/run")
 
     # API Keys & Hosts
     ollama_host: str = Field(default="http://localhost:11434", description="Ollama API base URL")

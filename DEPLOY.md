@@ -21,6 +21,8 @@
 - Domain / A record → static IP: `rag.noblechicken.me` → `65.2.210.233` (Namecheap A record, TTL Automatic; verified via nslookup 2026-09-05)
 - TLS: Caddy automatic Let's Encrypt once the domain resolves to the box
 - LLM keys on the box: `GEMINI_API_KEY` + `GROQ_API_KEY` (matches config defaults: gemini flash-lite primary, groq fallback)
+- Eval guard: `EVAL_TOKEN` (random hex, appended to box `.env`) — prod `POST /eval/run` requires header `x-eval-token: <token>`, else 403. Empty locally = open (dev/tests unaffected).
+- Prod eval: full Groq-backed run pending (Gemini free bucket too small for ~100 calls); run ID to be recorded in todos when done
 - Status: LIVE 2026-09-05 — build green (backend + web Healthy, Caddy TLS issued for rag.noblechicken.me); prod ingest verified (`Sample FastAPI Guide`, 20 chunks); live prod query verified (correct answer + 2 citations + retrieval debug, gemini backend). Remaining: prod eval re-run, restart persistence check, README live-URL update. Known issue: web UI styling judged poor — redesign IMPLEMENTED 2026-09-05 (dark-first design system, Jost/Mulish/JetBrains Mono, build green) but NOT YET DEPLOYED — box still serves the old UI until `git pull` + `up -d --build` is run there.
 
 SSH from the dev machine (PowerShell):

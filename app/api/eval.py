@@ -7,8 +7,9 @@ GET  /eval/runs/{run_id}  — Get a specific run's scorecard
 POST /eval/compare — Compare two runs side-by-side
 """
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Header, HTTPException
 
+from app.config import get_settings
 from app.evaluation.harness import run_evaluation
 from app.evaluation.qa_loader import list_qa_sets, load_qa_set
 from app.evaluation.scorecard import compare_runs, get_scorecard, list_runs
@@ -18,13 +19,24 @@ router = APIRouter(prefix="/eval", tags=["Evaluation"])
 
 
 @router.post("/run", response_model=EvalRunResponse)
-async def trigger_eval_run(request: EvalRunRequest):
+async def trigger_eval_run(
+    request: EvalRunRequest,
+    x_eval_token: str | None = Header(default=None),
+):
     """
     Trigger a new evaluation run.
 
     Either provide a qa_set_name (loads from data/qa_sets/) or
     inline qa_items in the request body.
+
+    A full run burns ~100 LLM calls. If EVAL_TOKEN is set (production),
+    the matching `x-eval-token` header is required, else 403.
     """
+    if get_settings().eval_token and x_eval_token != get_settings().eval_token:
+        raise HTTPException(
+            status_code=403,
+            detail="Evaluation is locked (EVAL_TOKEN set). Provide the x-eval-token header.",
+        )
     # Load QA items
     if request.qa_items:
         qa_items = request.qa_items
