@@ -8,6 +8,7 @@ POST /eval/compare — Compare two runs side-by-side
 """
 
 from fastapi import APIRouter, Header, HTTPException
+from starlette.concurrency import run_in_threadpool
 
 from app.config import get_settings
 from app.evaluation.harness import run_evaluation
@@ -49,8 +50,13 @@ async def trigger_eval_run(
     if not qa_items:
         raise HTTPException(status_code=400, detail="QA set is empty.")
 
-    # Run evaluation
-    run_id, scores, per_question = run_evaluation(qa_items, mode=request.mode)
+    # Run evaluation off the event loop: it is minutes of blocking sync work
+    # (model inference + RAGAS), and RAGAS executes nested async code that
+    # crashes on a running loop (uvloop in prod). A worker thread has no
+    # running loop, matching the local script runs. See eval_963a9e98.
+    run_id, scores, per_question = await run_in_threadpool(
+        run_evaluation, qa_items, mode=request.mode
+    )
 
     return EvalRunResponse(
         run_id=run_id,

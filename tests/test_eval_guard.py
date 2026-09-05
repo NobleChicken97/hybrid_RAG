@@ -5,6 +5,8 @@ header is required, else 403. run_evaluation is mocked: no LLM calls and no
 model loads, so these tests stay light.
 """
 
+import asyncio
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -83,3 +85,27 @@ def test_eval_run_locked_correct_token(client: TestClient, _locked, _mock_run):
     resp = _run(client, token="test-secret")
     assert resp.status_code == 200, resp.text
     assert resp.json()["run_id"] == "eval_test"
+
+
+def test_eval_run_offloads_event_loop(client: TestClient, _open, monkeypatch):
+    """run_evaluation must not execute on the event-loop thread.
+
+    Regression test for prod run eval_963a9e98: RAGAS executes nested async
+    code, which crashes on a running loop (uvloop). The endpoint must offload
+    to a worker thread, where no loop is running — exactly like the local
+    script runs that always worked.
+    """
+    seen = {}
+
+    def fake_run(*a, **kw):
+        try:
+            asyncio.get_running_loop()
+            seen["loop"] = True
+        except RuntimeError:
+            seen["loop"] = False
+        return ("eval_test", dict(SCORES), [])
+
+    monkeypatch.setattr(eval_module, "run_evaluation", fake_run)
+    resp = _run(client)
+    assert resp.status_code == 200, resp.text
+    assert seen.get("loop") is False, "run_evaluation ran on the event-loop thread"

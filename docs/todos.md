@@ -85,6 +85,11 @@
 - [x] Restyled layout + all 6 pages, data logic identical; `tsc` + `eslint` + `npm run build` green (7/7 routes static)
 - [x] Commit, push, update DEPLOY/docs (`a526274` on origin/main); user redeploys on the box (`git pull` + `up -d --build`)
 
+## Prod eval bug — nested event loop (found + fixed 2026-09-05)
+
+- Prod run `eval_963a9e98` (Groq, 3-doc corpus): generation 20/20 fine, ALL RAGAS scores null. Cause: `ragas.evaluate()` runs nested async code, which crashes on the running uvloop (`uvicorn[standard]`) — `POST /eval/run` called sync `run_evaluation` on the loop thread. Local script runs never hit it (no outer loop). The null run stays in the prod DB as evidence.
+- [x] Fix: endpoint awaits `run_in_threadpool(run_evaluation, ...)` — worker thread has no running loop, matching local runs. Regression test `test_eval_run_offloads_event_loop` verified to FAIL without the fix / PASS with it (suite now 58).
+
 ## CD via ECR (2026-09-05, code done — console steps pending)
 
 - [x] `.github/workflows/cd.yml`: build+push backend/web (`:<sha>` + `:latest`) → SSH deploy (fresh ECR login, pinned pull, health gate); docs-only pushes skip
