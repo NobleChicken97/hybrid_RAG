@@ -98,6 +98,8 @@ History: v1 redesign (dark-first, Jost, `a526274`, deployed via CD) superseded b
 
 ## CD via ECR (2026-09-05, code done — console steps pending)
 
+Incident 2026-09-05: manual `up -d backend` raced CD run #4's deploy → container-name conflict left backend DOWN (caught via `docker ps`, prod 502 on /api). Fixed with `concurrency: prod-deploy` queue (`95c7b44`); CD run green, both services on `:95c7b44` Healthy, health ok (gemini, 3 docs / 234 chunks). Standing rule: never run compose manually while a CD run is in progress.
+
 - [x] `.github/workflows/cd.yml`: build+push backend/web (`:<sha>` + `:latest`) → SSH deploy (fresh ECR login, pinned pull, health gate); docs-only pushes skip
 - [x] Compose on `image:` + `pull_policy: always` (Dockerfiles kept for emergency local builds); DEPLOY.md CD section (IAM policy, secrets table, rollback)
 - [x] Owner console steps DONE 2026-09-05 via CLI (no console needed): 2 ECR repos (ap-south-1) + lifecycle keep-3, IAM user `github-actions-deploy` + inline policy + access key, 7 GitHub secrets set, box `awscli` + `aws configure` + `ECR_REGISTRY` in `deploy/.env`
