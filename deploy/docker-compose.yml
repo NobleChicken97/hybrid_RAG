@@ -1,8 +1,10 @@
 services:
   backend:
-    build:
-      context: ..
-      dockerfile: deploy/Dockerfile
+    # CD pulls a pinned ECR image (IMAGE_TAG=<sha>, set by the deploy step;
+    # falls back to :latest). Dockerfiles stay in the repo for emergency
+    # local builds: `docker build -f deploy/Dockerfile .`
+    image: ${ECR_REGISTRY:-local}/hybrid-rag-backend:${IMAGE_TAG:-latest}
+    pull_policy: always
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000
     env_file: ../.env          # keys live here; .env is gitignored, copy to server via scp
     volumes:
@@ -22,9 +24,8 @@ services:
   # strips and proxies to the backend. NEXT_PUBLIC_BACKEND_URL stays UNSET
   # in this image so the client uses that same-origin path.
   web:
-    build:
-      context: ../web
-      dockerfile: Dockerfile.web
+    image: ${ECR_REGISTRY:-local}/hybrid-rag-web:${IMAGE_TAG:-latest}
+    pull_policy: always
     expose:
       - "3000"
     healthcheck:

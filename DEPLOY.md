@@ -132,10 +132,78 @@ Your credits cover this. To stop billing while idle:
 
 ## Updating the deployment
 
+Manual path (still valid): on the box,
+
 ```bash
 cd ~/hybrid-rag && git pull
-docker compose -f deploy/docker-compose.yml up -d --build
+docker compose -f deploy/docker-compose.yml up -d
 ```
+
+Note: compose no longer has `build:` sections (CD pulls ECR images), so plain
+`up -d --build` errors — emergency local builds go through
+`docker build -f deploy/Dockerfile .` directly. A manual `up -d` without
+IMAGE_TAG exported falls back to `:latest`, which CD keeps pointed at the last
+green main — always sane.
+
+## CD via ECR + GitHub Actions (`.github/workflows/cd.yml`)
+
+Every push to `main` touching code (docs/sample/archive/frontend-only pushes
+skip via `paths-ignore`) does: build backend+web on GH runners → push
+`:<sha>` and `:latest` to ECR → SSH into the box → fresh ECR login → pull the
+pinned `:sha` → restart → gate on public `/api/health` (`"status":"ok"` or the
+workflow fails). `.env` and `data/` on the box are untouched by deploys.
+
+One-time setup (console/click work, ~20 min):
+
+1. **ECR repos** (console → ECR → Create repository, region **ap-south-1**,
+   private): `hybrid-rag-backend` and `hybrid-rag-web`. In each repo →
+   Lifecycle policies → create rule: keep last **3** tagged images (the
+   backend image is multi-GB with torch + 3 baked models — unbounded history
+   gets expensive).
+2. **IAM user** `github-actions-deploy` (console → IAM → Users → Create):
+   no console access, attach this inline policy (replace `<ACCOUNT>`):
+   ```json
+   {
+     "Version": "2012-10-17",
+     "Statement": [
+       {"Effect": "Allow", "Action": ["ecr:GetAuthorizationToken"], "Resource": "*"},
+       {"Effect": "Allow",
+        "Action": ["ecr:BatchCheckLayerAvailability", "ecr:PutImage",
+                   "ecr:InitiateLayerUpload", "ecr:UploadLayerPart",
+                   "ecr:CompleteLayerUpload", "ecr:BatchGetImage",
+                   "ecr:GetDownloadUrlForLayer", "ecr:DescribeRepositories",
+                   "ecr:ListImages", "ecr:DescribeImages"],
+        "Resource": ["arn:aws:ecr:ap-south-1:<ACCOUNT>:repository/hybrid-rag-backend",
+                     "arn:aws:ecr:ap-south-1:<ACCOUNT>:repository/hybrid-rag-web"]}
+     ]
+   }
+   ```
+   Then Security credentials → Create access key (CLI use case) — save both
+   halves; the secret shows once. (Hardening follow-up: OIDC role instead of
+   long-lived keys.)
+3. **GitHub secrets** (repo → Settings → Secrets and variables → Actions →
+   New repository secret), 7 total:
+   | Secret | Value |
+   |---|---|
+   | `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY` | from step 2 |
+   | `AWS_REGION` | `ap-south-1` |
+   | `ECR_REGISTRY` | `<ACCOUNT>.dkr.ecr.ap-south-1.amazonaws.com` |
+   | `LIGHTSAIL_HOST` | `65.2.210.233` |
+   | `LIGHTSAIL_USER` | `ubuntu` |
+   | `LIGHTSAIL_SSH_KEY` | full contents of `trakplus-lightsail.pem` |
+4. **Box, once** (SSH): `sudo apt install -y awscli`, then
+   `aws configure` (paste the step-2 key pair, region `ap-south-1`, output
+   `json`), then `echo "ECR_REGISTRY=<same host as above>" >> deploy/.env`.
+   The deploy logs in fresh each run (12h creds), so no credential helper is
+   needed. `~/.aws/credentials` is root-readable-only by default — leave it.
+
+Costs to expect: ECR ~$0.10/GB-mo (backend image is several GB; ×3 retained
+≈ a few $/mo) + same-region pull bandwidth per deploy (GBs on first pull,
+only changed layers after). Public repo → GH build minutes free.
+
+Rollback: on the box,
+`IMAGE_TAG=<older-sha> docker compose -f deploy/docker-compose.yml up -d`
+(SHAs are in the Actions run log; ECR keeps the last 3).
 
 ## Troubleshooting
 

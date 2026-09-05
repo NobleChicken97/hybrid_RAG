@@ -85,6 +85,13 @@
 - [x] Restyled layout + all 6 pages, data logic identical; `tsc` + `eslint` + `npm run build` green (7/7 routes static)
 - [x] Commit, push, update DEPLOY/docs (`a526274` on origin/main); user redeploys on the box (`git pull` + `up -d --build`)
 
+## CD via ECR (2026-09-05, code done — console steps pending)
+
+- [x] `.github/workflows/cd.yml`: build+push backend/web (`:<sha>` + `:latest`) → SSH deploy (fresh ECR login, pinned pull, health gate); docs-only pushes skip
+- [x] Compose on `image:` + `pull_policy: always` (Dockerfiles kept for emergency local builds); DEPLOY.md CD section (IAM policy, secrets table, rollback)
+- [ ] Owner console steps: 2 ECR repos (ap-south-1) + lifecycle keep-3, IAM user + keys, 7 GitHub secrets, box `awscli` + `aws configure` + `ECR_REGISTRY` in `deploy/.env`
+- [ ] First CD run green (push or re-run → watch Actions → prod health on new SHA)
+
 ## Status note (2026-09-04, updated 2026-09-05)
 
 The full stack is installed, tested (53/53), and validated end-to-end with live generation. The clean hybrid vs vector-only scorecard is captured (README scorecard populated). The simplification batch is committed/pushed (`916a81c`) and `web/` parity is verified at route + contract + live-endpoint level.

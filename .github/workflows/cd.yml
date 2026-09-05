@@ -1,0 +1,98 @@
+# CD: build images -> push to ECR -> Lightsail pulls + redeploys.
+#
+# Flow per push to main (code paths only; docs-only pushes skip):
+#   1. build-push (matrix: backend, web): docker build on GH runners,
+#      push :<sha> and :latest to ECR.
+#   2. deploy: SSH into the Lightsail box, fresh ECR login (12h creds —
+#      no credential helper needed since pull happens in the same session),
+#      pull pinned :<sha>, restart, then gate on the public /api/health.
+#
+# Required GitHub secrets (Settings -> Secrets and variables -> Actions):
+#   AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY (IAM user, ECR push+pull —
+#     policy in DEPLOY.md "CD via ECR" section), AWS_REGION (ap-south-1),
+#   ECR_REGISTRY (e.g. 123456789012.dkr.ecr.ap-south-1.amazonaws.com),
+#   LIGHTSAIL_HOST (65.2.210.233), LIGHTSAIL_USER (ubuntu),
+#   LIGHTSAIL_SSH_KEY (contents of trakplus-lightsail.pem).
+#
+# Rollback: on the box,
+#   IMAGE_TAG=<older-sha> docker compose -f deploy/docker-compose.yml up -d
+# (ECR lifecycle keeps recent images; `docker images` on GH shows SHAs.)
+
+name: CD (ECR + Lightsail)
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
+      - "sample_docs/**"
+      - "scripts/archive/**"
+      - "frontend/**"
+      - "eval_results*.json"
+
+permissions:
+  contents: read
+
+jobs:
+  build-push:
+    name: Build + push (${{ matrix.service }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - service: backend
+            context: .
+            dockerfile: ./deploy/Dockerfile
+            repo: hybrid-rag-backend
+          - service: web
+            context: ./web
+            dockerfile: ./web/Dockerfile.web
+            repo: hybrid-rag-web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - uses: aws-actions/amazon-ecr-login@v2
+        id: login
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: |
+            ${{ secrets.ECR_REGISTRY }}/${{ matrix.repo }}:${{ github.sha }}
+            ${{ secrets.ECR_REGISTRY }}/${{ matrix.repo }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: Deploy to Lightsail
+    needs: build-push
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.LIGHTSAIL_HOST }}
+          username: ${{ secrets.LIGHTSAIL_USER }}
+          key: ${{ secrets.LIGHTSAIL_SSH_KEY }}
+          script: |
+            set -euo pipefail
+            cd ~/hybrid-rag && git pull --ff-only
+            aws ecr get-login-password --region ${{ secrets.AWS_REGION }} \
+              | docker login --username AWS --password-stdin ${{ secrets.ECR_REGISTRY }}
+            export ECR_REGISTRY=${{ secrets.ECR_REGISTRY }} IMAGE_TAG=${{ github.sha }}
+            docker compose -f deploy/docker-compose.yml pull
+            docker compose -f deploy/docker-compose.yml up -d
+            sleep 45
+            curl -sf https://rag.noblechicken.me/api/health | grep -q '"status":"ok"'
+            echo "DEPLOY OK: ${{ github.sha }} healthy"
