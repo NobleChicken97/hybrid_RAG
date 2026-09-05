@@ -44,7 +44,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${display.variable} ${body.variable} ${mono.variable} min-h-screen bg-abyss font-sans text-ink antialiased`}
+        className={`${display.variable} ${body.variable} ${mono.variable} flex min-h-screen flex-col bg-abyss font-sans text-ink antialiased`}
       >
         <div className="bg-console text-console-mist">
           <div className="flex w-full items-center justify-between px-4 py-1.5 font-mono text-[10px] uppercase tracking-[0.24em]">

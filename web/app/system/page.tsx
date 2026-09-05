@@ -130,7 +130,7 @@ export default function SystemPage() {
           {rows.map(([k, v]) => (
             <div key={k} className="flex justify-between gap-4 py-2">
               <dt className="text-mist">{k}</dt>
-              <dd className="text-right font-mono text-xs text-ink">{v}</dd>
+              <dd className="break-all text-right font-mono text-xs text-ink">{v}</dd>
             </div>
           ))}
         </dl>

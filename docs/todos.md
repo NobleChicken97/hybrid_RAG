@@ -86,7 +86,10 @@ Process: `npx impeccable install` (v4.0.1, into `.github`) → PRODUCT.md → li
 - [ ] Owner screenshots of deployed v4 → full verdict review → DESIGN.md (documenter) → close
   (Superseded: owner reviewed the v4 screenshot as harsh/muddy/empty/text-only and sent MAFIA/TERRAIN/portfolio/poster refs — see v5 below. The formal verdict pass folds into v5's review.)
 
-## Frontend redesign v8 — no empty heroes (2026-09-05, pushed, CD deploying)
+## Frontend redesign v9 — layout bugfixes (2026-09-05, pushed, CD deploying)
+
+Owner screenshots caught three real bugs: (1) footer stranded mid-page on short routes — body was never actually flex so `flex-1` did nothing (fixed: `flex flex-col` on body, footer pins to viewport bottom); (2) ask debug rail overflowing — classic grid blowout from unbreakable mono chunk IDs (fixed: `min-w-0` on grid tracks + `break-all` on IDs, same hardening on topology/ingest/system mono); (3) same stranded footer on topology (same root cause as 1).
+- [x] `tsc` + `eslint` + `npm run build` green (9/9) + `impeccable detect` clean; pushed — CD auto-deploys
 
 Owner review of v7 screenshots: voids moved, not filled (ask hero worst; index panel hollow; all pages). Response: every hero is now a 7/5 asymmetric grid with a live-data or real-guidance rail — ask status board (docs/chunks/engine, live), index densified to 6 rows, eval metric glossary, system machinery rail (live config), topology reading legend. `impeccable detect` fully clean (grid advisory gone too).
 

@@ -127,7 +127,7 @@ export default function IngestPage() {
           <div className="mt-3 flex flex-col divide-y divide-line-soft border-y border-line-soft">
             {result.sample_chunks.map((c) => (
               <div key={c.chunk_id} className="py-2 text-sm">
-                <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-gold">
+                <div className="break-all font-mono text-[11px] uppercase tracking-[0.14em] text-gold">
                   {c.chunk_id} · {c.token_count} tokens
                   {c.section_header ? ` · ${c.section_header}` : ""}
                 </div>

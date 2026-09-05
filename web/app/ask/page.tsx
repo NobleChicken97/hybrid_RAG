@@ -30,7 +30,7 @@ function Hits({
         )}
         {hits.slice(0, 10).map((h) => (
           <div key={h.chunk_id} className="px-4 py-2 text-sm">
-            <div className="font-mono text-[11px] text-dim">
+            <div className="font-mono text-[11px] text-dim break-all">
               {h.chunk_id} · SCORE {h.score.toFixed(4)}
             </div>
             <div className="mt-1 leading-5 text-mist">{h.text_preview}…</div>
@@ -189,8 +189,8 @@ export default function AskPage() {
       )}
 
       {result && (
-        <div className="grid items-start gap-px bg-line-soft xl:grid-cols-12">
-          <div className="flex flex-col gap-px bg-line-soft xl:col-span-7">
+        <div className="grid min-w-0 items-start gap-px bg-line-soft xl:grid-cols-12">
+          <div className="flex min-w-0 flex-col gap-px bg-line-soft xl:col-span-7">
             <section className="evidence-in border-y-4 border-signal bg-paper p-6 text-paper-ink sm:p-8">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-paper-ink/70 pb-2">
               <span className="font-display text-2xl font-bold uppercase">
@@ -234,7 +234,7 @@ export default function AskPage() {
           </section>
           </div>
 
-          <section className="flex flex-col gap-2 bg-panel p-6 xl:sticky xl:top-4">
+          <section className="flex min-w-0 flex-col gap-2 bg-panel p-6 xl:sticky xl:top-4">
             <h2 className="font-display text-2xl font-bold uppercase text-ink">
               Retrieval ledger
             </h2>

@@ -139,7 +139,7 @@ export default function TopologyPage() {
                   }`}
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-dim">
+                    <span className="break-all font-mono text-[11px] uppercase tracking-[0.14em] text-dim">
                       Entry {String(i + 1).padStart(2, "0")} · Call no.{" "}
                       {h.chunk_id}
                     </span>
