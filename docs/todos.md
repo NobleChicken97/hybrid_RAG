@@ -107,6 +107,10 @@ Incident 2026-09-05: manual `up -d backend` raced CD run #4's deploy → contain
 
 ## Status note (2026-09-04, updated 2026-09-05)
 
+## Status note (2026-09-04, updated 2026-09-05)
+
+PHASE 3 CLOSED 2026-09-05: prod verified end-to-end — persistence (counts survive restart), 3-doc corpus (20+19+195 chunks), live query with citations, Groq prod scorecard `eval_3ad9de1e` (0.8897/0.9277/0.9083/1.0), EVAL_TOKEN guard proven (403 + header-run), backends reverted to gemini (3/3 model lines), kernel reboot to 6.8.0-1063 clean with auto-restart, final health ok/gemini/3 docs. CD live (ECR + concurrency guard after the one race incident). Only remaining: v2 UI screenshots after CD ships `936ebee`.
+
 The full stack is installed, tested (53/53), and validated end-to-end with live generation. The clean hybrid vs vector-only scorecard is captured (README scorecard populated). The simplification batch is committed/pushed (`916a81c`) and `web/` parity is verified at route + contract + live-endpoint level.
 
 Update 2026-09-05: the 2026-09-04 blockers are resolved — Caddy cutover committed (`9ee13f0`, Streamlit retired from compose), rerank experiments captured (`ac1070b`) with `BAAI/bge-reranker-base` now the default (`95d115a`); Q14 checkbox ticked to match the recorded DECISION. Test-ordering wart in `test_api_smoke.py` (query test failed solo) fixed via self-seeding (`dc0f2aa`, still 53/53 + ruff clean). Update 2026-09-05: LIVE at https://rag.noblechicken.me (Lightsail `hybrid-rag-prod`; TLS, DNS, prod ingest + live query verified — see DEPLOY.md). UI redesigned dark-first (`a526274`, build green, not yet redeployed on the box). POST /eval/run now gated by EVAL_TOKEN in prod (4 guard tests, 57 total). Remaining for the box owner: (1) restart persistence check, (2) 3-doc corpus top-up, (3) Groq-backed prod eval re-run (commands issued), (4) UI redeploy (`git pull` + `up -d --build`). Note: local full-suite runs are RAM-sensitive on this dev box (2 GB free → reranker mmap OSError 1455 + one torch access-violation crash observed 2026-09-05); not a code regression — 53/53 verified green twice before, suite now 57 with the guard file.

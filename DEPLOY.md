@@ -209,6 +209,11 @@ Live state 2026-09-05: repos + lifecycle active, IAM user
 `github-actions-deploy` with key in GH secrets + box `~/.aws`, all 7 GH
 secrets set, box `awscli` configured. First green run 33945990241
 (`9f509d6`): both services on pinned ECR images, Healthy, public health ok.
+Phase 3 closed same day: backends reverted to gemini (3/3 lines incl. judge
+model), kernel reboot to 6.8.0-1063 clean (containers auto-restarted),
+final health ok/gemini/3 docs/4 eval runs. Prod scorecard `eval_3ad9de1e`
+in todos. Standing rule: never run compose manually while a CD run is in
+progress (see todos incident note).
 
 ## Troubleshooting
 
