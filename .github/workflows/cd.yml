@@ -35,6 +35,12 @@ on:
 permissions:
   contents: read
 
+# One deploy at a time: overlapping runs (or a manual `up -d` mid-deploy)
+# race container recreation and leave the backend down. Queued, never cancelled.
+concurrency:
+  group: prod-deploy
+  cancel-in-progress: false
+
 jobs:
   build-push:
     name: Build + push (${{ matrix.service }})
