@@ -1,29 +1,28 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { CountUp } from "@/components/ui/count-up";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { api, type Health } from "@/lib/api";
 
-const CARDS = [
+const DRAWERS = [
   {
     href: "/ingest",
-    step: "01 / LOAD",
+    step: "STEP 01",
     title: "Ingest",
-    body: "Upload PDF/Markdown/text. Context-aware chunking preserves document structure.",
+    body: "Shelve PDF, Markdown, or text. Context-aware chunking preserves document structure.",
   },
   {
     href: "/ask",
-    step: "02 / QUERY",
+    step: "STEP 02",
     title: "Ask",
-    body: "Cited answers with the full retrieval debug: BM25, vector, fusion, rerank.",
+    body: "Receive an evidence slip: a cited answer with the full retrieval ledger.",
   },
   {
     href: "/eval",
-    step: "03 / PROVE",
+    step: "STEP 03",
     title: "Evaluate",
-    body: "RAGAS scorecards and vector-only vs hybrid+rerank comparisons.",
+    body: "Audit runs in the ledger: RAGAS scorecards, hybrid against vector-only.",
   },
 ];
 
@@ -39,52 +38,55 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="texture-dots border border-line bg-panel p-5">
-        <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-signal">
-          Overview
-        </p>
-        <h1 className="mt-1 font-display text-4xl font-bold uppercase tracking-tight text-ink">
-          Hybrid RAG System
-        </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-mist">
+    <div className="flex flex-col gap-px border border-line bg-line">
+      <div className="bg-panel p-6">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <h1 className="font-display text-5xl font-bold tracking-tight text-ink">
+            Hybrid RAG System
+          </h1>
+          <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-dim">
+            Holdings verified nightly
+          </p>
+        </div>
+        <p className="mt-3 max-w-2xl leading-6 text-mist">
           A production-grade retrieval-augmented generation pipeline with
           hybrid retrieval, cross-encoder reranking, context compression, and
           RAGAS evaluation.
         </p>
         {health && (
-          <div className="mt-3 flex flex-wrap gap-2 font-mono text-[11px]">
-            <Badge variant="secondary">ENV {health.environment}</Badge>
-            <Badge variant="secondary">LLM {health.llm_backend}</Badge>
-          </div>
+          <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.2em] text-mist">
+            Environment <span className="text-gold">{health.environment}</span>
+            {"  ·  "}LLM backend{" "}
+            <span className="text-gold">{health.llm_backend}</span>
+          </p>
         )}
       </div>
 
-      <div className="grid grid-cols-3 gap-px border border-line bg-line">
-        {(
-          [
-            ["Documents", health?.documents_count],
-            ["Chunks", health?.chunks_count],
-            ["Eval runs", health?.eval_runs_count],
-          ] as [string, number | undefined][]
-        ).map(([label, value]) => (
-          <div key={label as string} className="bg-panel p-5">
-            <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-dim">
-              {label}
+      <div className="bg-panel px-6 py-4">
+        <div className="flex flex-col divide-y divide-line-soft border-y border-line">
+          {[
+            ["Documents shelved", health?.documents_count],
+            ["Chunks indexed", health?.chunks_count],
+            ["Audits on record", health?.eval_runs_count],
+          ].map(([label, value]) => (
+            <div key={label as string} className="flex items-baseline gap-3 py-2">
+              <span className="text-sm font-semibold uppercase tracking-[0.14em] text-mist">
+                {label}
+              </span>
+              <span
+                aria-hidden="true"
+                className="mx-1 flex-1 border-b border-dotted border-line"
+              />
+              <span className="font-display text-3xl font-bold tabular-nums text-gold">
+                {value ?? (error ? "—" : "…")}
+              </span>
             </div>
-            <div className="mt-1 font-display text-5xl font-bold tabular-nums text-gold">
-              {value == null ? error ? "—" : "…" : <CountUp value={value} />}
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
       {error && (
-        <p className="border border-bad bg-bad/10 p-3 text-sm text-ink">
-          <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-bad">
-            Backend unreachable
-          </span>
-          <br />
-          {error}. Start it with{" "}
+        <p className="border-y border-bad bg-bad/10 p-4 text-sm text-ink">
+          The stacks are unreachable: {error}. Start the backend with{" "}
           <code className="font-mono text-mist">
             uvicorn app.main:app --port 8000
           </code>
@@ -92,38 +94,43 @@ export default function Home() {
         </p>
       )}
 
-      <div className="grid grid-cols-3 gap-px border border-line bg-line">
-        {CARDS.map((card) => (
+      <div className="grid grid-cols-3 gap-px bg-line">
+        {DRAWERS.map((card) => (
           <Link
             key={card.href}
             href={card.href}
-            className="group flex flex-col bg-panel p-5 transition-colors hover:bg-hover lift"
+            className="group flex flex-col bg-panel p-6 transition-colors hover:bg-hover"
           >
-            <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-signal">
+            <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-signal">
               {card.step}
             </div>
-            <div className="mt-1 font-display text-2xl font-bold uppercase text-ink">
+            <div className="mt-2 font-display text-3xl font-bold text-ink">
               {card.title}
             </div>
-            <p className="mt-1 flex-1 text-sm leading-5 text-mist">
+            <p className="mt-2 flex-1 text-sm leading-6 text-mist">
               {card.body}
             </p>
-            <div className="mt-3">
-              <span className="inline-block border border-line bg-raised px-3 py-1 font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-signal transition-colors group-hover:border-signal group-hover:bg-signal group-hover:text-signal-ink">
-                Open →
-              </span>
+            <div className="mt-4">
+              <Button className="font-mono text-[11px] font-bold uppercase tracking-[0.2em]">
+                Open the drawer →
+              </Button>
             </div>
           </Link>
         ))}
       </div>
 
-      <pre className="overflow-x-auto border border-line bg-panel p-4 font-mono text-xs leading-5 text-mist">
-        {`DOCUMENTS > LOADER (PDF/MD/TXT) > CHUNKER > BGE EMBEDDINGS
+      <div className="bg-panel p-6">
+        <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-dim">
+          Pipeline colophon
+        </p>
+        <pre className="mt-2 overflow-x-auto border border-line-soft bg-abyss p-4 font-mono text-xs leading-6 text-mist">
+          {`DOCUMENTS > LOADER (PDF/MD/TXT) > CHUNKER > BGE EMBEDDINGS
   > CHROMADB (VECTOR) + BM25 INDEX (KEYWORD)
 
 QUERY > VECTOR SEARCH + BM25 > RRF FUSION > RERANKER
   > COMPRESSION > PROMPT + CITATIONS > LLM > ANSWER`}
-      </pre>
+        </pre>
+      </div>
     </div>
   );
 }

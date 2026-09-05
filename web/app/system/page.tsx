@@ -8,7 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { CountUp } from "@/components/ui/count-up";
 import { useEffect, useState } from "react";
 import {
   api,
@@ -35,18 +34,14 @@ export default function SystemPage() {
 
   if (error)
     return (
-      <p className="border border-bad bg-bad/10 p-4 text-sm text-ink">
-        <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-bad">
-          Backend unreachable
-        </span>
-        <br />
-        {error}
+      <p className="border border-bad bg-bad/10 p-5 text-sm text-ink">
+        The stacks are unreachable: {error}. Check the backend and try again.
       </p>
     );
   if (!health || !config)
     return (
       <p className="font-mono text-xs uppercase tracking-[0.2em] text-mist">
-        Loading system state…
+        Taking inventory…
       </p>
     );
 
@@ -68,44 +63,41 @@ export default function SystemPage() {
 
   return (
     <div className="flex flex-col gap-px border border-line bg-line">
-      <div className="bg-panel p-5">
-        <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-signal">
-          Inspect
-        </p>
-        <h1 className="mt-1 font-display text-3xl font-bold uppercase tracking-tight text-ink">
-          System
+      <div className="bg-panel p-6">
+        <h1 className="font-display text-4xl font-bold tracking-tight text-ink">
+          Stacks inventory
         </h1>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-mist">
+          What the room holds and how it is configured — counts, machinery,
+          and every shelved document.
+        </p>
       </div>
 
       <div className="grid grid-cols-3 gap-px bg-line">
         {(
           [
-            ["Documents", health.documents_count],
-            ["Chunks", health.chunks_count],
-            ["Eval runs", health.eval_runs_count],
+            ["Documents shelved", health.documents_count],
+            ["Chunks indexed", health.chunks_count],
+            ["Audits on record", health.eval_runs_count],
           ] as [string, number][]
         ).map(([label, value]) => (
-          <div key={label as string} className="bg-panel p-5">
-            <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-dim">
+          <div key={label} className="bg-panel p-6">
+            <div className="text-sm font-semibold uppercase tracking-[0.14em] text-mist">
               {label}
             </div>
             <div className="mt-1 font-display text-5xl font-bold tabular-nums text-gold">
-              <CountUp value={value} />
+              {value}
             </div>
           </div>
         ))}
       </div>
 
-      <section className="bg-panel p-5">
-        <h2 className="font-display text-lg font-bold uppercase text-ink">
-          Configuration
-        </h2>
+      <section className="bg-panel p-6">
+        <h2 className="font-display text-xl font-bold text-ink">Machinery</h2>
         <dl className="mt-2 divide-y divide-line-soft border-y border-line-soft text-sm">
           {rows.map(([k, v]) => (
             <div key={k} className="flex justify-between gap-4 py-2">
-              <dt className="font-mono text-[11px] uppercase tracking-[0.16em] text-mist">
-                {k}
-              </dt>
+              <dt className="text-mist">{k}</dt>
               <dd className="text-right font-mono text-xs text-ink">{v}</dd>
             </div>
           ))}
@@ -113,20 +105,20 @@ export default function SystemPage() {
       </section>
 
       <section className="bg-panel">
-        <h2 className="px-5 pb-1 pt-4 font-display text-lg font-bold uppercase text-ink">
-          Documents{" "}
+        <h2 className="px-6 pb-1 pt-4 font-display text-xl font-bold text-ink">
+          Shelved documents{" "}
           <span className="font-mono text-sm font-semibold text-gold">
             [{docs.length}]
           </span>
         </h2>
-        <div className="overflow-x-auto p-5 pt-2">
+        <div className="overflow-x-auto p-6 pt-2">
           <Table className="border border-line-soft font-mono text-xs">
             <TableHeader className="bg-raised">
               <TableRow className="border-b border-line hover:bg-transparent">
                 <TableHead className="text-dim">TITLE</TableHead>
-                <TableHead className="text-dim">DOC ID</TableHead>
+                <TableHead className="text-dim">CALL NO.</TableHead>
                 <TableHead className="text-dim">CHUNKS</TableHead>
-                <TableHead className="text-dim">INGESTED</TableHead>
+                <TableHead className="text-dim">SHELVED</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

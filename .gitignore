@@ -19,6 +19,14 @@ venv/
 .eggs/
 .pytest_cache/
 
+# === Impeccable tooling (reinstall per machine via `npx impeccable install`) ===
+# Engine binary is platform-specific; live journals/tokens are ephemeral.
+.github/skills/impeccable/scripts/bin/
+.impeccable/**/sessions/
+.impeccable/**/annotations/
+**/.impeccable/live/server.json
+**/.impeccable/live/inject-journal.json
+
 # === Logs (run evidence lives in eval_results.json + docs/progress.md) ===
 *.log
 

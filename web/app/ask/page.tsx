@@ -14,21 +14,21 @@ function Hits({
   hits: { chunk_id: string; score: number; text_preview: string }[];
 }) {
   return (
-    <details className="anim-in border border-line bg-panel" open={false}>
-      <summary className="cursor-pointer list-none border-b border-line-soft px-4 py-2 text-sm font-semibold text-ink marker:hidden [&::-webkit-details-marker]:hidden">
-        <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-dim">
+    <details className="border border-line bg-panel">
+      <summary className="cursor-pointer list-none border-b border-line-soft px-4 py-2 marker:hidden [&::-webkit-details-marker]:hidden">
+        <span className="text-sm font-semibold uppercase tracking-[0.14em] text-ink">
           {title}
         </span>{" "}
         <span className="font-mono text-xs font-semibold text-gold">
           [{hits.length}]
         </span>
       </summary>
-      <div className="flex flex-col gap-px bg-line-soft">
+      <div className="flex flex-col divide-y divide-line-soft">
         {hits.length === 0 && (
-          <p className="bg-panel px-4 py-2 text-sm text-mist">No hits.</p>
+          <p className="px-4 py-2 text-sm text-mist">No hits.</p>
         )}
         {hits.slice(0, 10).map((h) => (
-          <div key={h.chunk_id} className="bg-panel px-4 py-2 text-sm">
+          <div key={h.chunk_id} className="px-4 py-2 text-sm">
             <div className="font-mono text-[11px] text-dim">
               {h.chunk_id} · SCORE {h.score.toFixed(4)}
             </div>
@@ -48,18 +48,21 @@ export default function AskPage() {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<QueryResponse | null>(null);
 
-  // Staggered entrance for fresh results (skipped for reduced motion).
+  // The single authored motion moment in this world: fresh evidence
+  // arrives as a slip rising into lamplight (rise + deblur, one batch,
+  // exponential out). Skipped for reduced motion.
   useEffect(() => {
     if (!result) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     let cancelled = false;
     import("animejs").then(({ animate, stagger }) => {
       if (cancelled) return;
-      animate(".anim-in", {
+      animate(".evidence-in", {
         opacity: [0, 1],
-        translateY: [8, 0],
-        delay: stagger(60),
-        duration: 220,
+        translateY: [14, 0],
+        filter: ["blur(6px)", "blur(0px)"],
+        delay: stagger(90),
+        duration: 420,
         ease: "outExpo",
       });
     });
@@ -83,25 +86,26 @@ export default function AskPage() {
 
   return (
     <div className="flex flex-col gap-px border border-line bg-line">
-      <div className="bg-panel p-5">
-        <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-signal">
-          02 / Query
-        </p>
-        <h1 className="mt-1 font-display text-3xl font-bold uppercase tracking-tight text-ink">
+      <div className="bg-panel p-6">
+        <h1 className="font-display text-4xl font-bold tracking-tight text-ink">
           Ask a question
         </h1>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-mist">
+          Pose it plainly. The room answers on a slip, with every claim
+          stamped to its shelf mark.
+        </p>
       </div>
 
-      <div className="flex flex-col gap-3 bg-panel p-5">
+      <div className="flex flex-col gap-3 bg-panel p-6">
         <Input
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && question && !loading && ask()}
-          placeholder="WHAT WOULD YOU LIKE TO KNOW?"
-          className="rounded-none border-line bg-abyss font-mono text-[13px] uppercase tracking-wide text-ink placeholder:text-dim focus-visible:ring-signal"
+          placeholder="What would you like to know?"
+          className="border-line bg-abyss text-[15px] text-ink placeholder:text-dim focus-visible:ring-signal"
         />
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-mist">
-          <label className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em]">
+          <label className="flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[0.14em]">
             Mode
             <select
               value={mode}
@@ -112,7 +116,7 @@ export default function AskPage() {
               <option value="vector_only">vector_only</option>
             </select>
           </label>
-          <label className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em]">
+          <label className="flex items-center gap-2 text-[13px] font-semibold uppercase tracking-[0.14em]">
             Top-K
             <input
               type="number"
@@ -126,64 +130,72 @@ export default function AskPage() {
           <Button
             onClick={ask}
             disabled={!question || loading}
-            className="rounded-none font-mono text-xs font-bold uppercase tracking-[0.18em]"
+            className="font-mono text-xs font-bold uppercase tracking-[0.18em]"
           >
-            {loading ? "Searching…" : "Ask"}
+            {loading ? "Consulting the stacks…" : "Ask"}
           </Button>
         </div>
       </div>
 
       {error && (
-        <p className="border-y border-bad bg-bad/10 p-4 text-sm text-ink">
-          <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-bad">
-            Error
-          </span>
-          <br />
-          {error}
+        <p className="border-y border-bad bg-bad/10 p-5 text-sm text-ink">
+          The request failed: {error}. Check the question and try again.
         </p>
       )}
 
       {result && (
         <>
-          <section className="anim-in border-y-2 border-signal bg-panel p-5">
-            <h2 className="font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-signal">
-              Answer
-            </h2>
-            <p className="mt-2 whitespace-pre-wrap text-[15px] leading-7 text-ink">
+          <section className="evidence-in border-y-2 border-signal bg-paper p-6 text-paper-ink">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-paper-ink/20 pb-2">
+              <span className="font-display text-xl font-bold">
+                Evidence slip
+              </span>
+              <span className="border border-paper-ink/40 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-[0.2em]">
+                Verified against {result.citations.length} shelf mark
+                {result.citations.length === 1 ? "" : "s"}
+              </span>
+            </div>
+            <p className="mt-3 whitespace-pre-wrap text-[15px] leading-7">
               {result.answer}
             </p>
           </section>
 
           <section className="flex flex-col gap-px bg-line-soft">
-            <h2 className="bg-panel px-5 pb-1 pt-4 font-display text-lg font-bold uppercase text-ink">
-              Citations{" "}
+            <h2 className="bg-panel px-6 pb-1 pt-4 font-display text-xl font-bold text-ink">
+              Pulled cards{" "}
               <span className="font-mono text-sm font-semibold text-gold">
                 [{result.citations.length}]
               </span>
             </h2>
             {result.citations.map((c, i) => (
-              <div key={c.chunk_id} className="anim-in bg-panel px-5 py-3 text-sm">
-                <div className="flex flex-wrap items-center gap-2 font-semibold text-ink">
-                  <Badge className="rounded-none bg-signal font-mono text-[11px] font-bold text-signal-ink">
-                    [{i + 1}]
-                  </Badge>
-                  {c.doc_title}
+              <div key={c.chunk_id} className="evidence-in bg-panel px-6 py-4 text-sm">
+                <div className="border border-line bg-raised p-4">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge className="bg-signal font-mono text-[11px] font-bold text-signal-ink">
+                      [{i + 1}]
+                    </Badge>
+                    <span className="font-semibold text-ink">
+                      {c.doc_title}
+                    </span>
+                  </div>
+                  <div className="mt-1 font-mono text-[11px] uppercase tracking-[0.14em] text-gold">
+                    Call no. {c.chunk_id}
+                  </div>
+                  <div className="mt-2 leading-6 text-mist">
+                    “{c.snippet}”
+                  </div>
                 </div>
-                <div className="mt-1 font-mono text-[11px] text-dim">
-                  {c.chunk_id}
-                </div>
-                <div className="mt-1 leading-5 text-mist">“{c.snippet}”</div>
               </div>
             ))}
           </section>
 
-          <section className="flex flex-col gap-2 bg-panel p-5">
-            <h2 className="font-display text-lg font-bold uppercase text-ink">
-              Retrieval debug
+          <section className="flex flex-col gap-2 bg-panel p-6">
+            <h2 className="font-display text-xl font-bold text-ink">
+              Retrieval ledger
             </h2>
-            <Hits title="BM25 hits" hits={result.retrieval_debug.bm25_hits} />
+            <Hits title="BM25 entries" hits={result.retrieval_debug.bm25_hits} />
             <Hits
-              title="Vector hits"
+              title="Vector entries"
               hits={result.retrieval_debug.vector_hits}
             />
             <Hits

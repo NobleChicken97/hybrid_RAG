@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { CountUp } from "@/components/ui/count-up";
 import { Input } from "@/components/ui/input";
 import {
   Table,
@@ -19,14 +18,14 @@ import {
   type EvalScores,
 } from "@/lib/api";
 
-function ScoreRow({ label, value }: { label: string; value: number | null }) {
+function ScoreSlip({ label, value }: { label: string; value: number | null }) {
   return (
-    <div className="bg-panel p-4">
-      <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-dim">
+    <div className="bg-paper p-4 text-paper-ink">
+      <div className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-paper-dim">
         {label}
       </div>
-      <div className="mt-1 font-display text-3xl font-bold tabular-nums text-gold">
-        {value == null ? "N/A" : <CountUp value={value} decimals={4} />}
+      <div className="mt-1 font-display text-3xl font-bold tabular-nums">
+        {value == null ? "N/A" : value.toFixed(4)}
       </div>
     </div>
   );
@@ -35,10 +34,10 @@ function ScoreRow({ label, value }: { label: string; value: number | null }) {
 function Scores({ scores }: { scores: EvalScores }) {
   return (
     <div className="grid grid-cols-4 gap-px border border-line bg-line">
-      <ScoreRow label="Faithfulness" value={scores.faithfulness} />
-      <ScoreRow label="Answer relevancy" value={scores.answer_relevancy} />
-      <ScoreRow label="Context precision" value={scores.context_precision} />
-      <ScoreRow label="Context recall" value={scores.context_recall} />
+      <ScoreSlip label="Faithfulness" value={scores.faithfulness} />
+      <ScoreSlip label="Answer relevancy" value={scores.answer_relevancy} />
+      <ScoreSlip label="Context precision" value={scores.context_precision} />
+      <ScoreSlip label="Context recall" value={scores.context_recall} />
     </div>
   );
 }
@@ -66,7 +65,7 @@ export default function EvalPage() {
       if (!run1 && list.length > 0) setRun1(list[0].run_id);
       if (!run2 && list.length > 1) setRun2(list[1].run_id);
     } catch {
-      // Backend may be down; the health banner on Overview covers it.
+      // Backend may be down; the Overview page carries the warning.
     }
   }
 
@@ -82,7 +81,7 @@ export default function EvalPage() {
         setRun2((prev) => prev || list[1]?.run_id || "");
       })
       .catch(() => {
-        // Backend may be down; the health banner on Overview covers it.
+        // Backend may be down; the Overview page carries the warning.
       });
     return () => {
       cancelled = true;
@@ -120,25 +119,26 @@ export default function EvalPage() {
 
   return (
     <div className="flex flex-col gap-px border border-line bg-line">
-      <div className="bg-panel p-5">
-        <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-signal">
-          03 / Prove
-        </p>
-        <h1 className="mt-1 font-display text-3xl font-bold uppercase tracking-tight text-ink">
-          Evaluation dashboard
+      <div className="bg-panel p-6">
+        <h1 className="font-display text-4xl font-bold tracking-tight text-ink">
+          Audit ledger
         </h1>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-mist">
+          Run the holdings against the question set. Each audit is filed as
+          a slip and kept on record for comparison.
+        </p>
       </div>
 
-      <section className="flex flex-wrap items-end gap-3 bg-panel p-5">
-        <label className="flex flex-col gap-1 font-mono text-[11px] uppercase tracking-[0.18em] text-mist">
+      <section className="flex flex-wrap items-end gap-3 bg-panel p-6">
+        <label className="flex flex-col gap-1 text-[13px] font-semibold uppercase tracking-[0.14em] text-mist">
           QA set
           <Input
             value={qaSet}
             onChange={(e) => setQaSet(e.target.value)}
-            className="rounded-none border-line bg-abyss text-sm normal-case tracking-normal text-ink focus-visible:ring-signal"
+            className="border-line bg-abyss normal-case tracking-normal text-ink focus-visible:ring-signal"
           />
         </label>
-        <label className="flex flex-col gap-1 font-mono text-[11px] uppercase tracking-[0.18em] text-mist">
+        <label className="flex flex-col gap-1 text-[13px] font-semibold uppercase tracking-[0.14em] text-mist">
           Mode
           <select
             value={mode}
@@ -152,42 +152,40 @@ export default function EvalPage() {
         <Button
           onClick={runEval}
           disabled={running}
-          className="rounded-none font-mono text-xs font-bold uppercase tracking-[0.18em]"
+          className="font-mono text-xs font-bold uppercase tracking-[0.18em]"
         >
-          {running ? "Running… (minutes)" : "Run evaluation"}
+          {running ? "Auditing… (minutes)" : "Run audit"}
         </Button>
       </section>
 
       {error && (
-        <p className="border-y border-bad bg-bad/10 p-4 text-sm text-ink">
-          <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-bad">
-            Error
-          </span>
-          <br />
-          {error}
+        <p className="border-y border-bad bg-bad/10 p-5 text-sm text-ink">
+          Audit failed: {error}. Check the backend and try again.
         </p>
       )}
 
       {latest && (
         <section className="flex flex-col gap-px bg-line-soft">
-          <h2 className="bg-panel px-5 pb-1 pt-4 font-mono text-sm font-semibold text-good">
-            {latest.run_id}{" "}
+          <h2 className="bg-panel px-6 pb-1 pt-4 font-mono text-sm font-semibold text-good">
+            FILED · {latest.run_id}{" "}
             <span className="text-xs font-medium text-mist">
               ({latest.retrieval_mode})
             </span>
           </h2>
-          <Scores scores={latest.scores} />
+          <div className="bg-panel px-6 pb-6">
+            <Scores scores={latest.scores} />
+          </div>
         </section>
       )}
 
       <section className="flex flex-col bg-panel">
-        <h2 className="px-5 pb-1 pt-4 font-display text-lg font-bold uppercase text-ink">
-          Past runs{" "}
+        <h2 className="px-6 pb-1 pt-4 font-display text-xl font-bold text-ink">
+          Audits on record{" "}
           <span className="font-mono text-sm font-semibold text-gold">
             [{runs.length}]
           </span>
         </h2>
-        <div className="overflow-x-auto p-5 pt-2">
+        <div className="overflow-x-auto p-6 pt-2">
           <Table className="border border-line-soft font-mono text-xs">
             <TableHeader className="bg-raised">
               <TableRow className="border-b border-line hover:bg-transparent">
@@ -227,9 +225,9 @@ export default function EvalPage() {
       </section>
 
       {runs.length >= 2 && (
-        <section className="flex flex-col gap-3 bg-panel p-5">
-          <h2 className="font-display text-lg font-bold uppercase text-ink">
-            Compare two runs
+        <section className="flex flex-col gap-3 bg-panel p-6">
+          <h2 className="font-display text-xl font-bold text-ink">
+            Set two slips side by side
           </h2>
           <div className="flex flex-wrap items-center gap-3 text-sm text-mist">
             <select
@@ -257,7 +255,7 @@ export default function EvalPage() {
             </select>
             <Button
               onClick={compare}
-              className="rounded-none font-mono text-xs font-bold uppercase tracking-[0.18em]"
+              className="font-mono text-xs font-bold uppercase tracking-[0.18em]"
             >
               Compare
             </Button>
